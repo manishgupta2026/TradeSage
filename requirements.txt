@@ -1,5 +1,5 @@
 # Core Trading Libraries
-tvdatafeed
+tvDatafeed
 yfinance
 pandas
 numpy
@@ -17,6 +17,3 @@ websocket-client
 # Utilities
 python-dotenv
 pytz
-
-# Data Processing
-PyPDF2
