@@ -1,15 +1,22 @@
-torch --index-url https://download.pytorch.org/whl/cu118
-llama-cpp-python
-pdfplumber
-langchain
-chromadb
+# Core Trading Libraries
+tvdatafeed
+yfinance
 pandas
 numpy
-pydantic
-huggingface_hub
-langchain-community
-langchain-text-splitters
-groq
-google-generativeai
+pandas-ta
+
+# Telegram Bot
+python-telegram-bot
+
+# Angel One Broker
+smartapi-python
+pyotp
+logzero
+websocket-client
+
+# Utilities
 python-dotenv
-anthropic
+pytz
+
+# Data Processing
+PyPDF2
