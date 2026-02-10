@@ -2,7 +2,7 @@
 git+https://github.com/rongardF/tvdatafeed.git
 yfinance
 pandas
-pandas-ta
+pandas-ta==0.4.71b0
 numpy
 
 
