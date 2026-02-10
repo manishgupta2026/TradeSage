@@ -6,8 +6,8 @@ import glob
 import os
 
 class NSEScanner:
-    def __init__(self):
-        self.dm = DataManager()
+    def __init__(self, data_manager=None):
+        self.dm = data_manager if data_manager is not None else DataManager()
         self.lib = IndicatorLibrary()
         self.executor = StrategyExecutor(self.lib)
         # Broad list of Nifty 50 + Midcap stocks
