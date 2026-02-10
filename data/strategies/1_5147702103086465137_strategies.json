@@ -1,0 +1,1330 @@
+[
+  {
+    "strategy_name": "NIFTY 50 20 EMA Swing",
+    "type": "Swing",
+    "market": "NSE",
+    "timeframe": "Daily",
+    "entry_conditions": [
+      "NIFTY 50 closes above 20 EMA"
+    ],
+    "exit_conditions": [
+      "Target 1: 1:2 risk-reward"
+    ],
+    "stop_loss": [
+      "Close below swing low"
+    ],
+    "technical_indicators": [
+      "20 EMA"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "MCX Gold Options",
+    "type": "Options",
+    "market": "MCX",
+    "timeframe": "Daily",
+    "entry_conditions": [
+      "Gold price at a certain resistance level"
+    ],
+    "exit_conditions": [
+      "Target 1: 1:2 risk-reward"
+    ],
+    "stop_loss": [
+      "Stop out at a certain support level"
+    ],
+    "technical_indicators": [
+      "Resistance Level",
+      "Support Level"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Rejection Setup",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "Not specified",
+    "entry_conditions": [
+      "Not specified"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [
+      "Not specified"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Stop-loss and Profit Target for intraday trades",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "Not specified",
+    "entry_conditions": [
+      "Not specified"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [
+      "Not specified"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Stop-loss and Profit Target for swing trades",
+    "type": "Swing",
+    "market": "NSE",
+    "timeframe": "Not specified",
+    "entry_conditions": [
+      "Not specified"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [
+      "Not specified"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Stop-loss and Profit Target for long-term investments",
+    "type": "Long-term",
+    "market": "NSE",
+    "timeframe": "Not specified",
+    "entry_conditions": [
+      "Not specified"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [
+      "Not specified"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Not Found",
+    "type": "Not Found",
+    "market": "NOT FOUND",
+    "timeframe": "Not Found",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "stop_loss": [],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Not Specified",
+    "type": "Not Specified",
+    "market": "NOT SPECIFIED",
+    "timeframe": "Not Specified",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "stop_loss": [],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "News-based Long Entry",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "Hourly",
+    "entry_conditions": [
+      "News implies EUR/USD will go up"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Institutional Entry in Sideways Price Action",
+    "type": "Intraday",
+    "market": "NSE/BSE/MCX/NFO",
+    "timeframe": "Not specified",
+    "entry_conditions": [
+      "Price action channel identified",
+      "Institutions accumulate positions"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [
+      "Price action channel"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Sideways Price Action Strategy",
+    "type": "Swing",
+    "market": "NSE",
+    "timeframe": "Daily",
+    "entry_conditions": [
+      "Price closes above 20 EMA",
+      "RSI > 50"
+    ],
+    "exit_conditions": [
+      "Target 1: 1:2 risk-reward"
+    ],
+    "stop_loss": [
+      "Close below swing low"
+    ],
+    "technical_indicators": [
+      "20 EMA",
+      "RSI"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Strong Rejection Strategy",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "Hourly",
+    "entry_conditions": [
+      "Price aggressively moves in one direction",
+      "Counter activity by strong sellers"
+    ],
+    "exit_conditions": [
+      "Price reverses with strong aggression"
+    ],
+    "stop_loss": [
+      "Price approaches strong rejection area"
+    ],
+    "technical_indicators": [
+      "Pin Bar",
+      "Rejection Areas"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Aggressive Rejection Strategy",
+    "type": "Price Action",
+    "market": "NSE",
+    "timeframe": "Not specified",
+    "entry_conditions": [
+      "Sudden reversal in price"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Bullish AB = CD",
+    "type": "Swing",
+    "market": "NSE",
+    "timeframe": "60-minute",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "stop_loss": [],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Session Open",
+    "type": "Intraday",
+    "market": "N/A",
+    "timeframe": "N/A",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "stop_loss": [],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Daily Open",
+    "type": "Intraday",
+    "market": "NYSE",
+    "timeframe": "Daily",
+    "entry_conditions": [
+      "Price opens"
+    ],
+    "exit_conditions": [
+      "Price moves significantly above or below the Daily Open"
+    ],
+    "stop_loss": [
+      "Price moves significantly below the Daily Open"
+    ],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Long from Previous Day's High",
+    "type": "Intraday",
+    "market": "NSE/BSE/MCX/NFO",
+    "timeframe": "30-minute",
+    "entry_conditions": [
+      "Price closes above previous day's high"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [
+      "Not specified"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Short Trade from Previous Day's Low",
+    "type": "Intraday",
+    "market": "NSE/BSE/MCX/NFO",
+    "timeframe": "30-minute",
+    "entry_conditions": [
+      "Price closes below previous day's low"
+    ],
+    "exit_conditions": [
+      "Price action below low and returns to resistance"
+    ],
+    "stop_loss": [
+      "Price action above resistance"
+    ],
+    "technical_indicators": [
+      "Not specified"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Strong High/Low Analysis",
+    "type": "Intraday",
+    "market": "NSE/BSE/MCX/NFO",
+    "timeframe": "30-minute",
+    "entry_conditions": [
+      "Not specified"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "stop_loss": [
+      "Not tested high/low"
+    ],
+    "technical_indicators": [
+      "Not specified"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Pin Bar Entry",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "5-minute",
+    "entry_conditions": [
+      "Price closes above pin bar candle"
+    ],
+    "exit_conditions": [
+      "Target 1: 1:2 risk-reward"
+    ],
+    "stop_loss": [
+      "Close below pin bar low"
+    ],
+    "technical_indicators": [
+      "Pin Bar"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Avoid Weak Highs/Lows",
+    "type": "Entry/Exit",
+    "market": "NSE",
+    "timeframe": "Not specified",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Avoid entering a trade from weak highs/lows"
+    ],
+    "stop_loss": [
+      "Not applicable as it's an avoidance strategy"
+    ],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "One Last Guy Entry",
+    "type": "Swing",
+    "market": "NSE",
+    "timeframe": "Intraday",
+    "entry_conditions": [
+      "Price closes at swing high",
+      "RSI > 70"
+    ],
+    "exit_conditions": [
+      "Target 1: 1:2 risk-reward"
+    ],
+    "stop_loss": [
+      "Price reverses after entry"
+    ],
+    "technical_indicators": [
+      "Swing high",
+      "RSI"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Failed Auction Exit",
+    "type": "Swing",
+    "market": "NSE",
+    "timeframe": "Intraday",
+    "entry_conditions": [
+      "Price closes at swing high",
+      "RSI > 70"
+    ],
+    "exit_conditions": [
+      "Target 1: 1:2 risk-reward",
+      "Price reverses after entry"
+    ],
+    "stop_loss": [
+      "Price reverses after entry"
+    ],
+    "technical_indicators": [
+      "Swing high",
+      "RSI"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Futures-Based Intraday Trading",
+    "type": "Intraday",
+    "market": "FX",
+    "timeframe": "Intraday",
+    "entry_conditions": [
+      "Use futures data for precision",
+      "Plan trades based on futures volume and price data"
+    ],
+    "exit_conditions": [
+      "Recalculate trading levels from futures to forex",
+      "Execute trades on forex market"
+    ],
+    "stop_loss": [
+      "Not explicitly mentioned in the text"
+    ],
+    "technical_indicators": [
+      "Futures volume and price data"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Futures-Based Swing Trading",
+    "type": "Swing",
+    "market": "FX",
+    "timeframe": "Not explicitly mentioned, but implied to be longer than intraday",
+    "entry_conditions": [
+      "Use forex data for swing trading analysis"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the text"
+    ],
+    "stop_loss": [
+      "Not explicitly mentioned in the text"
+    ],
+    "technical_indicators": [
+      "FXCM data feed"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "P-Profile Entry",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "Daily",
+    "entry_conditions": [
+      "Price closes above POC",
+      "RSI > 50"
+    ],
+    "exit_conditions": [
+      "Target 1: 1:2 risk-reward"
+    ],
+    "stop_loss": [
+      "Close below POC"
+    ],
+    "technical_indicators": [
+      "POC",
+      "RSI"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "P-Profile Volume Cluster",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "Daily",
+    "entry_conditions": [
+      "Volume cluster in the thin area of the profile"
+    ],
+    "exit_conditions": [
+      "Target 1: 1:2 risk-reward"
+    ],
+    "stop_loss": [
+      "Close below POC"
+    ],
+    "technical_indicators": [
+      "Volume Cluster"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Volume Profile Entry",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "Daily",
+    "entry_conditions": [
+      "Price returns to exact volume accumulation level"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [
+      "Volume Profile"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Trend Volume Setup",
+    "type": "Intraday",
+    "market": "N/A",
+    "timeframe": "Not specified",
+    "entry_conditions": [
+      "Strong trend detected"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [
+      "Volume Profile"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Volume Cluster Entry",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "Daily",
+    "entry_conditions": [
+      "Price reaches the level where the heaviest volumes were within the volume cluster"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [
+      "Volume Cluster"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Volume Cluster Short Trade",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "Daily",
+    "entry_conditions": [
+      "Price reaches the level where the heaviest volumes were within the volume cluster"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [
+      "Volume Cluster"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Volume Cluster with Support/Resistance Confluence",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "Daily",
+    "entry_conditions": [
+      "Price reaches the level where the heaviest volumes were within the volume cluster",
+      "Support becomes resistance"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [
+      "Volume Cluster",
+      "Support/Resistance"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Volume Profile Setup",
+    "type": "Intraday",
+    "market": "N/A",
+    "timeframe": "30 Minute",
+    "entry_conditions": [
+      "Price peaks at the highest point of a significant volume cluster"
+    ],
+    "exit_conditions": [
+      "Not specified in the text"
+    ],
+    "stop_loss": [
+      "Not specified in the text"
+    ],
+    "technical_indicators": [
+      "Volume Profile"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Intraday Volume Setup",
+    "type": "Intraday",
+    "market": "NSE/BSE/MCX/NFO",
+    "timeframe": "5-minute to 1-hour",
+    "entry_conditions": [
+      "Volume setups identified"
+    ],
+    "exit_conditions": [
+      "Strongest volume-based support/resistance zones"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [
+      "Volume Profile"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "EUR/USD Intraday Trading",
+    "type": "Intraday",
+    "market": "FOREX",
+    "timeframe": "Not specified",
+    "entry_conditions": [
+      "Spread close to 0.0",
+      "Comfortable trading experience"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [
+      "Not specified"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Major Indexes Intraday Trading",
+    "type": "Intraday",
+    "market": "NSE/BSE/MCX/NFO",
+    "timeframe": "Not specified",
+    "entry_conditions": [
+      "Not specified"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [
+      "S&P 500",
+      "Dax"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Oil Intraday Trading",
+    "type": "Intraday",
+    "market": "NSE/BSE/MCX/NFO",
+    "timeframe": "Not specified",
+    "entry_conditions": [
+      "Not specified"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [
+      "Oil prices"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Intraday Volatility-Based SL/PT",
+    "type": "Intraday",
+    "market": "NSE/BSE/MCX/NFO",
+    "timeframe": "Daily",
+    "entry_conditions": [
+      "Use ATR indicator set to a long period (e.g., 200) and load 300-500 days"
+    ],
+    "exit_conditions": [
+      "SL and PT values around 10-20% of the average daily ATR"
+    ],
+    "stop_loss": [
+      "SL and PT values around 10-20% of the average daily ATR"
+    ],
+    "technical_indicators": [
+      "ATR"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Swing Trading Volume Setups",
+    "type": "Swing",
+    "market": "NSE/BSE/MCX/NFO",
+    "timeframe": "1-hour to Daily",
+    "entry_conditions": [
+      "Look for volume setups #1 - #3 on 4-hour or Daily charts"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [
+      "Volume"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "",
+    "type": "",
+    "market": "",
+    "timeframe": "",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "stop_loss": [],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "FX Squawk Strategy",
+    "type": "Options",
+    "market": "NSE",
+    "timeframe": "Intraday",
+    "entry_conditions": [
+      "Receive real-time news alerts"
+    ],
+    "exit_conditions": [
+      "Adjust trades based on news impact"
+    ],
+    "stop_loss": [
+      "Adjust trades based on unexpected news"
+    ],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "TD's EA Strategy",
+    "type": "Options",
+    "market": "NSE",
+    "timeframe": "Intraday",
+    "entry_conditions": [
+      "No specific entry conditions mentioned"
+    ],
+    "exit_conditions": [
+      "No specific exit conditions mentioned"
+    ],
+    "stop_loss": [
+      "Sudden price spike or spread widening"
+    ],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Macro News Based Strategy",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "Intraday",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "stop_loss": [],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Channel Breakout Exit",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "1-minute",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Price breaks through the nearest resistance level"
+    ],
+    "stop_loss": [
+      "Price retraces back to the channel support level"
+    ],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "",
+    "type": "",
+    "market": "",
+    "timeframe": "",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "stop_loss": [],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Recovery Strategy",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "Not specified",
+    "entry_conditions": [
+      "Not applicable"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [
+      "Not applicable"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Rough Backtest",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "Daily",
+    "entry_conditions": [
+      "RRR = 1",
+      "Ignore macro news",
+      "No confirmation required"
+    ],
+    "exit_conditions": [],
+    "stop_loss": [],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Quick 1-2 Hour Trade",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "1-2 hours",
+    "entry_conditions": [
+      "Simple idea identified"
+    ],
+    "exit_conditions": [
+      "Further research required or idea deemed unworthy"
+    ],
+    "stop_loss": [
+      "N/A"
+    ],
+    "technical_indicators": [
+      "N/A"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "",
+    "type": "",
+    "market": "",
+    "timeframe": "",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "stop_loss": [],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Market Order Entry",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "1 Minute",
+    "entry_conditions": [
+      "Price moves significantly (spike) towards a trading level"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [
+      "Not specified"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Limit Order Entry for Better Price",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "1 Minute",
+    "entry_conditions": [
+      "Price moves slightly past the trading level"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [
+      "Not specified"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Level Testing Criteria",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "Intraday",
+    "entry_conditions": [
+      "Price closes 0-3 pips close to the level",
+      "Price makes an 8 or more pip reaction"
+    ],
+    "exit_conditions": [
+      "Price does not close below the swing low"
+    ],
+    "stop_loss": [
+      "Close below swing low"
+    ],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Level Validation with Volume Profile",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "Intraday",
+    "entry_conditions": [
+      "Price turns 4 pips before reaching the level within a wider support/resistance zone"
+    ],
+    "exit_conditions": [
+      "Price does not close below the support/resistance level"
+    ],
+    "stop_loss": [
+      "Close below the support/resistance level"
+    ],
+    "technical_indicators": [
+      "Volume Profile"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Entry on Market Open",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "Intraday",
+    "entry_conditions": [
+      "Market opens and spreads tighten"
+    ],
+    "exit_conditions": [],
+    "stop_loss": [],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Trade All Valid Levels",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "Intraday",
+    "entry_conditions": [
+      "All levels hit during trading hours"
+    ],
+    "exit_conditions": [],
+    "stop_loss": [],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Reversal Trade #3",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "Daily",
+    "entry_conditions": [
+      "Volume Accumulation Setup",
+      "Price closes around 106.40-106.60",
+      "POC at 106.53"
+    ],
+    "exit_conditions": [
+      "Price returns to Break-even point (106.53)"
+    ],
+    "stop_loss": [
+      "Price gets extremely close to Stop-loss"
+    ],
+    "technical_indicators": [
+      "Volume Accumulation Setup",
+      "Point of Control (POC)"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Reversal Trade #4",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "Intraday",
+    "entry_conditions": [
+      "Long level based on Trend setup"
+    ],
+    "exit_conditions": [
+      "Price goes through long level without reaction",
+      "Limit order placed for Reversal trade"
+    ],
+    "stop_loss": [
+      "Immediate Stop-loss"
+    ],
+    "technical_indicators": [
+      "Trend setup"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Reversal Trade #5",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "Intraday",
+    "entry_conditions": [
+      "Not specified"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [
+      "Not specified"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Reversal Trade #5",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "Intraday",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "stop_loss": [],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Reversal Trade #6",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "Intraday",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "stop_loss": [],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Reversal Trade #7",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "Intraday",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "stop_loss": [],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Swing Trades Setup #1",
+    "type": "Swing",
+    "market": "NSE",
+    "timeframe": "Intraday",
+    "entry_conditions": [
+      "Volume accumulation"
+    ],
+    "exit_conditions": [],
+    "stop_loss": [],
+    "technical_indicators": [
+      "Volume"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Swing Trades Setup #2",
+    "type": "Swing",
+    "market": "NSE",
+    "timeframe": "Intraday",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "stop_loss": [],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Swing Trades Setup #3",
+    "type": "Swing",
+    "market": "NSE",
+    "timeframe": "Intraday",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "stop_loss": [],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Trend Setup",
+    "type": "Swing",
+    "market": "NSE",
+    "timeframe": "Not specified",
+    "entry_conditions": [
+      "Price closes above 20 EMA"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [
+      "20 EMA"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Rejection Setup",
+    "type": "Swing",
+    "market": "NSE",
+    "timeframe": "Not specified",
+    "entry_conditions": [
+      "Not specified"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [
+      "Not specified"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "20 EMA Pullback",
+    "type": "Swing",
+    "market": "NSE",
+    "timeframe": "Daily",
+    "entry_conditions": [
+      "Price closes above 20 EMA",
+      "RSI > 50"
+    ],
+    "exit_conditions": [
+      "Target 1: 1:2 risk-reward"
+    ],
+    "stop_loss": [
+      "Close below swing low"
+    ],
+    "technical_indicators": [
+      "20 EMA",
+      "RSI"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Not Found",
+    "type": "Not Found",
+    "market": "NOT FOUND",
+    "timeframe": "Not Found",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "stop_loss": [],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Transparent Trader System",
+    "type": "Options",
+    "market": "NSE",
+    "timeframe": "Intraday",
+    "entry_conditions": [
+      "Price closes above 20 EMA",
+      "RSI > 50"
+    ],
+    "exit_conditions": [
+      "Target 1: 1:2 risk-reward"
+    ],
+    "stop_loss": [
+      "Close below swing low"
+    ],
+    "technical_indicators": [
+      "20 EMA",
+      "RSI"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Flexible Market Profile Indicator",
+    "type": "Options",
+    "market": "NSE",
+    "timeframe": "Intraday",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "stop_loss": [],
+    "technical_indicators": [
+      "Flexible Market Profile Indicator"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Volume Profile Trading Scenarios",
+    "type": "Options",
+    "market": "NSE",
+    "timeframe": "Intraday",
+    "entry_conditions": [
+      "Specific scenarios to watch for in order to enter a trade"
+    ],
+    "exit_conditions": [],
+    "stop_loss": [],
+    "technical_indicators": [
+      "Volume Profile"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Volume Based Trading",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "Daily",
+    "entry_conditions": [
+      "Price closes above 20 EMA",
+      "RSI > 50"
+    ],
+    "exit_conditions": [
+      "Target 1: 1:2 risk-reward"
+    ],
+    "stop_loss": [
+      "Close below swing low"
+    ],
+    "technical_indicators": [
+      "20 EMA",
+      "RSI"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  },
+  {
+    "strategy_name": "Value Price & High Probability Trading",
+    "type": "Swing",
+    "market": "NSE",
+    "timeframe": "Daily",
+    "entry_conditions": [
+      "Find location on chart with value price and high probability of success"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned"
+    ],
+    "stop_loss": [
+      "Not explicitly mentioned"
+    ],
+    "technical_indicators": [
+      "Not explicitly mentioned"
+    ],
+    "risk_management": [],
+    "source_file": "1_5147702103086465137.pdf"
+  }
+]

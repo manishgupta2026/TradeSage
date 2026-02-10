@@ -1,0 +1,2265 @@
+[
+  {
+    "strategy_name": "Not Specified",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Not Specified",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not Specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "51 Trading Strategies",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Diverse Strategies Across Styles",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Bollinger Bands Strategy",
+    "entry_conditions": [
+      "Price breaks out from Bollinger Bands"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Bollinger Bands",
+      "9-period Exponential Moving Average"
+    ],
+    "timeframe": "Daily",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Williams %R and SMA Strategy",
+    "entry_conditions": [
+      "Sell below the low of a bearish candle",
+      "SMA 14 close 0"
+    ],
+    "exit_conditions": [
+      "Take profit rule not explicitly mentioned",
+      "Stop loss rule not explicitly mentioned"
+    ],
+    "indicators": [
+      "Williams %R",
+      "Simple Moving Average (SMA 14)"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be daily based on the context",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Fibonacci Pullback Entry",
+    "entry_conditions": [
+      "Spot a trend and market moving to the upside",
+      "Market takes a pullback to Fibonacci levels"
+    ],
+    "exit_conditions": [
+      "MACD crosses the red line from below",
+      "Exit above the 0% Fibonacci level or achieve a 1:2 Risk:Reward ratio"
+    ],
+    "indicators": [
+      "Moving Average Conversion (MACD)",
+      "Fibonacci levels"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Triangle Breakout",
+    "entry_conditions": [
+      "Observation of a Triangle Pattern with consolidation and breakout",
+      "Price breaks the resistance"
+    ],
+    "exit_conditions": [
+      "Stock rallies and makes new highs after breakout"
+    ],
+    "indicators": [
+      "Triangle Pattern",
+      "Volume"
+    ],
+    "timeframe": "Daily",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Breakout Entry Strategy",
+    "entry_conditions": [
+      "easier to enter after a breakout"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "5min / Daily etc",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Volatility Contraction Pattern (VCP)",
+    "entry_conditions": [
+      "Combine technical analysis, fundamental analysis, and risk management",
+      "Look for price levels from where all the days can be of the same colour"
+    ],
+    "exit_conditions": [
+      "Ride major market swings",
+      "Continue to stay bullish for maximum returns"
+    ],
+    "indicators": [],
+    "timeframe": "1 day to 1 month",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Swing Trading",
+    "entry_conditions": [
+      "Look for significant price levels",
+      "Price moves in a major swing"
+    ],
+    "exit_conditions": [
+      "Ride major market swings",
+      "Create an Alpha and beat the index"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "1-hour to 1 month",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Institutional Trading Strategy",
+    "entry_conditions": [
+      "Price touches demand or supply zone",
+      "First retracement after swift move"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Institutional Buy and Hold Strategy",
+    "entry_conditions": [
+      "Price moves away from average after institution buys",
+      "Price comes to BUY area"
+    ],
+    "exit_conditions": [
+      "Price advances to desired area"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Gap Down Short Swing Trade",
+    "entry_conditions": [
+      "Price making higher highs and reaching previous supply zone",
+      "Market opens gap down and ends in red"
+    ],
+    "exit_conditions": [
+      "Sell below the low of the bearish candle",
+      "Place STOPLOSS below the gap",
+      "Target on a trailing basis or major support level"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Daily",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Breakout Trading Strategy",
+    "entry_conditions": [
+      "Identify market volatility",
+      "Observe Bollinger Bands and Bollinger Bands Width"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on breakout direction",
+      "Stop loss rule to manage unprecedented volatility"
+    ],
+    "indicators": [
+      "Bollinger Bands",
+      "Bollinger Bands Width"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be suitable for volatile markets",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Bollinger Bands Width Strategy",
+    "entry_conditions": [
+      "Bollinger Bands squeezes",
+      "Bollinger Bands Width stays flat"
+    ],
+    "exit_conditions": [
+      "Bollinger Bands expands due to volatility",
+      "Bollinger Bands Width starts to rise"
+    ],
+    "indicators": [
+      "Bollinger Bands Width"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "RSI and EMA Entry and Exit",
+    "entry_conditions": [
+      "RSI below 30",
+      "EMA above the 50-day moving average"
+    ],
+    "exit_conditions": [
+      "RSI above 70",
+      "EMA below the 50-day moving average"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "5min",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Ichimoku Cloud Swing Trading Strategy",
+    "entry_conditions": [
+      "First-time reading about the Ichimoku Cloud indicator",
+      "trading signals provided by the indicator"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the provided text"
+    ],
+    "indicators": [
+      "Ichimoku Cloud",
+      "9-period Moving Average (Conversion Line)",
+      "26-period Moving Average (Base Line)",
+      "52-period Moving Average (Leading Span B)"
+    ],
+    "timeframe": "Not explicitly mentioned in the provided text",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Ichimoku Cloud Trading Strategy",
+    "entry_conditions": [
+      "Conversion Line (Blue line) is above the Base Line (Red line)",
+      "Price has closed above the cloud"
+    ],
+    "exit_conditions": [
+      "Price has closed below the cloud"
+    ],
+    "indicators": [
+      "Conversion Line",
+      "Base Line",
+      "Chikou Span Line"
+    ],
+    "timeframe": "1-hour / Daily",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Bullish Entry with Ichimoku Cloud",
+    "entry_conditions": [
+      "Price closes above the cloud",
+      "Price closes above the cloud after a few candles"
+    ],
+    "exit_conditions": [
+      "Trail stoploss as the market goes in your favor",
+      "Stoploss at the same level as Leading Span A"
+    ],
+    "indicators": [
+      "Ichimoku Cloud",
+      "Leading Span A"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Short Entry with Ichimoku Cloud",
+    "entry_conditions": [
+      "Price closes below the cloud"
+    ],
+    "exit_conditions": [
+      "Stoploss at the same level as Leading Span A"
+    ],
+    "indicators": [
+      "Ichimoku Cloud",
+      "Leading Span A"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Trend Following with Moving Average and Fibonacci Retracement",
+    "entry_conditions": [
+      "Price is above the 200-day Moving Average on the 5-minute timeframe"
+    ],
+    "exit_conditions": [
+      "Price touches key support and resistance levels identified by Fibonacci Retracement"
+    ],
+    "indicators": [
+      "200-day Moving Average",
+      "Fibonacci Retracement"
+    ],
+    "timeframe": "5min",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Breakout Strategy",
+    "entry_conditions": [
+      "Price broke below the 200-day Moving Average from below"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "5min / Daily etc",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Supertrend",
+    "entry_conditions": [
+      "When the market is in an uptrend or downtrend",
+      "Market stays sideways for a significant period"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "5min / Daily etc",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Trend Riding",
+    "entry_conditions": [
+      "Market is in an uptrend or downtrend",
+      "Market stays sideways for a significant period"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "5min / Daily etc",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Supertrend and Pivot Points Combination",
+    "entry_conditions": [
+      "Price remains sideways until it breaks a certain level",
+      "Supertrend is below the price for a buy trade"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Supertrend",
+      "Pivot Points"
+    ],
+    "timeframe": "5min",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Sideways Trading Strategy",
+    "entry_conditions": [
+      "Price between R1 and S1",
+      "Supertrend below the price"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "5min / Daily etc",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Buy Trade on Sideways",
+    "entry_conditions": [
+      "Price above R1",
+      "Supertrend below the price"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "5min / Daily etc",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Sell Trade on Sideways",
+    "entry_conditions": [
+      "Price between R1 and S1",
+      "Supertrend above the price"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "5min / Daily etc",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "VWAP and Standard Deviations Trading",
+    "entry_conditions": [
+      "Bullish sentiment on the Indian market",
+      "Use of VWAP on different securities"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on VWAP and standard deviations",
+      "Stop loss rule based on market volatility"
+    ],
+    "indicators": [
+      "VWAP",
+      "Standard Deviations"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "VWAP and Pivots Trading",
+    "entry_conditions": [
+      "Pivots identified using VWAP",
+      "Bullish sentiment on the Indian market"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on pivots",
+      "Stop loss rule based on market volatility"
+    ],
+    "indicators": [
+      "VWAP",
+      "Pivots"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "RSI and Volume Oscillator Combination",
+    "entry_conditions": [
+      "RSI levels of 70 (overbought)",
+      "Volume Oscillator indicating trend"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "Volume Oscillator"
+    ],
+    "timeframe": "Intraday",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Volume Oscillator and RSI Strategy",
+    "entry_conditions": [
+      "Oversold conditions with levels of 70 and 30 respectively",
+      "Market making higher lows but with less momentum"
+    ],
+    "exit_conditions": [
+      "Take profit rule: Look for crucial pivot points on an intraday basis",
+      "Stop loss rule: Keep an eye on the movement of both the Volume Oscillator and RSI"
+    ],
+    "indicators": [
+      "Volume Oscillator",
+      "RSI"
+    ],
+    "timeframe": "Daily",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Pullback Trading Strategy",
+    "entry_conditions": [
+      "Price breaks the high of a candle near a crucial area",
+      "Pullback is not more than 4-5% of the whole trend"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule at the low of the candle"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be based on candle patterns and trend analysis",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "RSI and EMA Entry and Exit",
+    "entry_conditions": [
+      "RSI below 30",
+      "EMA crosses above"
+    ],
+    "exit_conditions": [
+      "RSI above 70",
+      "EMA crosses below"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "5min / Daily etc",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Double RSI",
+    "entry_conditions": [
+      "RSI 5 14 close SMA 14 2",
+      "RSI 60 14 close SMA 14 2"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "SMA"
+    ],
+    "timeframe": "5min / Daily etc",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Double RSI",
+    "entry_conditions": [
+      "Single RSI below 30 level",
+      "Second RSI above 50 level"
+    ],
+    "exit_conditions": [
+      "Take profit rule not explicitly mentioned",
+      "Stop loss rule not explicitly mentioned"
+    ],
+    "indicators": [
+      "RSI",
+      "RSI-Based MA"
+    ],
+    "timeframe": "5min",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Pivot Point Strategy",
+    "entry_conditions": [
+      "Identifying areas with high momentum",
+      "Finding small demand zones"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on pivot point levels",
+      "Stop loss rule based on pivot point levels"
+    ],
+    "indicators": [
+      "Pivot Points (P, R1, R2, S1, S2)",
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be daily or intraday",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Central Pivot Range (CPR) Strategy",
+    "entry_conditions": [
+      "Market sideways with a clear CPR pattern"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on CPR levels",
+      "Stop loss rule based on CPR levels"
+    ],
+    "indicators": [
+      "Pivot Points (top central pivot, central pivot, bottom central pivot)",
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be daily or intraday",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "RSI and EMA Entry and Exit",
+    "entry_conditions": [
+      "RSI below 30",
+      "EMA crosses above"
+    ],
+    "exit_conditions": [
+      "RSI above 70",
+      "EMA crosses below"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "5min",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "RPC Sell Signal",
+    "entry_conditions": [
+      "RPC appears"
+    ],
+    "exit_conditions": [
+      "Take profit rule: Sell when price reaches a predetentic level"
+    ],
+    "indicators": [
+      "RPC"
+    ],
+    "timeframe": "5min / Daily etc",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "RPC Sell Signal with EMA",
+    "entry_conditions": [
+      "RPC appears"
+    ],
+    "exit_conditions": [
+      "Take profit rule: Sell when price reaches a predetentic level",
+      "Stop loss rule: Sell if price drops below a certain EMA level"
+    ],
+    "indicators": [
+      "RPC",
+      "EMA"
+    ],
+    "timeframe": "5min / Daily etc",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "RPC Sell Signal with RSI",
+    "entry_conditions": [
+      "RPC appears"
+    ],
+    "exit_conditions": [
+      "Take profit rule: Sell when price reaches a predetentic level",
+      "Stop loss rule: Sell if price drops below a certain RSI level"
+    ],
+    "indicators": [
+      "RPC",
+      "RSI"
+    ],
+    "timeframe": "5min / Daily etc",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Dow Theory",
+    "entry_conditions": [
+      "Identify market trends using technical tools",
+      "Belief in market trends based on personal stock market theory"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the provided text"
+    ],
+    "indicators": [],
+    "timeframe": "Not explicitly mentioned in the provided text",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Trend Entry Strategy",
+    "entry_conditions": [
+      "Market is in an uptrend",
+      "Market is in a downtrend"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Breakout Trading",
+    "entry_conditions": [
+      "Identify a breakout pattern",
+      "Confirm breakout with indicators"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on breakout strength",
+      "Stop loss rule to protect against reversals"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "5min / Daily",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Counter Trading Strategy",
+    "entry_conditions": [
+      "Market is bullish and near all-time high",
+      "Investor's stoploss is at a certain level"
+    ],
+    "exit_conditions": [
+      "Sell when the market turns or when the stoploss is hit",
+      "Avoid buying at high levels to prevent hitting stoplosses"
+    ],
+    "indicators": [
+      "None explicitly mentioned"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Multiple Buy Orders for Compliance",
+    "entry_conditions": [
+      "Big player intends to buy a stock",
+      "Avoid placing a single large order to prevent market impact"
+    ],
+    "exit_conditions": [
+      "Compliance with market regulations",
+      "Stock price reaches upper circuit limit"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Trend Riding with Pending Order Blocks",
+    "entry_conditions": [
+      "Identification of areas with pending order blocks",
+      "Presence of Fear Of Missing Out (FOMO)"
+    ],
+    "exit_conditions": [
+      "Riding the trend at the earliest",
+      "Areas of pending order blocks identified"
+    ],
+    "indicators": [
+      "Fair Value Candle method"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Big Risk-to-Reward Ratio Strategy",
+    "entry_conditions": [
+      "Look for aggressive buying in any security",
+      "Look for a strong price shift to the downside"
+    ],
+    "exit_conditions": [
+      "Sell below the low of the reversal candle",
+      "Place stoploss above the high of the red candle or swing high"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Sell on Reversal (SMC Method)",
+    "entry_conditions": [
+      "Mark the upper wick of the candles as an order block",
+      "Extend it and see if the price retraces back to this level",
+      "Find fair-value candles and an order block to mark the potential selling area",
+      "Let the price retrace to this level and make a bearish reversal sign"
+    ],
+    "exit_conditions": [
+      "Sell below the low of the reversal candle",
+      "Place stoploss above the high of the red candle or swing high"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Smart Money Concept (SMC)",
+    "entry_conditions": [
+      "Aggressive market moves",
+      "Mark order blocks",
+      "Wait for price retracements"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the provided text"
+    ],
+    "indicators": [],
+    "timeframe": "Not explicitly mentioned in the provided text",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Elliott Wave Theory",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not explicitly mentioned in the provided text",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Elliott Wave Theory Based Strategy",
+    "entry_conditions": [
+      "Identification of an impulsive wave",
+      "Significant price surge"
+    ],
+    "exit_conditions": [
+      "Identification of a corrective wave",
+      "Price retracement from the previous impulsive move"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "5min / Daily",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "RSI and EMA Entry and Exit",
+    "entry_conditions": [
+      "RSI below 30",
+      "EMA crosses above the signal line"
+    ],
+    "exit_conditions": [
+      "RSI above 70",
+      "EMA crosses below the signal line"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "5min / Daily etc",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Fractal-Based Trading Strategy",
+    "entry_conditions": [
+      "Fractal setting of 4/4 (4 candles before and after the fractal)",
+      "Specific number of candles before and after the fractal not breaching a specific price level"
+    ],
+    "exit_conditions": [
+      "Take profit rule (not explicitly mentioned in the text)",
+      "Stop loss rule (not explicitly mentioned in the text)"
+    ],
+    "indicators": [
+      "Fractals"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Fractal Trading Approach with Moving Average",
+    "entry_conditions": [
+      "Price level marked by the fractal",
+      "Price above 50-period SMA"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Fractal",
+      "50-Day Simple Moving Average (SMA)"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Renko Chart with Oscillators",
+    "entry_conditions": [
+      "Role reversals on Renko charts",
+      "Oscillator timing confirmation"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Renko",
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Pullback on Donchian Channel",
+    "entry_conditions": [
+      "Market pullback on Donchian Channel"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Donchian Channel"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Gann Fan and Linear Regression Line Strategy",
+    "entry_conditions": [
+      "Understanding of Gann Fan and Linear Regression Line indicators"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Gann Fan",
+      "Linear Regression Line"
+    ],
+    "timeframe": "Not specified in the text",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Gann Fan",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Linear Regression Line",
+      "Bollinger Bands"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Moving with Macro trends",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Not specified"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Supertrend with RSI",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Sectoral Analysis",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Not specified"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "M & W Positional trading strategy using RSI",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Kotak Mahindra Bank Entry Strategy",
+    "entry_conditions": [
+      "Stock opens gap down",
+      "Price starts to plummet to a specific level (e.g., 1005)"
+    ],
+    "exit_conditions": [
+      "RSI moves beyond the range of 40-60",
+      "Supertrend generates a bullish signal"
+    ],
+    "indicators": [
+      "RSI",
+      "Supertrend"
+    ],
+    "timeframe": "Longer timeframe (e.g., 8 months)",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Sectoral Analysis Trading Strategy",
+    "entry_conditions": [
+      "Importance of Sectoral Analysis",
+      "Powerful tool for trading the capital markets"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the provided text"
+    ],
+    "indicators": [
+      "Not explicitly mentioned in the provided text"
+    ],
+    "timeframe": "Not explicitly mentioned in the provided text",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Positional Trading Strategy",
+    "entry_conditions": [
+      "Sectoral Analysis",
+      "Capital markets",
+      "Powerful tool"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the provided text"
+    ],
+    "indicators": [
+      "Not explicitly mentioned in the provided text"
+    ],
+    "timeframe": "Not explicitly mentioned in the provided text",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Positional Trading Strategy",
+    "entry_conditions": [
+      "Identifying stocks in less than 15 minutes",
+      "Stocks from sectors that are outperforming other sectors of the economy"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the provided text"
+    ],
+    "indicators": [],
+    "timeframe": "Not explicitly mentioned in the provided text",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Sectoral Analysis",
+    "entry_conditions": [
+      "Evaluating and analyzing different sectors within the market"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the provided text"
+    ],
+    "indicators": [],
+    "timeframe": "Not explicitly mentioned in the provided text",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Sectoral Analysis Positional Trading Strategy",
+    "entry_conditions": [
+      "Evaluate financial health and performance of companies within a specific sector",
+      "Consider factors such as revenue growth, earnings, profitability, competitive position, and market share",
+      "Analyze overall strength using financial statements, industry reports, and company news",
+      "Assess broader economic factors like GDP growth, inflation, interest rates, and government policies",
+      "Study price and volume data to identify price patterns, trends, and support/resistance levels"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on price patterns and trends",
+      "Stop loss rule based on support/resistance levels and market conditions"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified in the provided text",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "M&W RSI Positioning",
+    "entry_conditions": [
+      "RSI above 70 (overbought)",
+      "RSI below 30 (oversold)"
+    ],
+    "exit_conditions": [
+      "RSI reaches opposite overbought/oversold level",
+      "Price forms M-type structure on RSI",
+      "Price forms W-type structure on RSI"
+    ],
+    "indicators": [
+      "RSI",
+      "SMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "M&W Positional Trading Strategy",
+    "entry_conditions": [
+      "RSI makes a W like structure",
+      "RSI re-enters above the 30 level"
+    ],
+    "exit_conditions": [
+      "RSI makes a M like structure",
+      "RSI comes below the 70 levels"
+    ],
+    "indicators": [
+      "RSI"
+    ],
+    "timeframe": "Daily",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "3-Minute Scalping Strategy",
+    "entry_conditions": [
+      "Not specified in the provided text"
+    ],
+    "exit_conditions": [
+      "Not specified in the provided text"
+    ],
+    "indicators": [
+      "Parabolic SAR",
+      "RSI",
+      "Hiei Enashi"
+    ],
+    "timeframe": "3min",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "RSI Divergence + Bollinger Bands",
+    "entry_conditions": [
+      "RSI divergence occurs"
+    ],
+    "exit_conditions": [
+      "Not specified in the provided text"
+    ],
+    "indicators": [
+      "RSI",
+      "Bollinger Bands"
+    ],
+    "timeframe": "Not specified in the provided text",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Scalp trading with RSI and VWAP",
+    "entry_conditions": [
+      "Not specified in the provided text"
+    ],
+    "exit_conditions": [
+      "Not specified in the provided text"
+    ],
+    "indicators": [
+      "RSI",
+      "VWAP"
+    ],
+    "timeframe": "Not specified in the provided text",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Martingale system",
+    "entry_conditions": [
+      "Not specified in the provided text"
+    ],
+    "exit_conditions": [
+      "Not specified in the provided text"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified in the provided text",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Scalping",
+    "entry_conditions": [
+      "Observing the market before risking money",
+      "Finding profitable trades on 1-minute or 3-minute timeframes"
+    ],
+    "exit_conditions": [
+      "Decent Risk to Reward ratio",
+      "Not suitable for short timeframes like 1-minute"
+    ],
+    "indicators": [
+      "RSI",
+      "Hiking Aichi"
+    ],
+    "timeframe": "1-minute / 3-minute",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Heiken Ashi and Parabolic SAR with RSI",
+    "entry_conditions": [
+      "RSI above 50",
+      "Heiken Ashi candles bullish",
+      "Parabolic SAR below the candle"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Heiken Ashi",
+      "Parabolic SAR",
+      "RSI"
+    ],
+    "timeframe": "3-minute",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "RSI Divergence Strategy",
+    "entry_conditions": [
+      "RSI above 70",
+      "RSI below 30"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on divergence",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "Bollinger Bands"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Scalping",
+    "entry_conditions": [
+      "Highly liquid stocks or indices such as Nifty 50 and Bank Nifty",
+      "Using a 1-minute chart"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Effective risk management techniques"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "1-minute",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Scalping Strategy",
+    "entry_conditions": [
+      "Identify the pre-established trend",
+      "Wait for the next 4-5 candles to form a range",
+      "Buy when a candle breaks the high of the range (bullish trend)",
+      "Sell when a candle breaks the low of the range (bearish trend)"
+    ],
+    "exit_conditions": [
+      "Close the trade in 10 minutes regardless of target or stop loss",
+      "Keep a minimum target of 1:3",
+      "Set stop loss above/below the breakout/breakdown candle"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "1-minute",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Scalping with Moving Average",
+    "entry_conditions": [
+      "2nd candle to close above the 5 or 7 period EMA on a 5-minute timeframe",
+      "The second candle should not touch the EMA"
+    ],
+    "exit_conditions": [
+      "Sell the stock at the low of the 2nd candle",
+      "Keep the stop loss on the high of the 2nd candle"
+    ],
+    "indicators": [
+      "5 or 7 period EMA"
+    ],
+    "timeframe": "5-minute",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Scalping with Moving Average",
+    "entry_conditions": [
+      "Adjust entries from time to time for better entry points",
+      "Entry point adjustment based on the 3rd candle if better"
+    ],
+    "exit_conditions": [
+      "Keep R:R ratio at least at 1:3 or 1:4"
+    ],
+    "indicators": [],
+    "timeframe": "5-minute",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Martingale System",
+    "entry_conditions": [
+      "Bet with a fixed sum",
+      "Choose a side (heads or tails)"
+    ],
+    "exit_conditions": [
+      "Win the bet",
+      "Increase bet size after a loss to cover previous losses"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Entry and Exit Conditions Based on RSI and EMA",
+    "entry_conditions": [
+      "RSI below a certain threshold",
+      "EMA crosses above a certain level"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on RSI and EMA levels",
+      "Stop loss rule based on RSI and EMA levels"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "5min / Daily etc",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Weekly Hedged Strategy",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified in the provided text",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Option Buying using Open Interest",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified in the provided text",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Momentum Buying Option",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified in the provided text",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "The Expiry Decay Strategy",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified in the provided text",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "The Combined Stoploss Strategy",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified in the provided text",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Swing Buying",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified in the provided text",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "The 3:00 PM Nifty Intraday Strategy",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified in the provided text",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Combined Option + VWAP",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified in the provided text",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Weekly Hedged Trading",
+    "entry_conditions": [
+      "Observing major trend",
+      "Join the bandwagon"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Weekly",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Calendar Spread Strategy",
+    "entry_conditions": [
+      "Market is stuck between a certain range",
+      "Vega should benefit from the market staying in the range"
+    ],
+    "exit_conditions": [
+      "Market moves out of the range",
+      "Profit from theta decay and Vega moves"
+    ],
+    "indicators": [],
+    "timeframe": "Daily",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Vega Exploitation Strategy",
+    "entry_conditions": [
+      "India Vix trading near 13",
+      "Sell options with LTP near twice the India Vix"
+    ],
+    "exit_conditions": [
+      "Buy options a bit expensive to the sold options",
+      "Hedge the strategy to reduce margins"
+    ],
+    "indicators": [
+      "India Vix",
+      "Leverage to India Vix (LTP)"
+    ],
+    "timeframe": "5min / Daily",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Theta Decay Hedge",
+    "entry_conditions": [
+      "India Vix trading near 13",
+      "Sell options with LTP near twice the India Vix"
+    ],
+    "exit_conditions": [
+      "Buy options a bit expensive to the sold options",
+      "Use Theta decay probability to time the hedge"
+    ],
+    "indicators": [
+      "India Vix",
+      "Theta decay probability"
+    ],
+    "timeframe": "5min / Daily",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Option Selling",
+    "entry_conditions": [
+      "Market not expected to move significantly and likely to stay within a range"
+    ],
+    "exit_conditions": [
+      "Keep premium as long as the option does not move significantly against the seller's direction",
+      "Benefit from time decay"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Multi Time Option Strategy",
+    "entry_conditions": [
+      "Selling out of money Nifty weekly calls and puts priced around Rs. 40"
+    ],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Weekly",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Option Selling Strategy",
+    "entry_conditions": [
+      "Selling out of money Nifty weekly calls and puts priced around Rs. 40",
+      "Initial stoploss set at 100% of the premium received"
+    ],
+    "exit_conditions": [
+      "Reduce stoploss by 50% when option premium declines by 50% from entry price",
+      "Exit trades by 3:15 p.m. on the day of entry"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified in the text",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Multi Time Frame Option Trading",
+    "entry_conditions": [
+      "Split one lot of calls and put options across 4-time frames",
+      "Execute one lot at each specific time (9:16 a.m., 10:16 a.m., 11:16 a.m., 12:16 p.m.)"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the text",
+      "Potential risk-adjusted returns based on long-term backtesting"
+    ],
+    "indicators": [],
+    "timeframe": "4-time frames (9:16 a.m., 10:16 a.m., 11:16 a.m., 12:16 p.m.)",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Risk Rewards Ratio",
+    "entry_conditions": [
+      "Risking Rs. 10"
+    ],
+    "exit_conditions": [
+      "Stoploss",
+      "target or time-based exit in 30 minutes"
+    ],
+    "indicators": [],
+    "timeframe": "30 minutes",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Open Interest Strategy",
+    "entry_conditions": [
+      "High Open Interest (OI) strike signals"
+    ],
+    "exit_conditions": [
+      "Stoploss to limit potential loss"
+    ],
+    "indicators": [
+      "Open Interest"
+    ],
+    "timeframe": "30 minutes",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Supertrend Selling Strategy",
+    "entry_conditions": [
+      "Using Supertrend indicator"
+    ],
+    "exit_conditions": [],
+    "indicators": [
+      "Supertrend"
+    ],
+    "timeframe": "Intraday",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Supertrend Intraday Trading Strategy",
+    "entry_conditions": [
+      "Price closes above the Supertrend line",
+      "Indicator turns green"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on dynamic bands expansion",
+      "Stop loss rule based on price movement"
+    ],
+    "indicators": [
+      "Supertrend",
+      "ATR"
+    ],
+    "timeframe": "Intraday",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Supertrend Options Strategy",
+    "entry_conditions": [
+      "Price is above the Supertrend indicator and it is green",
+      "ATM put option of the weekly expiry"
+    ],
+    "exit_conditions": [
+      "Supertrend changes its color into red"
+    ],
+    "indicators": [
+      "Supertrend"
+    ],
+    "timeframe": "5min",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Supertrend Options Strategy",
+    "entry_conditions": [
+      "Objective directional moves",
+      "Rule-based signals"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Bands",
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Combined Option with VWAP Strategy",
+    "entry_conditions": [
+      "Not specified"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "indicators": [
+      "VWAP"
+    ],
+    "timeframe": "Intraday",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Event-Driven Call Option Strategy",
+    "entry_conditions": [
+      "Event favors the stock market",
+      "Surge in market leading to increased call options premium"
+    ],
+    "exit_conditions": [
+      "Stop loss rule",
+      "Take profit rule (100 points - 20 points = 80 points net profit)"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Long Straddle Strategy",
+    "entry_conditions": [
+      "Purchasing At-the-Money call and put options based on spot prices at 9:30 in the morning"
+    ],
+    "exit_conditions": [
+      "Stop loss and target levels for each position",
+      "Exit at 3:15 p.m."
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Momentum-Based Trading Strategy",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Momentum-Based Trading Strategy",
+    "entry_conditions": [
+      "Price increase by a specified percentage (e.g., 15%) from the current price",
+      "Momentum indicators signaling strong price movement"
+    ],
+    "exit_conditions": [
+      "Take profit rule: Set a target price (e.g., 100% of the entry price)",
+      "Stop loss rule: Set a stop loss at a specific percentage (e.g., 25%) from the entry price"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "5min / Daily etc",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Expiry Decay Strategy",
+    "entry_conditions": [
+      "Identify the Bank Nifty spot value around 10:00 a_a.m.",
+      "Implement the strategy 2 days prior to the expiry date"
+    ],
+    "exit_conditions": [
+      "Initial stoploss set at 90% of the premium for each leg",
+      "Exit based on the spot value of Bank Nifty"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "5min / Daily etc",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Expiry Decay Strategy",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Exit at 9:55 a.m. on the expiry day",
+      "Take profit rule: Exit price will not reach zero, typically around \u20b915"
+    ],
+    "indicators": [
+      "Historical Performance"
+    ],
+    "timeframe": "Daily",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Combined Call and Put Options Selling Strategy",
+    "entry_conditions": [
+      "Selling out-of-the-money (OTM) call and put options simultaneously at 9:30 a_m"
+    ],
+    "exit_conditions": [
+      "Combined stoploss of 40 points",
+      "Exit when the combined premium reaches 240 points"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Combined Strategies for Trending Market Conditions",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Selling ATM Call & Put Options to Capitalise on Theta Decay",
+    "entry_conditions": [
+      "Identify the current spot price of a particular index or stock, such as the Nifty",
+      "Select the ATM call and put options accordingly"
+    ],
+    "exit_conditions": [
+      "Stoploss order placed at 25% above the entry price for both the call and put options"
+    ],
+    "indicators": [],
+    "timeframe": "9:30 a.m. to 10:34 ae",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "ATM Call or Put Option Strategy",
+    "entry_conditions": [
+      "Placing another stop-loss",
+      "Order at 25% above the entry price"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Intraday",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Optimized ATM Call or Put Option Strategy",
+    "entry_conditions": [
+      "Selling call and put options closest to a premium of \u20b9125"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Intraday",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Bull Trap Strategy (BTST)",
+    "entry_conditions": [
+      "Select an in-the-money call option that is two strikes above the at-the-money level at 11:00 a.m.",
+      "Monitor the selected call option for a 20% upward move from the entry point"
+    ],
+    "exit_conditions": [
+      "Set a stop loss (SL) at 30% below the entry price",
+      "Exit the position either on the same day if the stop loss is triggered or the next morning at 9:30 a.m."
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Daily",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "3:00 PM Nifty Intraday Strategy",
+    "entry_conditions": [
+      "Find the money straddle",
+      "Wait for a 5% drop in both the call and put options"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "3:00 p.m. intraday",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "3:00 PM Nifty Intraday Strategy",
+    "entry_conditions": [
+      "CMP reduces by 5%",
+      "CE and PE options trading around Rs 150 and reduces by 5%"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule",
+      "Trailing stop loss by 5 points for every 10 points move on the downside"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Daily",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Momentum Selling Strategy",
+    "entry_conditions": [
+      "Analyse the options premium of ATM call and put options",
+      "Observe the Theta decay in both call and put options"
+    ],
+    "exit_conditions": [
+      "Sell the option after a certain fall in the options premium at a specific time",
+      "Standard depletion rate for trade entry is 10% of the option premium"
+    ],
+    "indicators": [
+      "Theta"
+    ],
+    "timeframe": "Daily",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Nifty Weekly Expiry Strategy",
+    "entry_conditions": [
+      "Not explicitly mentioned in the provided text"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Weekly",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Momentum Selling Strategy",
+    "entry_conditions": [
+      "Following defined rules",
+      "Considering suggested variations"
+    ],
+    "exit_conditions": [
+      "Theta depletion",
+      "Backtested results"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "In-the-Money (ITM) or Out-of-the-Money (OTM) Options Selling",
+    "entry_conditions": [
+      "Selling options that are either ITM or OTM"
+    ],
+    "exit_conditions": [
+      "Increased drawdown for ITM options",
+      "Reduced profit potential and risk for OTM options"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Swing Buying Strategy",
+    "entry_conditions": [
+      "Initiating trade around 3:30 p.m. on a Thursday"
+    ],
+    "exit_conditions": [
+      "Creating stoploss orders",
+      "Trailing stops"
+    ],
+    "indicators": [],
+    "timeframe": "2-3 days",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "ATM Straddle",
+    "entry_conditions": [
+      "Buying ATM Straddle"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "2-3 days",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Trailing Stop-Loss",
+    "entry_conditions": [
+      "Triggered one stoploss order"
+    ],
+    "exit_conditions": [
+      "Trailing stop-loss order adjustment"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Moving Averages Strategy",
+    "entry_conditions": [
+      "Rising moving average indicates an uptrend",
+      "Price consolidation followed by a strong price push"
+    ],
+    "exit_conditions": [
+      "9 EMA crosses 21 EMA from below (buy entry)",
+      "9 EMA crosses 21 EMA from above (sell entry)"
+    ],
+    "indicators": [
+      "9 EMA",
+      "21 EMA"
+    ],
+    "timeframe": "Intraday",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Consolidation and Breakout Strategy",
+    "entry_conditions": [
+      "Stock has given a rally of 15-20%",
+      "Stock is currently consolidating in a range",
+      "Volume has dried down within the consolidation period"
+    ],
+    "exit_conditions": [
+      "Stock breaks the consolidation range with a huge green candle",
+      "Volume rises drastitically",
+      "Stop loss set at minimum 5% of the stock's range"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Positional Strategy with Pyramiding",
+    "entry_conditions": [
+      "Stock is trading at its all-time high"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "indicators": [
+      "Not specified"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Pyramiding",
+    "entry_conditions": [
+      "Stock is trading at its all-time high",
+      "Trade starts to turn in your favor and is consolidating for the second time"
+    ],
+    "exit_conditions": [
+      "Increase position and trail stop loss a bit"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Pin Bar",
+    "entry_conditions": [
+      "Candlestick pattern known as 'Pin Bar'"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "indicators": [],
+    "timeframe": "1 minute, 5 minutes, 15 minutes, 30 minutes, 45 minutes",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Pin Bar Candlestick Pattern",
+    "entry_conditions": [
+      "Identify a bullish Pin Bar candlestick pattern",
+      "Upper wick smaller or equal to the body of the candle"
+    ],
+    "exit_conditions": [
+      "Take profit rule: Enter after the formation of the pattern and exit when the price breaks above the upper wick",
+      "Stop loss rule: Set a stop loss below the lower wick"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "5min / Daily etc",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Pullback trading",
+    "entry_conditions": [
+      "Price comes back for retesting its previous resistance levels after a breakout"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Pullback Trading Strategy",
+    "entry_conditions": [
+      "Price breaks above a range and comes back to its previous resistance level"
+    ],
+    "exit_conditions": [
+      "Set stop loss just below the long wick candle of the breakout candle"
+    ],
+    "indicators": [],
+    "timeframe": "Hourly, 4-hourly, or Daily",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Pullback Price Action Strategy",
+    "entry_conditions": [
+      "Identifying price ranges or resistance levels",
+      "Waiting for a candle to pullback to the same level"
+    ],
+    "exit_conditions": [
+      "Breaking the high of the pullback candle"
+    ],
+    "indicators": [
+      "Volume",
+      "RSI"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Repo Rate Trading Strategy",
+    "entry_conditions": [
+      "Understanding Repo Rate concept",
+      "Beginner level"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "indicators": [
+      "Not applicable"
+    ],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Repo Rate Strategy",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [
+      "Repo Rate"
+    ],
+    "timeframe": "Not specified in the provided text",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Volatility Contraction Pattern (VCP)",
+    "entry_conditions": [
+      "Price action repeatedly pulling back to test prior swing high resistance level",
+      "Pullbacks get progressively shorter and weaker in an uptrend"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the provided text"
+    ],
+    "indicators": [],
+    "timeframe": "Not explicitly mentioned in the provided text",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Volatility Contraction Pattern (VCP)",
+    "entry_conditions": [
+      "Identifying the Volatility Contraction Pattern",
+      "Significant price moves in leading stocks"
+    ],
+    "exit_conditions": [
+      "Well-defined stoplosses"
+    ],
+    "indicators": [
+      "Not explicitly mentioned in the provided text"
+    ],
+    "timeframe": "Not explicitly mentioned in the provided text",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Two-Legged Pullback",
+    "entry_conditions": [
+      "Identifying a two-legged pullback pattern"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the provided text"
+    ],
+    "indicators": [
+      "Not explicitly mentioned in the provided text"
+    ],
+    "timeframe": "Not explicitly mentioned in the provided text",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Two-Legged Pullback Strategy",
+    "entry_conditions": [
+      "Notice a pattern of higher highs",
+      "Wait for higher lows"
+    ],
+    "exit_conditions": [
+      "Take profit rule: Exit after the second pullback",
+      "Stop loss rule: Not applicable as it doesn't rely on indicators"
+    ],
+    "indicators": [],
+    "timeframe": "5 seconds 1 min 2 hours 1 day 5 seconds 3 mins 3 hours 1 week 15 seconds 5 mins 3 months",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Two-Legged Pullback Strategy",
+    "entry_conditions": [
+      "Start with three lots",
+      "Secure profits quickly"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "5-minute / Daily",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Two-Legged Pullback Strategy",
+    "entry_conditions": [
+      "Identification of two-legged pullbacks"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Not explicitly mentioned",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Developing a Trading Plan",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Starting Small and Practicing",
+    "entry_conditions": [
+      "Opening a demo account",
+      "Trading with limited capital"
+    ],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Risk Management",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Setting stop-loss orders",
+      "Defining position sizes",
+      "Diversifying portfolio"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Maintaining a Trading Journal",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Learning from Every Trade",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Staying Informed and Adapting",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Seeking Feedback and Support",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "51-Trading-Strategies (2).pdf"
+  },
+  {
+    "strategy_name": "Not explicitly mentioned",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "",
+    "source": "51-Trading-Strategies (2).pdf"
+  }
+]

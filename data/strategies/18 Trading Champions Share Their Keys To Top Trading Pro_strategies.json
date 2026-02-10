@@ -1,0 +1,328 @@
+[
+  {
+    "strategy_name": "Gold Sideways to Lower",
+    "type": "Intraday",
+    "market": "MCX",
+    "timeframe": "April",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Target 1: Lower in April"
+    ],
+    "stop_loss": [],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "18 Trading Champions Share Their Keys To Top Trading Pro.pdf"
+  },
+  {
+    "strategy_name": "TOM DEMARK RELIES",
+    "type": "Market Timing",
+    "market": "N/A",
+    "timeframe": "N/A",
+    "entry_conditions": [
+      "N/A"
+    ],
+    "exit_conditions": [
+      "N/A"
+    ],
+    "stop_loss": [
+      "N/A"
+    ],
+    "technical_indicators": [
+      "N/A"
+    ],
+    "risk_management": [],
+    "source_file": "18 Trading Champions Share Their Keys To Top Trading Pro.pdf"
+  },
+  {
+    "strategy_name": "Sequendal",
+    "type": "Options",
+    "market": "NSE",
+    "timeframe": "Daily",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "stop_loss": [],
+    "technical_indicators": [
+      "Sequendal"
+    ],
+    "risk_management": [],
+    "source_file": "18 Trading Champions Share Their Keys To Top Trading Pro.pdf"
+  },
+  {
+    "strategy_name": "Delta Neutral",
+    "type": "Options",
+    "market": "NSE/BSE/MCX/NFO",
+    "timeframe": "Not specified",
+    "entry_conditions": [
+      "Short wheat position",
+      "Long two wheat calls, at the money"
+    ],
+    "exit_conditions": [
+      "Wheat price decreases"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [
+      "Delta"
+    ],
+    "risk_management": [],
+    "source_file": "18 Trading Champions Share Their Keys To Top Trading Pro.pdf"
+  },
+  {
+    "strategy_name": "Contrarian Trading",
+    "type": "Not specified",
+    "market": "NSE/BSE/MCX/NFO",
+    "timeframe": "Not specified",
+    "entry_conditions": [
+      "Volatility and momentum out of line"
+    ],
+    "exit_conditions": [
+      "Market reaction in the opposite direction"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [
+      "Volatility",
+      "Momentum"
+    ],
+    "risk_management": [],
+    "source_file": "18 Trading Champions Share Their Keys To Top Trading Pro.pdf"
+  },
+  {
+    "strategy_name": "Trading with Small Positions",
+    "type": "Not specified",
+    "market": "NSE/BSE/MCX/NFO",
+    "timeframe": "Not specified",
+    "entry_conditions": [
+      "Learning and using all trading methods"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [
+      "Not applicable"
+    ],
+    "risk_management": [],
+    "source_file": "18 Trading Champions Share Their Keys To Top Trading Pro.pdf"
+  },
+  {
+    "strategy_name": "Volpat Trading System",
+    "type": "Options",
+    "market": "NSE",
+    "timeframe": "Not specified",
+    "entry_conditions": [
+      "Big outside day, closing on the lows"
+    ],
+    "exit_conditions": [
+      "Market starts up the next day"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [
+      "Big outside day",
+      "Closing on the lows"
+    ],
+    "risk_management": [],
+    "source_file": "18 Trading Champions Share Their Keys To Top Trading Pro.pdf"
+  },
+  {
+    "strategy_name": "Not Provided",
+    "type": "Not Provided",
+    "market": "NOT PROVIDED",
+    "timeframe": "Not Provided",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "stop_loss": [],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "18 Trading Champions Share Their Keys To Top Trading Pro.pdf"
+  },
+  {
+    "strategy_name": "",
+    "type": "",
+    "market": "",
+    "timeframe": "",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "stop_loss": [],
+    "technical_indicators": [],
+    "risk_management": [],
+    "source_file": "18 Trading Champions Share Their Keys To Top Trading Pro.pdf"
+  },
+  {
+    "strategy_name": "Taylor Trading Method",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "Daily",
+    "entry_conditions": [
+      "Price closes above 20 EMA",
+      "RSI > 50"
+    ],
+    "exit_conditions": [
+      "Target 1: 1:2 risk-reward"
+    ],
+    "stop_loss": [
+      "Close below swing low"
+    ],
+    "technical_indicators": [
+      "20 EMA",
+      "RSI"
+    ],
+    "risk_management": [],
+    "source_file": "18 Trading Champions Share Their Keys To Top Trading Pro.pdf"
+  },
+  {
+    "strategy_name": "Stochastics Momentum Indicator",
+    "type": "Options",
+    "market": "NSE",
+    "timeframe": "30-minute",
+    "entry_conditions": [
+      "%K line crosses above %D line"
+    ],
+    "exit_conditions": [
+      "Target based on %D line"
+    ],
+    "stop_loss": [
+      "Price reverses from trend"
+    ],
+    "technical_indicators": [
+      "%K",
+      "%D"
+    ],
+    "risk_management": [],
+    "source_file": "18 Trading Champions Share Their Keys To Top Trading Pro.pdf"
+  },
+  {
+    "strategy_name": "Contrarian Market Entry",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "Daily",
+    "entry_conditions": [
+      "Media signals a market top",
+      "Media signals a market bottom"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "stop_loss": [
+      "Not specified"
+    ],
+    "technical_indicators": [
+      "Media sentiment"
+    ],
+    "risk_management": [],
+    "source_file": "18 Trading Champions Share Their Keys To Top Trading Pro.pdf"
+  },
+  {
+    "strategy_name": "20 EMA Pullback",
+    "type": "Swing",
+    "market": "NSE",
+    "timeframe": "Daily",
+    "entry_conditions": [
+      "Price closes above 20 EMA",
+      "RSI > 50"
+    ],
+    "exit_conditions": [
+      "Target 1: 1:2 risk-reward"
+    ],
+    "stop_loss": [
+      "Close below swing low"
+    ],
+    "technical_indicators": [
+      "20 EMA",
+      "RSI"
+    ],
+    "risk_management": [],
+    "source_file": "18 Trading Champions Share Their Keys To Top Trading Pro.pdf"
+  },
+  {
+    "strategy_name": "Wyckoff Technique",
+    "type": "Intraday",
+    "market": "NSE",
+    "timeframe": "Intraday",
+    "entry_conditions": [
+      "Price closes above swing high",
+      "Volume increases"
+    ],
+    "exit_conditions": [
+      "Target 1: 1:2 risk-reward"
+    ],
+    "stop_loss": [
+      "Close below swing low"
+    ],
+    "technical_indicators": [
+      "Point and Figure",
+      "Volume"
+    ],
+    "risk_management": [],
+    "source_file": "18 Trading Champions Share Their Keys To Top Trading Pro.pdf"
+  },
+  {
+    "strategy_name": "Eurodollar Futures Trading",
+    "type": "Options",
+    "market": "NSE",
+    "timeframe": "Intraday",
+    "entry_conditions": [
+      "Total open interest near 2,398,012"
+    ],
+    "exit_conditions": [
+      "Contracts of 500 at the next price"
+    ],
+    "stop_loss": [
+      "Cut losses at 1,000 ticks"
+    ],
+    "technical_indicators": [
+      "Total open interest",
+      "Contract size ($25 per tick)"
+    ],
+    "risk_management": [],
+    "source_file": "18 Trading Champions Share Their Keys To Top Trading Pro.pdf"
+  },
+  {
+    "strategy_name": "Cups and Caps",
+    "type": "Technical",
+    "market": "N/A",
+    "timeframe": "N/A",
+    "entry_conditions": [
+      "Price closes below cup formation"
+    ],
+    "exit_conditions": [
+      "Target 1: 1:2 risk-reward"
+    ],
+    "stop_loss": [
+      "Close below cup formation"
+    ],
+    "technical_indicators": [
+      "Three-bar technical chart"
+    ],
+    "risk_management": [],
+    "source_file": "18 Trading Champions Share Their Keys To Top Trading Pro.pdf"
+  },
+  {
+    "strategy_name": "Cups and Caps",
+    "type": "Swing",
+    "market": "NSE",
+    "timeframe": "Daily",
+    "entry_conditions": [
+      "Market has gone up",
+      "Identify at least three bars forming a cup pattern"
+    ],
+    "exit_conditions": [
+      "Target 1: Higher close (or low) of the third bar"
+    ],
+    "stop_loss": [
+      "Close below the low of the first bar"
+    ],
+    "technical_indicators": [
+      "Closing prices",
+      "Lowest closing prices"
+    ],
+    "risk_management": [],
+    "source_file": "18 Trading Champions Share Their Keys To Top Trading Pro.pdf"
+  }
+]

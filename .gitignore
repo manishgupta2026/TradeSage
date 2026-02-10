@@ -35,8 +35,10 @@ env/
 # Environment Variables (CRITICAL - Contains API Keys)
 .env
 
-# Data and Logs
-data/
+# Data Files (Exclude portfolio and cache, but KEEP strategies)
+data/paper_portfolio.json
+data/cache/
+data/*.parquet
 logs/
 *.log
 *.parquet
@@ -56,8 +58,6 @@ Thumbs.db
 desktop.ini
 
 # Trading Bot Specific
-data/paper_portfolio.json
-data/strategies/
 cache/
 
 # Temporary Files

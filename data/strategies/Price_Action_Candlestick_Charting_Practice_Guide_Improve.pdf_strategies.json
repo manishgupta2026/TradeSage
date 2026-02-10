@@ -1,0 +1,2514 @@
+[
+  {
+    "strategy_name": "Understanding Price Action and Candle Charting",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Applying Basic Ideas to Common Candle Patterns",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Case Studies for Real Market Conditions",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Market Price Action and Candle Reading Guide",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified in the provided text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Daily Timeframe Balance",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Daily",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Short-term Detailing with Daily Reference",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "15min",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Long-term Context with Daily and Weekly Combination",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Weekly",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Lower Wick Strategy",
+    "entry_conditions": [
+      "The low is lower than the close price of a bearish candle"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the provided text"
+    ],
+    "indicators": [],
+    "timeframe": "Not explicitly mentioned in the provided text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Daily Close Price Strategy",
+    "entry_conditions": [
+      "Market opens",
+      "Nearing the close"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on closing price",
+      "Stop loss rule based on closing price"
+    ],
+    "indicators": [
+      "Closing price (C)"
+    ],
+    "timeframe": "Daily",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Real Body Concentration Analysis",
+    "entry_conditions": [
+      "Identifying price ranges with high market activity",
+      "Observing the proportion of the real body in a candle"
+    ],
+    "exit_conditions": [
+      "Long upper wick indicates a weak move and potential exit point",
+      "Long lower wick indicates a weak move and potential exit point"
+    ],
+    "indicators": [
+      "Real Body",
+      "Upper Wick",
+      "Lower Wick"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Real Body Candle Analysis",
+    "entry_conditions": [
+      "Market shows intent to move in the direction of the wick but the intent becomes weak",
+      "Large real body candles remain in one direction during an existing trend"
+    ],
+    "exit_conditions": [
+      "Price retreats from higher prices in a bearish context",
+      "Price retreats from lower prices in a bullish context",
+      "Upper and lower wicks are proportionally very short compared to the real body"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Daily",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Inverted Hammer Strategy",
+    "entry_conditions": [
+      "Minimum of the real body in at least the bottom half but preferably occupying the approximate lower 1/3 range",
+      "Next candle trades above the inverted hammer's high and closes above it"
+    ],
+    "exit_conditions": [
+      "Take profit rule: Close above the inverted hammer's high",
+      "Stop loss rule: Not explicitly mentioned but implied to be below the inverted hammer's low"
+    ],
+    "indicators": [
+      "Inverted Hammer"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be suitable for the candle's formation",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Dark Cloud Cover",
+    "entry_conditions": [
+      "First candle continues the uptrend with a green candle",
+      "Second candle is always red and closes to the halfway point or lower of the first candle"
+    ],
+    "exit_conditions": [
+      "Close to the halfway point of the first candle",
+      "Close below the low of the second candle, preferably below the low of the first candle"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bearish Kicking Pattern",
+    "entry_conditions": [
+      "Second candle closes lower than the low of the first green candle"
+    ],
+    "exit_conditions": [
+      "Price action of a bearish kicking pattern",
+      "Gap between the real bodies of the two candles"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bullish Kicking Pattern",
+    "entry_conditions": [
+      "Second candle closes near the halfway point of the first red candle"
+    ],
+    "exit_conditions": [
+      "Price action of a bullish kicking pattern",
+      "Gap between the real bodies of the two candles"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bearish Engulfing Pattern",
+    "entry_conditions": [
+      "First green candle's real body is completely engulfed by the red real body of the second candle"
+    ],
+    "exit_conditions": [
+      "Previous uptrend is reversed",
+      "More sought after variation of the bearish star"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Gravestone Doji",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Gravestone Doji"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Dragonfly Doji",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Dragonfly Doji"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Balanced Doji",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Balanced Doji"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Spinning Tops",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Spinning Tops"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Spinning Top",
+    "entry_conditions": [
+      "Second candle forms within the context of a continuation or alongside reversal candles and dojis"
+    ],
+    "exit_conditions": [
+      "Context or 'spin' / direction is an important factor"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bearish Harami",
+    "entry_conditions": [
+      "First candle is green, continuing an existing uptrend",
+      "Second candle is red and ideally contained within the first candle's real body"
+    ],
+    "exit_conditions": [
+      "Signals potential reversal but carries an indecisive tone with doubt and uncertainty"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bullish Harami",
+    "entry_conditions": [
+      "Second candle is green, following a red first candle"
+    ],
+    "exit_conditions": [
+      "Reverse of the bearish Harami pattern"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "3 Black Crows",
+    "entry_conditions": [
+      "Row of red candles, each closing lower than the previous one"
+    ],
+    "exit_conditions": [
+      "Perfect formation would have a full gap between the close of the previous candle and the open of the next candle"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Three Black Crows",
+    "entry_conditions": [
+      "Candles are large real bodies with little to no wick appearing",
+      "Occurring in the context of a downtrend"
+    ],
+    "exit_conditions": [
+      "Large drop in price",
+      "Continuation of an existing decline"
+    ],
+    "indicators": [],
+    "timeframe": "Not explicitly mentioned, but implied to be daily or less frequent",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Three Methods Falling",
+    "entry_conditions": [
+      "First and last candles have large red real bodies with little to no wick",
+      "In between candles form a 'resting phase' with a flat to slight incline in price"
+    ],
+    "exit_conditions": [
+      "Price continues to drop from the first candle",
+      "Resting phase ends and the last candle carries on the decline"
+    ],
+    "indicators": [],
+    "timeframe": "Not explicitly mentioned, but implied to be daily or less frequent",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "3 Methods Falling",
+    "entry_conditions": [
+      "Price is indecisive and ambiguous for an extended period of time",
+      "Price is in a resting phase with small bodied candles"
+    ],
+    "exit_conditions": [
+      "Price breaks out of the resting phase range",
+      "Price reaches a predefined target or profit level"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "3 Methods Rising",
+    "entry_conditions": [
+      "Price is indecisive and ambiguous for an extended period of time",
+      "Price is in a resting phase with small bodied candles"
+    ],
+    "exit_conditions": [
+      "Price breaks out of the resting phase range",
+      "Price reaches a predefined target or profit level"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Decisive Price Action with Dojis",
+    "entry_conditions": [
+      "Increasing amount of Dojis",
+      "Price shifts to a more neutral to bearish tone",
+      "Green candles engulf the lowest candle of the period",
+      "Immediate green surge following a brief L below a key level"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on strong uptrend emergence",
+      "Stop loss rule near key reversal levels"
+    ],
+    "indicators": [
+      "Doji",
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be daily or multi-day",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bearish Trend Confirmation with Resistance and Support Levels",
+    "entry_conditions": [
+      "Formation of bearish patterns such as inverted hammer and bull hammer",
+      "Context showing bearish sentiment with multiple bearish candles"
+    ],
+    "exit_conditions": [
+      "Closing below a significant resistance level (e.g., 55-55.25)",
+      "Formation of bearish candlestick patterns like gravestone doji with a long upper wick"
+    ],
+    "indicators": [
+      "Gravestone doji",
+      "Triple top chart pattern"
+    ],
+    "timeframe": "Not explicitly mentioned, but context suggests daily or multi-day timeframes",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Dragonfly Doji Strategy",
+    "entry_conditions": [
+      "Overall price action is close to a strict dragonfly doji",
+      "Long lower wick indicating market's unwillingness to favor further selling",
+      "Volume on the chart is high for the dragonfly doji"
+    ],
+    "exit_conditions": [
+      "Price action following the doji is bullish but not exceedingly bullish",
+      "Price action surpasses the 55 range with volume slightly above normal"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Continuation Pattern Strategy",
+    "entry_conditions": [
+      "Two massive bullish surges with exceedingly high volume",
+      "Price action resembles a one huge continuation pattern"
+    ],
+    "exit_conditions": [
+      "Price goes flat to lower with relatively lower volume during 'resting phases'",
+      "Price surpasses major obstacles like the 55 range and the low 70s"
+    ],
+    "indicators": [
+      "Not specified"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Decisive Price and Doji Analysis",
+    "entry_conditions": [
+      "A steady downtrend accelerates",
+      "Emergence of a doji with high green volume"
+    ],
+    "exit_conditions": [
+      "Price reaches a major support level (e.g., 142)",
+      "Inverted hammer candle with intent to rise"
+    ],
+    "indicators": [
+      "Doji"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be medium-term based on the context",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Upward Continuation Pattern",
+    "entry_conditions": [
+      "Price rises quite rapidly",
+      "Market reaches a major supporting price"
+    ],
+    "exit_conditions": [
+      "Strong break higher with decisive green spikes in volume and candles",
+      "Sharp candle formation at the peak"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Downtrend Confirmation",
+    "entry_conditions": [
+      "Market forms a peak with a sharp candle",
+      "Next candle closes lower for immediate follow through"
+    ],
+    "exit_conditions": [
+      "Strong row of red candles with high volume",
+      "Increased red selling volume"
+    ],
+    "indicators": [
+      "RSI",
+      "Doji patterns"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Analyzing Wicks and Candle Patterns",
+    "entry_conditions": [
+      "Long wicks at contentious areas",
+      "Uptrend continuing but gradually flattening",
+      "Flat areas with dojis and/or spinning tops",
+      "Two successive lower closes quickly",
+      "Volume returning to normal after bearish candles"
+    ],
+    "exit_conditions": [
+      "Increase in selling volume",
+      "Volume increases significantly after initial stalling",
+      "Price levels marked earlier as major support/resistance",
+      "Large real-bodied candles or steady row of thicker-bodied candles"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Swift Reversals and Single Candle Reversal",
+    "entry_conditions": [
+      "Large bearish star followed by a large bull hammer candle",
+      "Candle trades and closes below the bearish star but negates it"
+    ],
+    "exit_conditions": [
+      "Balanced and centered real body of a large doji",
+      "Gradual increase in thicker red-bodied candles with periodic green candles"
+    ],
+    "indicators": [
+      "Doji",
+      "Bull Hammer"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Resistance and Support Analysis",
+    "entry_conditions": [
+      "Market surge to easily surpass a stronger resistance level",
+      "Large wicks forming around a support level"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on surpassing resistance levels",
+      "Stop loss rule based on support levels"
+    ],
+    "indicators": [
+      "Candlestick patterns",
+      "Volume"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Abandoned Baby Candle Analysis",
+    "entry_conditions": [
+      "Large gaps from the candle before and after",
+      "Rapid volatility and increased volume"
+    ],
+    "exit_conditions": [
+      "Strong rebound in the opposite direction",
+      "Volume increases during the event"
+    ],
+    "indicators": [
+      "Candlestick patterns"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bearish Star at Major Resistance",
+    "entry_conditions": [
+      "Market forming a bearish star at major resistance",
+      "Upper wick rejection"
+    ],
+    "exit_conditions": [
+      "Pause rather than leading to a major downtrend",
+      "Upper wick rejection for bearish stars"
+    ],
+    "indicators": [
+      "Candlestick patterns",
+      "Volume"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Round Number Resistance",
+    "entry_conditions": [
+      "Price rising to a round number at a previous long-term resistance"
+    ],
+    "exit_conditions": [
+      "Price slightly over extended upward",
+      "Take profit rule based on round number resistance"
+    ],
+    "indicators": [
+      "Price levels"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Swift Reversals and Single Candle Reversal",
+    "entry_conditions": [
+      "Increasing bullish candles and volume",
+      "Passing major resistance with increasing bullish sentiment"
+    ],
+    "exit_conditions": [
+      "Candle trades below the bearish star\u2019s low and closes under the bearish star\u2019s low",
+      "New upper range reached with dojis and lower volume slowing down the climb",
+      "Next candle trades below the low of the previous candle on May 2nd with increasing volume and large upper wick rejection"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Volume-Driven Reversal Strategy",
+    "entry_conditions": [
+      "Increasing volume",
+      "Large upper wick rejection"
+    ],
+    "exit_conditions": [
+      "Price closes below bearish star(s)",
+      "Large bullish candle followed by lower closes"
+    ],
+    "indicators": [
+      "Doji",
+      "Bull Hammer"
+    ],
+    "timeframe": "Not explicitly mentioned, inferred from context",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Support Level Confirmation Strategy",
+    "entry_conditions": [
+      "Price approaches a strong support level (e.g., 42)",
+      "Volume is not exceedingly high but increasing red candles"
+    ],
+    "exit_conditions": [
+      "Price closes below support level",
+      "Break under support level with a doji"
+    ],
+    "indicators": [
+      "Round candle",
+      "Bull Hammer"
+    ],
+    "timeframe": "Not explicitly mentioned, inferred from context",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bullish Pause and Potential Uptrend Strategy",
+    "entry_conditions": [
+      "Strong break under a support level (e.g., 42)",
+      "Bull Hammer with high volume"
+    ],
+    "exit_conditions": [
+      "Price closes above the break level with increased bullish activity",
+      "Inverted hammer on a dip below the support level"
+    ],
+    "indicators": [
+      "Bull Hammer",
+      "Inverted Hammer"
+    ],
+    "timeframe": "Not explicitly mentioned, inferred from context",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bearish Star and Upper Wick Rejection",
+    "entry_conditions": [
+      "Inverted hammer on a downtrend",
+      "Lower wick observed"
+    ],
+    "exit_conditions": [
+      "Upper wick rejection forming bearish stars",
+      "Increasing bearish volume"
+    ],
+    "indicators": [
+      "RSI",
+      "Upper wick"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be daily or multi-day",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bearish Engulfing Pattern",
+    "entry_conditions": [
+      "Lower red candle in an uptrend",
+      "Upper wick rejection in a sliding resistance zone"
+    ],
+    "exit_conditions": [
+      "Closing well below the low of the bearish engulfing pattern",
+      "Confirmation with subsequent candles"
+    ],
+    "indicators": [
+      "Candlestick pattern"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be daily or multi-day",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Continuation Lower Pattern",
+    "entry_conditions": [
+      "Lower price action following a pattern similar to a falling pattern",
+      "Spread over a few weeks"
+    ],
+    "exit_conditions": [
+      "Price action continuing the lower trend",
+      "Not explicitly mentioned"
+    ],
+    "indicators": [
+      "Price action"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be daily or multi-day",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Dragonfly Doji and Hammer Patterns",
+    "entry_conditions": [
+      "Price falls and forms a thick dragonfly doji",
+      "Price immediately trades above the doji"
+    ],
+    "exit_conditions": [
+      "Price breaks above the doji's body",
+      "Price closes above the doji's body on a subsequent candle"
+    ],
+    "indicators": [
+      "Dragonfly Doji",
+      "Bull Hammer"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Lower Wick Rejection and Uptrend Development",
+    "entry_conditions": [
+      "Price falls and forms a lower wick rejection",
+      "Price falls but bullish hammer or doji forms"
+    ],
+    "exit_conditions": [
+      "Price breaks above the lower wick rejection",
+      "Price closes above the lower wick rejection on a subsequent candle"
+    ],
+    "indicators": [
+      "Lower Wick Rejection",
+      "Bull Hammer",
+      "Dragonfly Doji"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bullish Acceleration Over Resistance",
+    "entry_conditions": [
+      "Price falls and forms a lower wick rejection",
+      "Price falls but bullish hammer or doji forms"
+    ],
+    "exit_conditions": [
+      "Price breaks above the resistance level (e.g., 14.50 barrier)",
+      "Price closes above the resistance level on a subsequent candle"
+    ],
+    "indicators": [
+      "Lower Wick Rejection",
+      "Bull Hammer",
+      "Dragonfly Doji"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bearish Engulfing Pattern Analysis",
+    "entry_conditions": [
+      "Large bearish engulfing pattern formation",
+      "Price trades or closes above the high of the reversal candle"
+    ],
+    "exit_conditions": [
+      "Next candle closes higher, increasing chances of a bullish reversal",
+      "Volume increases, supporting bullish reversal"
+    ],
+    "indicators": [
+      "Bearish Engulfing Pattern"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Lower Wick Rejection and Volume Analysis",
+    "entry_conditions": [
+      "Upper wick rejection around a significant price range (e.g., 12.30-12.50)",
+      "Higher volume observed"
+    ],
+    "exit_conditions": [
+      "Price forms a bearish pattern (e.g., bearish kicking pattern)",
+      "Volume decreases, indicating a potential reversal"
+    ],
+    "indicators": [
+      "Upper wick rejection",
+      "Volume"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bullish Hammer and Inverted Hammer Analysis",
+    "entry_conditions": [
+      "Bull hammer formation on a significant support level (e.g., 10.50)",
+      "Inverted hammer formation above the bull hammer's high"
+    ],
+    "exit_conditions": [
+      "Following candle closes above the inverted hammer",
+      "Avoiding a prolonged range around the support level"
+    ],
+    "indicators": [
+      "Bull Hammer",
+      "Inverted Hammer"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Long-Term Support Analysis",
+    "entry_conditions": [
+      "Price approaches a major long-term support level (e.g., 11.10)",
+      "Past indecision around this level"
+    ],
+    "exit_conditions": [
+      "Price breaks above the support level",
+      "Volume increases, indicating a potential reversal"
+    ],
+    "indicators": [
+      "Volume"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Inverted Hammer and Piercing Pattern",
+    "entry_conditions": [
+      "Ford trades and closes above the inverted hammer",
+      "cross 11.10 to 10.50 boundary",
+      "bearish sentiment reversal"
+    ],
+    "exit_conditions": [
+      "Price action develops into a major double top",
+      "bearish tone confirmed with a strong close lower on the 17th"
+    ],
+    "indicators": [
+      "Inverted Hammer",
+      "Dark Cloud Cover"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Inverted Hammer and Piercing Pattern",
+    "entry_conditions": [
+      "Inverted hammer nearing but not at the halfway point of the large red candle's midpoint",
+      "Row of green candles originating from the inverted hammer and piercing pattern"
+    ],
+    "exit_conditions": [
+      "Lowerwick rejection to avoid 240ran",
+      "Bullish engulfing pattern with immediate follow-through"
+    ],
+    "indicators": [
+      "Inverted Hammer",
+      "Piercing Pattern"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Gap and Wick Rejection",
+    "entry_conditions": [
+      "Minor wick rejection on a spinning top upon return to 2400",
+      "Market dips back towards the major upper range (24000)"
+    ],
+    "exit_conditions": [
+      "Lowerwick rejection to avoid 2400",
+      "Wick rejection of lower prices close to the prior upswing around the low 2400s"
+    ],
+    "indicators": [
+      "Gap",
+      "Wick Rejection"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bullish Engulfing Pattern",
+    "entry_conditions": [
+      "Bullish engulfing pattern forms after a harami",
+      "Bull hammer that forms a harami with the previous full candle"
+    ],
+    "exit_conditions": [
+      "Immediate follow-through with a thick-bodied bullish candle closing higher"
+    ],
+    "indicators": [
+      "Bullish Engulfing Pattern",
+      "Bull Hammer"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Harami Pattern Strategy",
+    "entry_conditions": [
+      "Market peaks",
+      "Drop ends with a bull hammer that forms a harami"
+    ],
+    "exit_conditions": [
+      "Natural resistance develops around the upper 2700s",
+      "Upper wick rejection",
+      "Closes below the lows of the bearish engulfing"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bearish Engulfing Pattern Strategy",
+    "entry_conditions": [
+      "Bearish engulfing pattern forms",
+      "Market recovers but resistance at upper ranges"
+    ],
+    "exit_conditions": [
+      "Descending trend line crosses",
+      "Upper 2700s resist bullish intent",
+      "Consolidating range establishes above 2700"
+    ],
+    "indicators": [
+      "Upper wick rejection",
+      "Gravestone doji"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Upper 2700s Support Strategy",
+    "entry_conditions": [
+      "Falling price approaching upper 2700s"
+    ],
+    "exit_conditions": [
+      "Upper 2700s reverses roles to offer support"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Triple Bottom Reversal",
+    "entry_conditions": [
+      "Upper wick rejection near previous highs",
+      "Green candles closing below bearish engulfing"
+    ],
+    "exit_conditions": [
+      "Confirmation of the triple bottom pattern",
+      "Sustained price movement in the opposite direction"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bearish Engulfing with Indecision",
+    "entry_conditions": [
+      "Bearish engulfing candlestick formation",
+      "Indecisive doji engulfed at previous highs"
+    ],
+    "exit_conditions": [
+      "Continued bearish price action despite green candles",
+      "Slow progress in the downtrend due to market hesitation"
+    ],
+    "indicators": [
+      "Doji"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Lower Wick Rejection with Hesitation",
+    "entry_conditions": [
+      "Lower wick rejection near previous support",
+      "Hesitation to decline rapidly"
+    ],
+    "exit_conditions": [
+      "Price movement towards the previous support level",
+      "Slow down in the downtrend due to market hesitation"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Overlapping Kicking Patterns & Wick Rejection Strategy",
+    "entry_conditions": [
+      "Pair of overlapping kicking patterns",
+      "Lower wick rejection at previous significant ranges"
+    ],
+    "exit_conditions": [
+      "Price trades above all significant levels",
+      "Major recovery after passing a specific price level (e.g., 2940)"
+    ],
+    "indicators": [
+      "RSI",
+      "MACD"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bullish Engulfing Pattern & Upper Wick Rejection Strategy",
+    "entry_conditions": [
+      "Firm lower base with two large bullish engulfing patterns",
+      "Lower wick rejection and real bodies tending to close above a specific level (e.g., 0.7850)"
+    ],
+    "exit_conditions": [
+      "Price holds above a significant resistance level (e.g., 2785)",
+      "Base of support forms in a mid-range (e.g., mid 0.70s)"
+    ],
+    "indicators": [
+      "Bullish Engulfing",
+      "RSI"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Sideways Range and Inverted Hammer Strategy",
+    "entry_conditions": [
+      "High wick rejection",
+      "Inverted hammers in a sideways range"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned",
+      "Followed by a row of consecutive closes higher"
+    ],
+    "indicators": [
+      "RSI",
+      "Hammer"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Early Recovery Analysis",
+    "entry_conditions": [
+      "Formation of a harami",
+      "C and O of the first and second candle almost in line at 0e level"
+    ],
+    "exit_conditions": [
+      "No follow through with higher closes above reversal candles",
+      "Large red candle poses a similar scenario to previous breakdowns"
+    ],
+    "indicators": [
+      "Reversal candles",
+      "Doji"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Breakdown and Resistance Analysis",
+    "entry_conditions": [
+      "Breakdown below a significant level (e.g., 0.7850)",
+      "Large red candle formation"
+    ],
+    "exit_conditions": [
+      "Re-test of the major support level (e.g., 0.70)",
+      "Lower wick rejection and formation of reversal candles"
+    ],
+    "indicators": [
+      "Lower wick rejection",
+      "Reversal candles",
+      "Doji"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Inverted Hammer and Bull Hammer Analysis",
+    "entry_conditions": [
+      "Inverted hammer formation",
+      "Bull hammer formation with a bullish engulfing pattern"
+    ],
+    "exit_conditions": [
+      "At least 3 closes higher than the high of the bull hammer and inverted hammer",
+      "Decreasing selling pressure and market indecision"
+    ],
+    "indicators": [
+      "Inverted hammer",
+      "Bull hammer"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bull Hammer Reversal",
+    "entry_conditions": [
+      "High of the bull hammer is cleared by at least 3 closes higher",
+      "Immediate confirmation with a strong close that gets above 0.70"
+    ],
+    "exit_conditions": [
+      "Natural resistance from the upper boundary of the last downward continuations resting phase at 0.73",
+      "Secondary effect slowing down the drop as a secondary effect when 0.75 shows a strong downtrend negating a bull hammer"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bullish Engulfing Pattern",
+    "entry_conditions": [
+      "Next candle bullishly engulfs the previous red real body",
+      "Remains above 0e.74 at the close"
+    ],
+    "exit_conditions": [
+      "Higher closes in the next few days",
+      "Longer upper wick with lower wick rejection"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bullish Hammer with Longer Upper Wick",
+    "entry_conditions": [
+      "Large green real bodied candle with longer upper wick",
+      "Real body easily engulfs the real bodies of the past 4 red candles"
+    ],
+    "exit_conditions": [
+      "Longer upper wick with lower wick rejection",
+      "Effective rejection of bearish selling below .73"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bearish Selling Pressure with Indecisive Phase",
+    "entry_conditions": [
+      "No progress higher",
+      "Bearish selling unable to drive cleanly below .73"
+    ],
+    "exit_conditions": [
+      "Prompt lower wick rejection",
+      "Lower wick rejection for the majority of real body ranges staying above .73"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bullish Engulfing Pattern",
+    "entry_conditions": [
+      "Recent large green candle closes above the firm 0.75 level",
+      "Firm 0e75 level is a significant resistance level"
+    ],
+    "exit_conditions": [
+      "Price closes below the low of the bearish engulfing pattern",
+      "Lower wick rejection in the context of an uptrend"
+    ],
+    "indicators": [
+      "Price action"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bullish Continuation",
+    "entry_conditions": [
+      "Price closes above the firm 0.75 level after a bullish comeback",
+      "Price action resembles a familiar bullish continuation pattern"
+    ],
+    "exit_conditions": [
+      "Price begins to consolidate after overcoming 0.75",
+      "Lower wick rejection despite attempts to sell lower"
+    ],
+    "indicators": [
+      "Price action"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bearish Engulfing Pattern",
+    "entry_conditions": [
+      "Back to back lower closes",
+      "Price closes below the low of the bearish engulfing pattern"
+    ],
+    "exit_conditions": [
+      "Price closes below the low of the bearish engulfing pattern",
+      "Lower wick rejection in the context of an uptrend"
+    ],
+    "indicators": [
+      "Price action"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Morning Star",
+    "entry_conditions": [
+      "Doji provides upward reversal potential",
+      "Following candles close above the doji's high"
+    ],
+    "exit_conditions": [
+      "Trade and close above the highest high of the three candles",
+      "Minor overlap of real bodies for less strict criteria"
+    ],
+    "indicators": [
+      "Doji",
+      "Candlestick patterns"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Upper Wick Rejection",
+    "entry_conditions": [
+      "Break of prior support",
+      "Upswing in a specific price range forms firm resistance"
+    ],
+    "exit_conditions": [
+      "Price action begins to sideways range and eventually drops",
+      "Clean upper wick rejection"
+    ],
+    "indicators": [
+      "Price levels",
+      "Candlestick patterns"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Upper Wick Rejection",
+    "entry_conditions": [
+      "Upper wick rejection",
+      "Firm resistance overcome"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Support level reached"
+    ],
+    "indicators": [
+      "Upper wick",
+      "Resistance level"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Evening Star with Lower Wick Rejection",
+    "entry_conditions": [
+      "Lower wick rejection",
+      "Evening star formation"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Support level reached"
+    ],
+    "indicators": [
+      "Lower wick",
+      "Evening star"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Downtrend Confirmation and Upswing Analysis",
+    "entry_conditions": [
+      "Market loses contact with the lower boundary",
+      "Rapid continuation lower observed"
+    ],
+    "exit_conditions": [
+      "Price action completes the downtrend",
+      "Price action forms a gradual shift from down to uptrend with lower volume for the second candle and higher volume for the first and third candles"
+    ],
+    "indicators": [
+      "RSI",
+      "Volume"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Evening Star Pattern Analysis",
+    "entry_conditions": [
+      "Technical formation of an evening star pattern",
+      "Volume mostly green for days at a time",
+      "Gradual build up of bullish intent",
+      "Price behavior aligns with evening star pattern characteristics"
+    ],
+    "exit_conditions": [
+      "First candle of the evening star is not significantly larger than the second",
+      "Second candle closes under 158.46",
+      "Lower wick rejection on the second candle",
+      "Price closes back above the evening star\u2019s low after a brief trading below the low",
+      "Large red real body of the current candle indicating bearish volume"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bearish Volume and Candle Pattern Analysis",
+    "entry_conditions": [
+      "Increased bearish volume",
+      "Large red real body of the current candle"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on price action",
+      "Stop loss rule based on bearish engulfing pattern or upper wick rejection"
+    ],
+    "indicators": [],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Classic Descent Strategy",
+    "entry_conditions": [
+      "A close below the current and newest bearish star\u2019s low",
+      "Volume and price action gradually accelerating more bearishly"
+    ],
+    "exit_conditions": [
+      "Expected lower boundary with clean lower wick rejection"
+    ],
+    "indicators": [
+      "Bearish stars"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be medium-term based on the context",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "General Price Action and Downward Continuation",
+    "entry_conditions": [
+      "Focus on general price action rather than a single green candle"
+    ],
+    "exit_conditions": [
+      "Emergence of more bullish candles with lower wick rejection",
+      "Price holding the lows with more lower wick rejection"
+    ],
+    "indicators": [],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bullish Engulfing Pattern",
+    "entry_conditions": [
+      "Market shows a bullish engulfing pattern"
+    ],
+    "exit_conditions": [
+      "Price does not close over the bullish engulfing pattern\u2019s high"
+    ],
+    "indicators": [
+      "Bullish Engulfing"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Evening Stars",
+    "entry_conditions": [
+      "Evening stars are identified in the price chart"
+    ],
+    "exit_conditions": [
+      "The second evening star is less strict and ideal, indicating a passive rise"
+    ],
+    "indicators": [
+      "Evening Stars"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Spinning Top Candle Analysis",
+    "entry_conditions": [
+      "Spinning top candle found alongside reversal or doji candles",
+      "Spinning top candle near support/resistance ranges",
+      "Spinning top candle in the context of evening star pattern"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on the next candle's price action",
+      "Stop loss rule near the 49-50 resistance range"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be suitable for candlestick patterns analysis",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Harami Pattern Analysis",
+    "entry_conditions": [
+      "Red candle continuing the downtrend",
+      "Green candle body fully contained within the red candle's range"
+    ],
+    "exit_conditions": [
+      "Price trading and closing above the high of the first red candle",
+      "Price closing strongly below the harami's low"
+    ],
+    "indicators": [
+      "Doji",
+      "Spinning top"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Harami Confirmation for Uptrend",
+    "entry_conditions": [
+      "Price closing above the harami's high"
+    ],
+    "exit_conditions": [
+      "Faster price closes above the harami's high for a stronger uptrend"
+    ],
+    "indicators": [
+      "Doji",
+      "Spinning top"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Harami as Resistance Level",
+    "entry_conditions": [
+      "Formation of a harami in a bearish context"
+    ],
+    "exit_conditions": [
+      "Price closing below the harami's low, confirming a downswing"
+    ],
+    "indicators": [
+      "Doji",
+      "Spinning top"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bull Hammer Over Two Candles",
+    "entry_conditions": [
+      "Price action starts from the O of the first red candle",
+      "Price action reaches the C of the second green candle"
+    ],
+    "exit_conditions": [
+      "Not specified in the text"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Inverted Hammers and Bearish Stars",
+    "entry_conditions": [
+      "Support range offered by the low 150s",
+      "Next candle trading above the morning star\u2019s high"
+    ],
+    "exit_conditions": [
+      "Downswing just under 170",
+      "Followed by dojis and eventual closes lower"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Rapid Downward Acceleration with Volatile Market",
+    "entry_conditions": [
+      "Rapid downward acceleration",
+      "Volatile time in the market"
+    ],
+    "exit_conditions": [
+      "Rapid rise to counter",
+      "Form a harami that leans more bullish"
+    ],
+    "indicators": [
+      "Harami pattern"
+    ],
+    "timeframe": "Not specified in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Upper Wick Rejection and Bearish Engulfing",
+    "entry_conditions": [
+      "Two downswings that followed",
+      "Near bearish engulfing price action"
+    ],
+    "exit_conditions": [
+      "Near bearish engulfing price action"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bullish Engulfing Strategy",
+    "entry_conditions": [
+      "Early confirmation to start another bullish attempt off the low 150s",
+      "Consistent and noticeably increased volume compared to the previous break over 170"
+    ],
+    "exit_conditions": [
+      "Piercing pattern alone is less significant without immediate confirmation",
+      "Going below the low of the piercing pattern and the long-standing 150 level"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Harami Pattern Analysis",
+    "entry_conditions": [
+      "Declining volume and volatility",
+      "Narrower H-L and O-C ranges of recent candles",
+      "Emergence of a thick doji that forms a harami with the preceding candle"
+    ],
+    "exit_conditions": [
+      "Rapid movement of the market over the harami's high",
+      "Follow through with a row of higher closes",
+      "Bullish engulfing or piercing patterns confirmation"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bullish Kicking Pattern",
+    "entry_conditions": [
+      "Short green candle slightly higher than the harami's high",
+      "Neutral to marginally bullish stance",
+      "U-shaped price action"
+    ],
+    "exit_conditions": [
+      "Follow through with a row of higher closes",
+      "Bullish engulfing or piercing patterns confirmation"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Harami with Loose Criteria",
+    "entry_conditions": [
+      "Declining volume and volatility",
+      "Narrower H-L and O-C ranges of recent candles",
+      "Thick doji forming a harami with the preceding candle"
+    ],
+    "exit_conditions": [
+      "Follow through with a row of higher closes",
+      "Bullish engulfing or piercing patterns confirmation"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Harami Pattern Analysis",
+    "entry_conditions": [
+      "Second candle's real body is fully contained within the first candle's real body",
+      "Large red candle resembles a downward overextension",
+      "Inverted hammer formation and immediate confirmation",
+      "Closing above the high of the disproportional harami",
+      "Bearish star of the gap up from late October around 85"
+    ],
+    "exit_conditions": [
+      "Closing below the mid point of the first green candle",
+      "Close lower to form price action similar to an evening star",
+      "Single green candle with increasing red volume"
+    ],
+    "indicators": [
+      "Inverted Hammer",
+      "Evening Star"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bearish Harami and Dark Cloud Cover Analysis",
+    "entry_conditions": [
+      "Upper wick surpasses the first candle's high",
+      "Rapid drop ensues after immediate closes under the lows of the harami and dark cloud cover"
+    ],
+    "exit_conditions": [
+      "Lower wick rejection and formation of a bull hammer",
+      "Price closing over the high of the less strict harami"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bullish Harami Analysis",
+    "entry_conditions": [
+      "Second candle shows lower wick rejection and is a large bull hammer",
+      "Price closing over the high of the less strict harami"
+    ],
+    "exit_conditions": [
+      "Price closing over the high of the less strict harami"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bearish Engulfing Analysis",
+    "entry_conditions": [
+      "Marginally higher bearish engulfings"
+    ],
+    "exit_conditions": [
+      "Strong opposition nearing the mid 90s"
+    ],
+    "indicators": [
+      "None mentioned"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bearish Engulfing and Lower Range Strategy",
+    "entry_conditions": [
+      "Marginally higher bearish engulfings",
+      "Lower range holds",
+      "Sharp drops from the mid 90s leading to oversold market"
+    ],
+    "exit_conditions": [
+      "Oversold market allows for a stable rise",
+      "Lower wick rejection of the first harami candle",
+      "Second harami candle as an inverted hammer"
+    ],
+    "indicators": [
+      "Bearish engulfings",
+      "Lower wick"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bullish Harami and Piercing Pattern Strategy",
+    "entry_conditions": [
+      "Harami forms with indecision",
+      "Current candle shifts sentiment to bullish",
+      "Disparity corrected with a harami"
+    ],
+    "exit_conditions": [
+      "Rapid price action over the lows of the upswing point",
+      "Increased selling volume"
+    ],
+    "indicators": [
+      "Harami",
+      "Piercing pattern"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Oversold Market and Morning Star Strategy",
+    "entry_conditions": [
+      "Rapid overselling in the short term",
+      "Market unable to sell lower under the low 100s range"
+    ],
+    "exit_conditions": [
+      "Resumption of uptrend",
+      "Clean bullish engulfing followed by bull hammer and doji lower wick rejection"
+    ],
+    "indicators": [
+      "Oversold market",
+      "Morning star"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Evening Star and Harami Analysis",
+    "entry_conditions": [
+      "Price action similar to a morning star but unsymmetrical and skewed to the lower left",
+      "Volume consistent and slightly above average levels",
+      "Price action tries to reestablish over 110"
+    ],
+    "exit_conditions": [
+      "Price breaks under 110, negating bullish confirmation",
+      "Price finds quick support from the prior 110 range",
+      "Price holds 110 longer, indicating a potential downswing"
+    ],
+    "indicators": [
+      "Evening Star",
+      "Harami"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Multi-Timeframe Analysis",
+    "entry_conditions": [
+      "Combining a shorter time frame (15 minute intraday chart) with a longer time frame (daily chart)"
+    ],
+    "exit_conditions": [],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "15min intraday / Daily",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Gap Down Entry and Bull Hammer Analysis",
+    "entry_conditions": [
+      "Market begins with a gap down",
+      "Bull hammers can slow down a large drop"
+    ],
+    "exit_conditions": [
+      "Passive bullish rise after oversold conditions",
+      "Uptrend possible after passing the high of a large harami and closing above a resistance range"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Lower Wick Rejection and Bull Hammer Formation",
+    "entry_conditions": [
+      "Negative price range candles form lower wick rejection",
+      "Combination of candles forms a thicker bull hammer"
+    ],
+    "exit_conditions": [
+      "Uptrend possible after passing the high of a large harami and closing above a resistance range"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Continuation Price Formations",
+    "entry_conditions": [
+      "Gap down levels provide lower intermediate resistance",
+      "Lower wick rejection as a prior upper range reverses roles"
+    ],
+    "exit_conditions": [
+      "Upward continuations on a larger scale"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "3 Methods Rising",
+    "entry_conditions": [
+      "Hesitation from an upwardly skewed harami is quickly overcome",
+      "Following candle closes successively higher"
+    ],
+    "exit_conditions": [
+      "Gap down near the important O of the first green candles",
+      "Lower support range seen at the start of the trend"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be suitable for identifying candle patterns and ranges",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Long-term Range-based Trading Strategy",
+    "entry_conditions": [
+      "Identification of long-term ranges (150-180) that have influenced price action",
+      "Observation of flat lower boundaries not being breached significantly or for sustained periods"
+    ],
+    "exit_conditions": [
+      "Formation of familiar bullish reversal candles indicating a potential uptrend",
+      "Influence of previous ranges slowing down a strong market decline"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be daily or longer for the context of IPO and long-term trends",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "IPO Range Analysis",
+    "entry_conditions": [
+      "Identification of IPO (initial public offering) range",
+      "Wide opening price range on the first trading day due to initial speculation"
+    ],
+    "exit_conditions": [
+      "Normal candle formation during rapid rises, indicating minor resting phases"
+    ],
+    "indicators": [
+      "Candle charting"
+    ],
+    "timeframe": "First days of trading, typically daily",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bullish Engulfing Pattern",
+    "entry_conditions": [
+      "IPO low of 24.11 not breached",
+      "Bullish engulfing candle formation"
+    ],
+    "exit_conditions": [
+      "Price action forming a clean 3 black crows pattern with increasing volume",
+      "Minor lower wick rejection on August 19th and August 21st"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Daily",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Decisive Downtrend",
+    "entry_conditions": [
+      "Minor real body overlap",
+      "Row of green candles successively closing higher"
+    ],
+    "exit_conditions": [
+      "Price action forming a 3 black crows pattern",
+      "31.10 halting the rise"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Daily",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Lower Wick Rejection",
+    "entry_conditions": [
+      "Lower wick rejection on August 19th",
+      "Lower wick rejection on August 21st"
+    ],
+    "exit_conditions": [
+      "Price action forming a clean 3 black crows pattern",
+      "31.10 halting the rise"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Daily",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Shopify Uptrend Strategy",
+    "entry_conditions": [
+      "Stabilization of price action after high volatility",
+      "First 3 marching soldiers pattern emergence"
+    ],
+    "exit_conditions": [
+      "Price surpassing the 40s range",
+      "Bullish continuation price action represented by a large green candle"
+    ],
+    "indicators": [
+      "3 marching soldiers",
+      "3 methods rising pattern"
+    ],
+    "timeframe": "Daily",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bearish Continuation Strategy",
+    "entry_conditions": [
+      "Lower wick rejection in the mid 80s",
+      "Upper wick rejection at the 100 area"
+    ],
+    "exit_conditions": [
+      "Bearishly engulfed doji with lower wick rejection in the lower 90s",
+      "Unsustainable bearish moves followed by overextension"
+    ],
+    "indicators": [
+      "3 methods falling",
+      "3 black crows"
+    ],
+    "timeframe": "Daily",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Post-IPO Uptrend Strategy",
+    "entry_conditions": [
+      "Stock price passes 100",
+      "Stock has recently gone public (IPO)"
+    ],
+    "exit_conditions": [
+      "Reached target uptrend price",
+      "Significant reversal in trend"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Long-Term Uptrend with Resting Phase",
+    "entry_conditions": [
+      "Stock price has been in a long-term uptrend",
+      "Stock price enters a resting phase"
+    ],
+    "exit_conditions": [
+      "Resting phase ends and resumes uptrend",
+      "Significant reversal in trend"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bullish Continuation Near Key Price Range",
+    "entry_conditions": [
+      "Stock price bounces off key price range (e.g., 30s to 40s)",
+      "Volume increases and large green candles appear"
+    ],
+    "exit_conditions": [
+      "Reached target price within the key range",
+      "Significant reversal in trend"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Neutral to Bullish Post-Bounce Strategy",
+    "entry_conditions": [
+      "Stock price bounces off lower wick rejection",
+      "Bullish volume and large green candles observed"
+    ],
+    "exit_conditions": [
+      "Reached target price",
+      "Significant reversal in trend"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "3 Black Crows Setup",
+    "entry_conditions": [
+      "Rejection during price action that resembles a strong 3 black crows pattern",
+      "Price is over extended downward"
+    ],
+    "exit_conditions": [
+      "Volume increase to strengthen the bearish move",
+      "Bullish engulfing candle followed by a 3 Marching Soldiers pattern"
+    ],
+    "indicators": [
+      "Volume"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be daily or longer",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Combining Multiple Candles for Clarity",
+    "entry_conditions": [
+      "Identifying bearish engulfing patterns",
+      "Recognizing established support and resistance ranges"
+    ],
+    "exit_conditions": [
+      "Completion of the combined candle pattern",
+      "Identification of a clear bearish reversal"
+    ],
+    "indicators": [
+      "Bearish engulfing pattern",
+      "Gravestone doji",
+      "Bull hammer"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be at the 170 area",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Reversal Example with Combined Candles",
+    "entry_conditions": [
+      "Observation of a large piercing pattern",
+      "Identification of a bullish reversal at a now clearly established upper resistance range"
+    ],
+    "exit_conditions": [
+      "Completion of the bullish reversal pattern",
+      "Recognition of a bullish reversal despite non-ideal formation"
+    ],
+    "indicators": [
+      "Large piercing pattern",
+      "Bull hammer",
+      "Gravestone doji"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be at the 170 area",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Gap Down Entry Strategy",
+    "entry_conditions": [
+      "Recent gap down in stock price",
+      "Stock held up but repelled before reaching a specific price level"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on price target",
+      "Stop loss rule to protect against further decline"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bull Hammer Upswing Strategy",
+    "entry_conditions": [
+      "Bull hammer candlestick formation in mid December",
+      "Volume at normal levels"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on price target",
+      "Stop loss rule to protect against reversal"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Support Range Stalling Strategy",
+    "entry_conditions": [
+      "Strong support range established",
+      "Lower wick rejection at a specific price level"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on price target",
+      "Stop loss rule to protect against break of temporary support"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bullish Continuation Strategy",
+    "entry_conditions": [
+      "Stabilization of short term steep incline",
+      "Firm hold around a specific price range"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on price target",
+      "Stop loss rule to protect against reversal"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Neutral to Bearish Tone Development",
+    "entry_conditions": [
+      "Bearish engulfing candlestick formation",
+      "Harami candlestick pattern"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on price target",
+      "Stop loss rule to protect against further decline"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bearish Tone Detection and Support Level Identification",
+    "entry_conditions": [
+      "Development of a harami pattern with opposition from a bull hammer",
+      "Strong close down followed by a bull hammer emergence"
+    ],
+    "exit_conditions": [
+      "Near the open of a bearish star that is bearishly engulfed",
+      "Near the IPO price of 24.00"
+    ],
+    "indicators": [
+      "Bull hammer",
+      "Bearish star"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Support Level Analysis and Uptrend Stabilization",
+    "entry_conditions": [
+      "IPO range with 26.50 as a key support level",
+      "IPO price of 24.00 as a major boundary"
+    ],
+    "exit_conditions": [
+      "Upper intermediate range with normal volume levels",
+      "Defined top with bearish stars and dojis"
+    ],
+    "indicators": [
+      "IPO price",
+      "Bearish stars and dojis"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bullish Engulfing Pattern and Range Support",
+    "entry_conditions": [
+      "Less strict bullish engulfing at the end of October near the last major range of support"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the text"
+    ],
+    "indicators": [
+      "Bullish engulfing"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bearish Continuation Pattern",
+    "entry_conditions": [
+      "Price breaks below a significant support level",
+      "Formation of bearish chart patterns such as black crows"
+    ],
+    "exit_conditions": [
+      "Price reaches a lower boundary of a bearish pattern",
+      "Market oversold condition leading to a potential bounce"
+    ],
+    "indicators": [
+      "Lower wick rejection",
+      "Black crows formation"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be daily or multi-day",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bearish Trend Confirmation with Bullish Signals",
+    "entry_conditions": [
+      "Market showing continued uncertainty and indecision",
+      "Rapid downward acceleration with large red candles and gaps",
+      "Market becoming overbought"
+    ],
+    "exit_conditions": [
+      "Minor bullish to neutral ranges to sustain the downtrend",
+      "Volume increase with real bodies and large gaps indicating a potential reversal",
+      "Near perfect morning star formation with a shift in volume"
+    ],
+    "indicators": [
+      "Morning star",
+      "Gaps",
+      "Volume"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be short-term based on candlestick patterns",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Morning Star Uptrend Strategy",
+    "entry_conditions": [
+      "Current candle shows lower wick rejection",
+      "Continued high bullish volume",
+      "Trades over the morning star's high but unable to close above it"
+    ],
+    "exit_conditions": [
+      "Defined uptrend established",
+      "Price action consistently over 150_H"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Resistance Level Strategy",
+    "entry_conditions": [
+      "Bearish candle with lower volume compared to past bullish candles",
+      "Candle H-L range decreases significantly"
+    ],
+    "exit_conditions": [
+      "Price action holding around 1500",
+      "Potential drift towards 1750"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bullish Breakout Strategy",
+    "entry_conditions": [
+      "Current candle decisively trades and closes higher over 1500"
+    ],
+    "exit_conditions": [
+      "Defined break over 1500",
+      "Development into a longer lasting uptrend"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Morning and Evening Star Pattern",
+    "entry_conditions": [
+      "Price action forms morning star",
+      "Price action forms evening star"
+    ],
+    "exit_conditions": [
+      "Price breaks above the morning star's resistance",
+      "Price breaks above the evening star's resistance"
+    ],
+    "indicators": [
+      "Price action"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be daily",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Consolidation and Breakout Strategy",
+    "entry_conditions": [
+      "Highs similar to the prior range in 2e18-2019",
+      "Strong bullish break over 3000"
+    ],
+    "exit_conditions": [
+      "Lower wick rejection on the 2900 level",
+      "Lower wick rejection pushing back up against the strong drop"
+    ],
+    "indicators": [
+      "Lower wick"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Evening Star and Kicking Pattern Strategy",
+    "entry_conditions": [
+      "Evening star pattern formation",
+      "Kicking pattern formation with a large red candle"
+    ],
+    "exit_conditions": [
+      "Lower wick rejection to decrease the chances of a rapid downtrend",
+      "Shallow incline approaching the 3000-2900 range"
+    ],
+    "indicators": [
+      "Evening star",
+      "Kicking pattern"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Nikkei 225 Range Trading Strategy",
+    "entry_conditions": [
+      "Major recovery takes the Nikkei back up to upper intermediate ranges",
+      "Temporary flat range held in place with clear swing points"
+    ],
+    "exit_conditions": [
+      "Lower boundary at 19000 comes under increasing pressure for a likely downtrend"
+    ],
+    "indicators": [
+      "Clear swing points",
+      "Lower boundary pressure"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bearish Volume Spike Entry",
+    "entry_conditions": [
+      "Isolated spike in bearish volume",
+      "Not maintained in the following months"
+    ],
+    "exit_conditions": [
+      "Overextension following the final phase of 3 black crows"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Defined Trading Ranges with Candle Patterns",
+    "entry_conditions": [
+      "Lower and upper wick rejection",
+      "Formation of defined trading ranges"
+    ],
+    "exit_conditions": [
+      "Natural resistance at 20000",
+      "Rejection of lower prices"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA",
+      "Candle patterns"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bullish Hammer Entry",
+    "entry_conditions": [
+      "Doji with lower wick rejection",
+      "Bull hammer candle on the 19000 level"
+    ],
+    "exit_conditions": [
+      "Rejection of lower prices",
+      "Consistent volume and bull hammer candle"
+    ],
+    "indicators": [
+      "Doji",
+      "Bull hammer"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Downtrend After Major Peak",
+    "entry_conditions": [
+      "Sharp peak at record highs",
+      "Large red bodied candle",
+      "Abnormally high selling price action and volume"
+    ],
+    "exit_conditions": [
+      "3 black crows forming stronger and lower closes"
+    ],
+    "indicators": [
+      "Candle patterns",
+      "Volume"
+    ],
+    "timeframe": "Not specified",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "3 Black Crows and Bull Hammer Setup",
+    "entry_conditions": [
+      "Formation of a 3 black crows pattern",
+      "Followed by a large bull hammer candle"
+    ],
+    "exit_conditions": [
+      "Breach of the bull hammer high level (e.g., 41.12)",
+      "Lower closes and increasing bearish volume"
+    ],
+    "indicators": [
+      "Bull Hammer"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be daily or longer",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Piercing Pattern Strategy",
+    "entry_conditions": [
+      "Approaching the 41-42 range formed by the August 24th bull hammer",
+      "Formation of a strong piercing pattern"
+    ],
+    "exit_conditions": [
+      "Resistance is less but still present in the 41-42 range",
+      "Progress stalls at the 42.79 level",
+      "Price action takes hold of 3 black crows",
+      "Rejection at the firm 46s"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bullish Continuation Strategy",
+    "entry_conditions": [
+      "Breach of 39.68 held",
+      "Bullish continuation after a bearish to neutral range"
+    ],
+    "exit_conditions": [
+      "Influence of 39.68 near the low of the large August 24th bull hammer",
+      "Rejection at the firm 46s"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Supporting Area Strategy",
+    "entry_conditions": [
+      "Recontact of the 46s that retained strong resistance potential",
+      "Large August 24th bull hammer action"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the text"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Harami Pattern Analysis",
+    "entry_conditions": [
+      "Large harami forms",
+      "Rapid downswing observed"
+    ],
+    "exit_conditions": [
+      "Market decisively shifts bearish",
+      "Candle closes lower on a near vertical descent"
+    ],
+    "indicators": [
+      "Candlestick patterns"
+    ],
+    "timeframe": "Intraday 15min",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Bearish Shift Strategy",
+    "entry_conditions": [
+      "Market shifts completely bearish",
+      "August 19th candle closing lower on a near vertical descent"
+    ],
+    "exit_conditions": [
+      "Breach below a significant level (e.g., 10820)",
+      "Price action returning to a support level"
+    ],
+    "indicators": [
+      "Bearish Engulfing",
+      "High of Harami"
+    ],
+    "timeframe": "15min / Daily",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Piercing Pattern and Morning Star Reversal",
+    "entry_conditions": [
+      "Large dark cloud cover on the 15-minute chart",
+      "General morning star price action"
+    ],
+    "exit_conditions": [
+      "Price action forming a double bottom reversal",
+      "Price action returning to a support level"
+    ],
+    "indicators": [
+      "Dark Cloud Cover",
+      "Morning Star"
+    ],
+    "timeframe": "15min / Daily",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  },
+  {
+    "strategy_name": "Short-Term Volatility Strategy",
+    "entry_conditions": [
+      "Intraday time frame shows higher volatility",
+      "High trading volume charts (e.g., Bitcoin, stock market)"
+    ],
+    "exit_conditions": [
+      "Identification of common candle patterns",
+      "Price action returning to a support level"
+    ],
+    "indicators": [],
+    "timeframe": "15min / Daily",
+    "source": "Price_Action_Candlestick_Charting_Practice_Guide_Improve.pdf"
+  }
+]

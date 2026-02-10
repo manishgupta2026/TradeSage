@@ -1,0 +1,1061 @@
+[
+  {
+    "strategy_name": "Fibonacci with Price Action",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Fibonacci levels",
+      "Price action"
+    ],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Trendlines with Price Action",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Trendlines",
+      "Price action"
+    ],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Moving Averages with Price Action",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Moving averages",
+      "Price action"
+    ],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Confluence with Price Action",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Confluence",
+      "Price action"
+    ],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Not specified in the provided text",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Price Action Trading",
+    "entry_conditions": [
+      "Observing past data",
+      "Analyzing current market situation"
+    ],
+    "exit_conditions": [
+      "Risk:Reward Ratio",
+      "Predicting market direction"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified in the provided text",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Weather Analogy for Trading",
+    "entry_conditions": [
+      "Studying past data",
+      "Understanding current market conditions"
+    ],
+    "exit_conditions": [
+      "Correct prediction of market direction"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified in the provided text",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Price Action Trading",
+    "entry_conditions": [
+      "Identification of repeated price patterns",
+      "Use of chart patterns, candlestick patterns, trendlines, price bands, market swing structure, support and resistance levels, consolidations, Fibonacci retracement levels, pivots"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule during major economic news announcements"
+    ],
+    "indicators": [
+      "Chart patterns",
+      "Candlestick patterns",
+      "Trendlines",
+      "Price bands",
+      "Market swing structure",
+      "Support and resistance levels",
+      "Consolidations",
+      "Fibonacci retracement levels",
+      "Pivots"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be short-term due to the context of economic news impact",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "News-Aware Trading",
+    "entry_conditions": [
+      "Valid trade setup",
+      "No major news announcements close to the trade time"
+    ],
+    "exit_conditions": [
+      "Place stop loss behind major support or resistance level",
+      "Avoid trading during high volatility due to news releases"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "News Calendar Check",
+    "entry_conditions": [
+      "Valid trade setup",
+      "No major news announcements close to the trade time"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "indicators": [
+      "ForexFactory News Calendar"
+    ],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Multi-timeframe Trading",
+    "entry_conditions": [
+      "Using trading setups that happen in larger timeframes",
+      "Getting in at a better price point"
+    ],
+    "exit_conditions": [
+      "Keeping the stop loss tight"
+    ],
+    "indicators": [],
+    "timeframe": "Not explicitly mentioned, but implied to be smaller timeframes",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Price Action Trading",
+    "entry_conditions": [
+      "Trading with the trend",
+      "Trading With Price Action Using reliable chart patterns and candlestick patterns",
+      "Trading using Support and resistance levels",
+      "Waiting patiently for the right trade setups and not chasing trades"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the provided text"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not explicitly mentioned in the provided text",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Pure Price Action Trading",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule"
+    ],
+    "indicators": [],
+    "timeframe": [],
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Not-So-Pure Price Action Trading",
+    "entry_conditions": [
+      "Price action"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Moving averages",
+      "Stochastic indicator",
+      "CCI"
+    ],
+    "timeframe": [],
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Price Trend Analysis",
+    "entry_conditions": [
+      "Market is going up, indicating high demand",
+      "Price bars, candlestick, and line charts show a clear trend"
+    ],
+    "exit_conditions": [
+      "Reaching a predefined resistance level",
+      "Price reverses and breaks through support level"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified in the provided text",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Candlestick Chart Analysis",
+    "entry_conditions": [
+      "Not explicitly mentioned in the provided text"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Candlestick chart"
+    ],
+    "timeframe": "Not explicitly mentioned in the provided text",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Bar Chart Analysis",
+    "entry_conditions": [
+      "Not explicitly mentioned in the provided text"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Bar chart"
+    ],
+    "timeframe": "Not explicitly mentioned in the provided text",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Line Chart Analysis",
+    "entry_conditions": [
+      "Not explicitly mentioned in the provided text"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Line chart"
+    ],
+    "timeframe": "Not explicitly mentioned in the provided text",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Candlestick Chart Analysis",
+    "entry_conditions": [
+      "Price opened lower",
+      "Price closed higher after a certain time period"
+    ],
+    "exit_conditions": [
+      "Take profit rule: Set a target based on the distance of the candle body from the opening price",
+      "Stop loss rule: Set a stop loss level based on the high or low of the candlestick"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "5min / Daily etc",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Bullish and Bearish Candlestick Analysis",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Upper Wick Strategy",
+    "entry_conditions": [
+      "Price is moving up",
+      "Market sentiment changes",
+      "Price is pushed down towards the open"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Lower Wick Strategy",
+    "entry_conditions": [
+      "Price is moving down",
+      "Market sentiment changes",
+      "Price is pushed up towards the close"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Trend Detection",
+    "entry_conditions": [
+      "Price is moving up",
+      "Price is moving down",
+      "Price is moving sideways"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Dow Theory structure"
+    ],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Dow Theory Trend Strategy",
+    "entry_conditions": [
+      "Price is in an uptrend, making higher highs and higher lows",
+      "Price is in a downtrend, making lower highs and lower lows"
+    ],
+    "exit_conditions": [
+      "Price makes a higher low, signaling the end of the uptrend and the beginning of a downtrend",
+      "Price makes a lower low, signaling the end of the downtrend and the beginning of an uptrend",
+      "Price intersects a high or low, signaling a potential reversal of the trend"
+    ],
+    "indicators": [
+      "Higher Highs",
+      "Higher Lows",
+      "Lower Highs",
+      "Lower Lows"
+    ],
+    "timeframe": "Not specified in the text",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Sideways/Ranging Market Strategy",
+    "entry_conditions": [
+      "Price moves within a range between a support and resistance level"
+    ],
+    "exit_conditions": [
+      "Not specified in the text"
+    ],
+    "indicators": [
+      "Support and Resistance Levels"
+    ],
+    "timeframe": "Not specified in the text",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Reversal Trading",
+    "entry_conditions": [
+      "Price hits a major support level",
+      "Price breaks the support level"
+    ],
+    "exit_conditions": [
+      "Price breaks the resistance level formed after the support level break",
+      "Price reaches a predetermined profit target"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified in the provided text",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Trend Continuation",
+    "entry_conditions": [
+      "Price slows down and consolidates",
+      "Price resumes the original uptrend direction after a minor downtrend"
+    ],
+    "exit_conditions": [
+      "Price reaches a predetermined profit target",
+      "Price reaches a predetermined stop loss level"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified in the provided text",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Trend Trading",
+    "entry_conditions": [
+      "Avoid buying near or at resistance levels",
+      "Avoid selling near or at support levels",
+      "Enter trades when the trend is clearly up or down"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on higher highs and lows in an uptrend",
+      "Stop loss rule to avoid trading during temporary upswings in a downtrend"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Understanding Market Price Swings",
+    "entry_conditions": [
+      "Recognize higher highs and higher lows in an uptrend",
+      "Recognize lower highs and lower lows in a downtrend"
+    ],
+    "exit_conditions": [
+      "Avoid trading during temporary upswings in a downtrend",
+      "Position sizing based on stop loss distance"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Buy on Downswing in Uptrend",
+    "entry_conditions": [
+      "Market in an uptrend",
+      "Price action (reversal candlesticks) indicates a downswing"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on the reversal candlestick pattern",
+      "Stop loss rule not explicitly mentioned but implied by the context of managing risk"
+    ],
+    "indicators": [
+      "Price Action (reversal candlesticks)"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be aligned with the observation of reversal candlesticks",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Sell on Upswing in Downtrend",
+    "entry_conditions": [
+      "Market in a downtrend",
+      "Price action (reversal candlesticks) indicates an upswing"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on the reversal candlestick pattern",
+      "Stop loss rule not explicitly mentioned but implied by the context of managing risk"
+    ],
+    "indicators": [
+      "Price Action (reversal candlesticks)"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be aligned with the observation of reversal candlesticks",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Dynamic Support and Resistance Levels",
+    "entry_conditions": [
+      "Identification of dynamic support and resistance levels on charts"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on the dynamic level's movement",
+      "Stop loss rule not explicitly mentioned but implied by the context of managing risk"
+    ],
+    "indicators": [
+      "Not explicitly mentioned, but implied to be chart analysis"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be aligned with the observation of dynamic levels",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Position Sizing with Stop Loss",
+    "entry_conditions": [
+      "Large stop loss in place"
+    ],
+    "exit_conditions": [
+      "Position sizing based on stop loss distance to manage risk"
+    ],
+    "indicators": [],
+    "timeframe": "Not explicitly mentioned",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Horizontal Support and Resistance Levels",
+    "entry_conditions": [
+      "Price hits a support or resistance level",
+      "Price reacts to these levels"
+    ],
+    "exit_conditions": [
+      "Rejection from the support or resistance level",
+      "Reversal candlestick signal on smaller timeframes (4hr, 1hr, 30min, 15min, 5min)"
+    ],
+    "indicators": [],
+    "timeframe": "Monthly, Weekly, Daily, 4hr, 1hr, 30min, 15min, 5min",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Support Turned Resistance Level",
+    "entry_conditions": [
+      "Support level has been broken to the downside",
+      "Bearish reversal candlestick observed"
+    ],
+    "exit_conditions": [
+      "Price reaches the resistance turned support level",
+      "Profit taking or stop loss rule applied"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Uptrend Channel",
+    "entry_conditions": [
+      "Price reaches the lower boundary of the uptrend channel",
+      "Bullish reversal candlestick observed"
+    ],
+    "exit_conditions": [
+      "Price reaches the upper boundary of the uptrend channel",
+      "Profit taking or stop loss rule applied"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Trading Channels",
+    "entry_conditions": [
+      "Price touches the channel",
+      "Sideways/Horizontal channel setup at point #2"
+    ],
+    "exit_conditions": [
+      "Price reaches the other end of the channel",
+      "Stop loss placed just outside the channel or just above/below the candlestick showing signs of rejection",
+      "Half the profits taken when price is in the middle of the channel"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Symmetrical Triangle Pattern",
+    "entry_conditions": [
+      "Formation of a symmetrical triangle pattern",
+      "Pattern appears in an uptrend"
+    ],
+    "exit_conditions": [
+      "Breakout to the upside",
+      "Price reaches the neckline"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Trading Symmetrical Triangle Breakout",
+    "entry_conditions": [
+      "Formation of a symmetrical triangle pattern in a downtrend",
+      "Confirmation of breakout with a 1hr candlestick"
+    ],
+    "exit_conditions": [
+      "Take profit rule: Enter a pending buy stop or sell stop order after the 1hr candlestick closes outside the triangle",
+      "Stop loss rule: Prefer breakouts with candlesticks close to the trend lines"
+    ],
+    "indicators": [
+      "Symmetrical Triangle Pattern"
+    ],
+    "timeframe": "1hr / 4hr",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Descending Triangle Strategy",
+    "entry_conditions": [
+      "Initial breakout of the descending triangle pattern",
+      "Candlestick closes outside of the pattern"
+    ],
+    "exit_conditions": [
+      "Take profit rule: Target previous resistance levels or a multiple of the 'x' pips distance",
+      "Stop loss rule: A few pips under the support level"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified in the text",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Head & Shoulders Pattern",
+    "entry_conditions": [
+      "Buyers return to the market and push through to new highs",
+      "Market rallies but fails to take out the previous high"
+    ],
+    "exit_conditions": [
+      "Take profit rule using previous lows or troughs",
+      "Stop loss rule using the distance in pips between the neckline and the head"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Inverse Head & Shoulders Pattern",
+    "entry_conditions": [
+      "Initial breakout of the neckline",
+      "Price re-tests and breaks the neckline"
+    ],
+    "exit_conditions": [
+      "Take profit rule using previous lows or troughs",
+      "Stop loss rule using the distance in pips between the neckline and the head"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Double Top Chart Pattern",
+    "entry_conditions": [
+      "Buy the breakout of the neckline",
+      "Sell trade on Peak 2 when a bearish reversal candlestick is observed"
+    ],
+    "exit_conditions": [
+      "Use previous low (support levels) to set take profit targets",
+      "Measure the distance between the neckline and the highest peak (range) in pips as take profit target"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Triple Bottom",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Bearish Reversal Candlestick Patterns",
+    "entry_conditions": [
+      "Candlestick forms at peak 3",
+      "Bearish reversal candlestick (gravestone doji) in an uptrend or resistance level"
+    ],
+    "exit_conditions": [
+      "Take profit rule: Use the neckline as a profit target",
+      "Stop loss rule: Use the distance between the neckline and the highest of the 3 peaks"
+    ],
+    "indicators": [
+      "Neckline",
+      "3 peaks"
+    ],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Bullish Reversal Candlestick Patterns",
+    "entry_conditions": [
+      "Candlestick forms at peak 3",
+      "Bullish reversal candlestick (dragonfly doji) in a downtrend or support level"
+    ],
+    "exit_conditions": [
+      "Take profit rule: Use a previous low as a profit target level",
+      "Stop loss rule: Not specified"
+    ],
+    "indicators": [
+      "Dragonfly doji",
+      "Support level"
+    ],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Engulfing Candlestick Patterns",
+    "entry_conditions": [
+      "First candle is bearish followed by a bullish engulfing pattern"
+    ],
+    "exit_conditions": [
+      "Take profit rule: Not specified",
+      "Stop loss rule: Not specified"
+    ],
+    "indicators": [
+      "Bearish candlestick",
+      "Bullish engulfing pattern"
+    ],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Bearish Reversal Signal",
+    "entry_conditions": [
+      "Bearish candlestick pattern forming at support levels or in a downtrend"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Bullish Reversal Signal",
+    "entry_conditions": [
+      "Piercing line candlestick pattern forming at support levels or in a downtrend"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Bearish Reversal Signal",
+    "entry_conditions": [
+      "Shooting star candlestick pattern forming in an uptrend or at resistance level"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Bullish Reversal Signal",
+    "entry_conditions": [
+      "Hammer candlestick pattern forming in a downtrend or at support levels"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Bullish Reversal Candlestick Pattern",
+    "entry_conditions": [
+      "Identify a high probability bullish reversal candlestick pattern"
+    ],
+    "exit_conditions": [
+      "Not specified in the text"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified in the text",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Hanging Man Candlestick Pattern",
+    "entry_conditions": [
+      "Identify a candlestick that looks like a hammer in an uptrend"
+    ],
+    "exit_conditions": [
+      "Consider going short (sell) if it forms in an uptrend or resistance levels"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified in the text",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Bearish Railway Track Candlestick Pattern",
+    "entry_conditions": [
+      "Identify a bearish railway track pattern in an uptrend or area of resistance"
+    ],
+    "exit_conditions": [
+      "Consider selling if the bearish railway track pattern is observed"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified in the text",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Bullish Railway Track Candlestick Pattern",
+    "entry_conditions": [
+      "Identify a bullish railway track pattern in a downturn or area of support"
+    ],
+    "exit_conditions": [
+      "Consider buying if the bullish railway track pattern is observed"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified in the text",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Spinning Top Candlestick Pattern",
+    "entry_conditions": [
+      "Identify a spinning top candlestick pattern"
+    ],
+    "exit_conditions": [
+      "Not specified in the text"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified in the text",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Spinning Tops Reversal Strategy",
+    "entry_conditions": [
+      "Bearish spinning top in a support area or downtrend",
+      "Bullish spinning top in a resistance level or uptrend"
+    ],
+    "exit_conditions": [
+      "Breakout of the low or high of a spinning top by the next candle",
+      "Not explicitly mentioned in the text"
+    ],
+    "indicators": [],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Blending Candlesticks",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "1m, 5min, 15m, 30min, 1hr, 4hr, daily, weekly, monthly",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Fibonacci Retracement with Price Action",
+    "entry_conditions": [
+      "Identify a major peak and trough on a forex chart",
+      "Use the Fibonacci retracement tool to divide the vertical distance by key Fibonacci ratios (23.6%, 38.2%, 50%, 61.8%, 100%)"
+    ],
+    "exit_conditions": [
+      "Identify possible support and resistance levels using the Fibonacci retracement tool",
+      "Focus on the 50% and 61.8% Fibonacci levels for trading decisions"
+    ],
+    "indicators": [
+      "Fibonacci retracement tool",
+      "Reversal candlesticks"
+    ],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Fibonacci Retracement",
+    "entry_conditions": [
+      "Price has been going down for some time (downtrend)",
+      "Price has been going up for some time (uptrend)"
+    ],
+    "exit_conditions": [
+      "Price reaches a Fibonacci level (e.g., 50% or 61.8%)",
+      "Price action combined with support and resistance levels"
+    ],
+    "indicators": [
+      "Fibonacci levels"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be used on daily charts for the context of the example",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Trendline Trading",
+    "entry_conditions": [
+      "Trendline gets intersected",
+      "Bearish harami pattern",
+      "Spinning top pattern"
+    ],
+    "exit_conditions": [
+      "Price heads back in the original direction",
+      "Price intersects the first trendline and goes up to the second trendline",
+      "Shooting star candlestick signal"
+    ],
+    "indicators": [
+      "Trendlines"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be suitable for trendline analysis",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Moving Averages for Dynamic Support and Resistance",
+    "entry_conditions": [
+      "Price has crossed the HL (higher low)",
+      "Price has made a significant move in a particular direction"
+    ],
+    "exit_conditions": [
+      "Moving averages confirm the trend indicated by price action",
+      "Price action suggests a potential reversal"
+    ],
+    "indicators": [
+      "Moving Averages"
+    ],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Dynamic Support and Resistance with Moving Averages",
+    "entry_conditions": [
+      "Price moves up to the moving average lines in a downtrend",
+      "Price moves down to the moving average lines in an uptrend"
+    ],
+    "exit_conditions": [
+      "Price bounces back from the moving average lines",
+      "Reversal candlestick patterns confirm the move towards the moving average lines"
+    ],
+    "indicators": [
+      "Moving Averages"
+    ],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Trend Trading with Reversal Candlesticks",
+    "entry_conditions": [
+      "Bearish reversal candlesticks in a downtrend",
+      "Bullish reversal candlesticks in an uptrend"
+    ],
+    "exit_conditions": [
+      "Price touches the moving average lines",
+      "Confirmation signal from reversal candlestick patterns"
+    ],
+    "indicators": [
+      "Moving Averages",
+      "Reversal Candlesticks"
+    ],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Dynamic Resistance Levels with Price Action",
+    "entry_conditions": [
+      "Price heading towards a resistance level",
+      "Fibonacci retracement level coincides with resistance level",
+      "Overall trend is down"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Fibonacci retracement"
+    ],
+    "timeframe": "Daily",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Confluence Zone and Reversal Pattern Trade",
+    "entry_conditions": [
+      "Downward trendline drawn",
+      "Price approaching confluence zone",
+      "Shooting star or bearish reversal Candlestick pattern observed"
+    ],
+    "exit_conditions": [
+      "Take profit rule set at previous swing low (215 pips)",
+      "Trailing stop loss used to protect profits"
+    ],
+    "indicators": [
+      "Trendline",
+      "Confluence Zone",
+      "Shooting star/bearish reversal Candlestick pattern"
+    ],
+    "timeframe": "1hr",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Doji Candlestick Confluence with Downtrend",
+    "entry_conditions": [
+      "The doji candlestick shows a clear indecision by the sellers and the buyers",
+      "The doji candlestick formed between 50-61.8 Fibonacci retracement zone"
+    ],
+    "exit_conditions": [
+      "Breakout of the low of doji candlestick by sellers",
+      "Dynamic resistance provided by moving averages"
+    ],
+    "indicators": [
+      "Doji",
+      "Fibonacci retracement",
+      "Moving averages"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be daily or longer",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Multi-Timeframe Trading",
+    "entry_conditions": [
+      "Using smaller timeframes for trade entry",
+      "Switching to smaller timeframes for better trade entries"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the provided text"
+    ],
+    "indicators": [],
+    "timeframe": "Not explicitly mentioned, but implied use of multiple timeframes",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Multi-Timeframe Trading",
+    "entry_conditions": [
+      "Wait for trade setups to happen in monthly, weekly, daily, 4hr timeframes",
+      "Use smaller timeframes to get good trade entries"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule",
+      "Bearish reversal candlestick signal",
+      "Breaking significant resistance level"
+    ],
+    "indicators": [
+      "Monthly chart uptrend",
+      "Daily chart shooting star",
+      "4hr chart price action"
+    ],
+    "timeframe": [
+      "Monthly",
+      "Weekly",
+      "Daily",
+      "4hr"
+    ],
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Multi-timeframe Analysis",
+    "entry_conditions": [
+      "Identify a good price level or entry point",
+      "Keep stop loss distance tight"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [],
+    "timeframe": "Varies",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Avoiding Overextended Breakouts",
+    "entry_conditions": [
+      "Price has not been overextended for a long period of time"
+    ],
+    "exit_conditions": [
+      "Wait for a pullback to buy"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  },
+  {
+    "strategy_name": "Trading the Obvious",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The_Ultimate_Guide_To_Price_Action_Trading_Mangi_Madang_.pdf"
+  }
+]

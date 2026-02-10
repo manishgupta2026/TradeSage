@@ -1,0 +1,1239 @@
+[
+  {
+    "strategy_name": "Candlestick Trading Bible",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [
+      "Japanese candlestick patterns",
+      "Technical analysis"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Candlestick Trading",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified in the provided text",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Candlestick Patterns",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified in the provided text",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Market Structure Analysis",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified in the provided text",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Candlestick Trading Strategy",
+    "entry_conditions": [
+      "Interest in candlesticks",
+      "Introduction of candlestick reversal patterns"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the text"
+    ],
+    "indicators": [
+      "Candlesticks",
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Candlestick Trading Strategy",
+    "entry_conditions": [
+      "Understanding candlestick patterns",
+      "Identifying bullish candlesticks"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on candlestick patterns",
+      "Stop loss rule based on candlestick patterns"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA",
+      "Support and resistance",
+      "Trend lines"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be flexible based on the context",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Candlestick Trading Strategy",
+    "entry_conditions": [
+      "Close is above the open",
+      "Close is below the open"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Candlestick body size",
+      "Candlestick shadows"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Candlestick Pattern Trading",
+    "entry_conditions": [
+      "Past the open and close",
+      "Identify Japanese candlestick patterns",
+      "Long upper shadow and short lower shadow indicate buying pressure"
+    ],
+    "exit_conditions": [
+      "End the session near the open price",
+      "Take profit rule based on pattern completion",
+      "Stop loss rule based on pattern reversal"
+    ],
+    "indicators": [
+      "Japanese candlesticks",
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be suitable for candlestick patterns",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Bearish Trend Reversal",
+    "entry_conditions": [
+      "Pattern occurs at the end of an uptrend",
+      "Buyers are not in control of the market"
+    ],
+    "exit_conditions": [
+      "Confirmation with other technical tools required",
+      "Confluence of factors to decide on trade"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Bullish Engulfing Bar Pattern",
+    "entry_conditions": [
+      "Bullish engulfing candlestick pattern found",
+      "Formation in the context of an uptrend or at the end of a downtrend"
+    ],
+    "exit_conditions": [
+      "Confirmation with other technical tools required",
+      "Confluence of factors to decide on trade"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Bearish and Bullish Engulfing Candlestick Patterns",
+    "entry_conditions": [
+      "Identify bearish and bullish engulfing patterns on charts"
+    ],
+    "exit_conditions": [
+      "Take profits after a trend reversal indicated by the Doji pattern",
+      "Consider the Doji as an entry signal when combined with other technical analysis"
+    ],
+    "indicators": [
+      "Doji"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Doji Candlestick Pattern",
+    "entry_conditions": [
+      "Formation of Doji in an uptrend or downtrend"
+    ],
+    "exit_conditions": [
+      "Take profits after a trend reversal",
+      "Exit when the market shows signs of resting after a significant move"
+    ],
+    "indicators": [
+      "Doji"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Dragonfly Doji",
+    "entry_conditions": [
+      "Open high and close are the same or about the same price"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "5min / Daily etc",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Gravestone Doji",
+    "entry_conditions": [
+      "Open and close are the same or about the same price"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "5min / Daily etc",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Gravestone Doji",
+    "entry_conditions": [
+      "Formation occurs near a resistance level"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the text"
+    ],
+    "indicators": [
+      "Candlestick pattern"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Morning Star",
+    "entry_conditions": [
+      "First candlestick is bearish",
+      "Second candlestick is small and can be bullish or bearish",
+      "Third candlestick is a bullish candlestick that gapped up on the open and closed above the midpoint of the body of the first day"
+    ],
+    "exit_conditions": [
+      "Occurs at the bottom of a downtrend near a support level"
+    ],
+    "indicators": [
+      "Candlestick pattern"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Morning Star Pattern",
+    "entry_conditions": [
+      "The pattern occurs at the bottom of a downtrend",
+      "First candle confirms seller's domination"
+    ],
+    "exit_conditions": [
+      "Second candle produces indecision in the market",
+      "Third bullish candle indicates buyers take control"
+    ],
+    "indicators": [
+      "Candlestick patterns"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Evening Star Pattern",
+    "entry_conditions": [
+      "The pattern occurs at the top of an uptrend",
+      "First candle is a bullish candle"
+    ],
+    "exit_conditions": [
+      "Second candle shows indecision or a small candlestick",
+      "Third candle is a large bearish candle"
+    ],
+    "indicators": [
+      "Candlestick patterns"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Harami Pattern",
+    "entry_conditions": [
+      "The second candle closes outside the previous one",
+      "The pattern occurs during an uptrend or a downtrend"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on the continuation or reversal signal",
+      "Stop loss rule based on the market consolidation or breakout"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Tweezers Top and Bottom Formations",
+    "entry_conditions": [
+      "Bullish candlestick followed by a bearish candlestick",
+      "Bearish candlestick followed by a bullish candlestick"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Tweezers Top (Bearish Reversal)",
+    "entry_conditions": [
+      "Bullish candlestick followed by a bearish candlestick during an uptrend"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Tweezers Bottom (Bullish Reversal)",
+    "entry_conditions": [
+      "Bearish candlestick followed by a bullish candlestick during a downtrend"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Reversal Buy Signal",
+    "entry_conditions": [
+      "Market downward on the first session",
+      "Second session opens with prices closing on the first session and going up"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Candlestick Pattern Recognition",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [
+      "Bullish Harami pattern",
+      "Bullish Tweezers",
+      "Engulfing bar"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Trending Market Strategy",
+    "entry_conditions": [
+      "Visual observation of price action indicating higher highs and higher lows in an up-trending market",
+      "Visual observation of price action indicating lower highs and lower lows in a downtrending market"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on the identified trend continuation",
+      "Stop loss rule to protect against trend reversals"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Trending Market Trading",
+    "entry_conditions": [
+      "Identify a trending market",
+      "Market is making higher highs and higher lows"
+    ],
+    "exit_conditions": [
+      "Take profits at the end of an impulsive move"
+    ],
+    "indicators": [],
+    "timeframe": "4H, Daily, Weekly",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Impulsive Move Entry",
+    "entry_conditions": [
+      "Market is making an impulsive move in the direction of the trend"
+    ],
+    "exit_conditions": [
+      "Take profits at the end of the impulsive move"
+    ],
+    "indicators": [],
+    "timeframe": "4H, Daily, Weekly",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Support and Resistance Levels",
+    "entry_conditions": [
+      "Market in a downtrend",
+      "Previous swing point acts as a resistance level"
+    ],
+    "exit_conditions": [
+      "Price approaches previous swing point (resistance level)",
+      "Price respects support level after breakout"
+    ],
+    "indicators": [
+      "Candlestick patterns"
+    ],
+    "timeframe": "Daily",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Trend Lines",
+    "entry_conditions": [
+      "Market making new swing highs and lows",
+      "Price tends to respect a linear level"
+    ],
+    "exit_conditions": [
+      "Price breaks through trend line",
+      "Price approaches trend line"
+    ],
+    "indicators": [
+      "Trend lines"
+    ],
+    "timeframe": "4H and Daily",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Trend Line Strategy",
+    "entry_conditions": [
+      "Identify the beginning of impulsive moves in a trending market"
+    ],
+    "exit_conditions": [
+      "Price approaches the trend line",
+      "Market reverses and continues in the same direction"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "4H / Daily",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Trend Line Strategy in Uptrend",
+    "entry_conditions": [
+      "Market respects the trend line",
+      "Market shows a pattern of higher highs and higher lows"
+    ],
+    "exit_conditions": [
+      "Price approaches the trend line",
+      "Market predicts the next movement upward"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "4H / Daily",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Ranging Market Strategy",
+    "entry_conditions": [
+      "Market makes a series of higher highs and higher lows",
+      "Market stops making consecutive peaks"
+    ],
+    "exit_conditions": [
+      "Price moves within the support and resistance levels"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "4H / Daily",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Trading Ranging Markets",
+    "entry_conditions": [
+      "Price approaches key support level",
+      "Price approaches key resistance level"
+    ],
+    "exit_conditions": [
+      "Buy at key support level",
+      "Sell at key resistance level"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Support and Resistance Trading",
+    "entry_conditions": [
+      "Market moving horizontally",
+      "Price breaks out of the resistance level"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Breakout Trading",
+    "entry_conditions": [
+      "Breakout from support or resistance level"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Pullback Entry",
+    "entry_conditions": [
+      "Pullback after breakout of support or resistance level"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Pullback Entry Strategy",
+    "entry_conditions": [
+      "Missed breakout",
+      "Pullback occurrence"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be suitable for ranging markets",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Choppy Market Identification",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [
+      "Daily chart zoom",
+      "Price action analysis"
+    ],
+    "timeframe": "Daily",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Top and Down Analysis",
+    "entry_conditions": [
+      "Start with bigger time frames to get the big picture",
+      "Switch to smaller time frames for detailed decision-making"
+    ],
+    "exit_conditions": [
+      "Align weekly and daily chart analysis with the 4h chart for trading decisions",
+      "Avoid low probability trading setups by focusing on high probability signals"
+    ],
+    "indicators": [],
+    "timeframe": "Weekly, Daily, 4H",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Top-Down Analysis",
+    "entry_conditions": [
+      "Identifying turning points on the weekly chart",
+      "Market approaching important resistance level"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Weekly chart analysis"
+    ],
+    "timeframe": "Weekly / Daily",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Price Action and Candlestick Patterns",
+    "entry_conditions": [
+      "Previous candle on the weekly chart",
+      "Market condition on the 4h time frame",
+      "Important key levels on the 4h or daily time frame"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Weekly chart analysis",
+      "Candlestick patterns"
+    ],
+    "timeframe": "4h / Daily",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Pin Bar Signal Analysis",
+    "entry_conditions": [
+      "Clear pin bar candlestick pattern on daily chart"
+    ],
+    "exit_conditions": [
+      "Rejection from key weekly resistance level"
+    ],
+    "indicators": [
+      "Candlestick pattern"
+    ],
+    "timeframe": "Daily",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Top Down Analysis",
+    "entry_conditions": [
+      "Presence of a key resistance level on a weekly chart"
+    ],
+    "exit_conditions": [
+      "Reversal of market direction due to resistance level"
+    ],
+    "indicators": [
+      "Weekly chart analysis"
+    ],
+    "timeframe": "Weekly",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Counter Trend Trading",
+    "entry_conditions": [
+      "Price action based on one-time frame",
+      "Combination with top down analysis"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the text"
+    ],
+    "indicators": [
+      "Price action",
+      "Top down analysis"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Candlestick Trading",
+    "entry_conditions": [
+      "Identify market trend using multiple time frames analysis",
+      "Differentiate between trending markets and range bounds markets"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Pin Bar Candlestick Strategy",
+    "entry_conditions": [
+      "Identify potential pin bar signals",
+      "Conditions needed for high probability setups"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the provided text",
+      "Market moves in the opposite direction indicated by a long tail"
+    ],
+    "indicators": [
+      "Candlestick chart pattern",
+      "Real body size and shadow length"
+    ],
+    "timeframe": "Not explicitly mentioned in the provided text",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Pin Bar Trading with Trend",
+    "entry_conditions": [
+      "Identifying a clear uptrend or downtrend",
+      "Waiting for a pin bar to occur after a pullback to support or resistance level"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Dynamic Support/Resistance with 21-Moving Average",
+    "entry_conditions": [
+      "Market trending down",
+      "21-moving average acting as dynamic resistance"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "21-Moving Average"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Resistance Level Entry",
+    "entry_conditions": [
+      "Identification of resistance level",
+      "Market closing with pin bar",
+      "Stop loss positioned above the long tail"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on next support level in a downtrend"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Conservative Entry Option",
+    "entry_conditions": [
+      "50% of the range bar retracement",
+      "Market closing with pin bar"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned, but implied to be based on the retracement level"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Trading Pin Bars with Confluence",
+    "entry_conditions": [
+      "Pin bar formation",
+      "Confluence of technical indicators"
+    ],
+    "exit_conditions": [],
+    "indicators": [
+      "Not specified"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Pin Bar Confirmation Strategy",
+    "entry_conditions": [
+      "Identification of a pin bar signal",
+      "Confluence with other factors"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Trend",
+      "Support and resistance levels",
+      "Moving averages (8 and 21)",
+      "Fibonacci retracement (61% and 50%)",
+      "Trend lines"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Buying Opportunity from Support Level Rejection",
+    "entry_conditions": [
+      "Market is rejected from the support level",
+      "Pin bar formation indicating buyers are still present"
+    ],
+    "exit_conditions": [
+      "Profit target at the next resistance level"
+    ],
+    "indicators": [
+      "Pin Bar"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Trading Breakouts and Retracements",
+    "entry_conditions": [
+      "Price breaks out from a major key support or resistance level",
+      "Price retraces back to the breakout point"
+    ],
+    "exit_conditions": [
+      "Long the market if price retraces back to breakout point",
+      "Short the market if price retraces back to breakout point"
+    ],
+    "indicators": [
+      "Bollinger Bands"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Bollinger Bands False Breakout with Horizontal Support/Resistance",
+    "entry_conditions": [
+      "Pin bar rejected from a horizontal key level",
+      "Pin bar rejected from Bollinger bands"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Bollinger Bands",
+      "Horizontal Support/Resistance"
+    ],
+    "timeframe": "Daily",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Engulfing Bar Price Action",
+    "entry_conditions": [
+      "Market is trending",
+      "Clearly definable uptrend or downtrend"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Trend Following with Engulfing Bar",
+    "entry_conditions": [
+      "Market is trending",
+      "Series of higher highs and higher lows (uptrend)",
+      "Series of lower highs and lower lows (downtrend)"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Engulfing Bar Pattern Trading",
+    "entry_conditions": [
+      "Clearly definable uptrend or downtrend",
+      "Price passes through resistance level"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Moving averages",
+      "Fibonacci retracement ratios"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Support and Resistance Level Trading",
+    "entry_conditions": [
+      "Price tests support level and stops",
+      "Price tests resistance level and stops"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Trend lines, channels, flags, triangles",
+      "Supply and demand areas"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Moving Average Trading Strategy",
+    "entry_conditions": [
+      "Buy when prices are above the 200 simple moving average",
+      "Buy when price pullbacks to the moving average and an engulfing bar pattern forms"
+    ],
+    "exit_conditions": [
+      "Sell when prices are below the 200 simple moving average",
+      "Sell when price retraces to the moving average"
+    ],
+    "indicators": [
+      "200 Simple Moving Average",
+      "Engulfing Bar Pattern"
+    ],
+    "timeframe": [
+      "Daily",
+      "4-hour"
+    ],
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Engulfing Bar with Fibonacci Retracement",
+    "entry_conditions": [
+      "Define a clear uptrend or downtrend",
+      "Identify major corrective levels using Fibonacci retracement tool"
+    ],
+    "exit_conditions": [
+      "Take profit rule: Matching engulfing bar pattern with 50% or 61% Fibonacci retracement levels",
+      "Stop loss rule: Not explicitly mentioned in the text"
+    ],
+    "indicators": [
+      "Fibonacci retracement",
+      "Japanese candlestick"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Trading the Engulfing Bar with Trendlines",
+    "entry_conditions": [
+      "Define a clear uptrend or downtrend",
+      "Identify major corrective levels using Fibonacci retracement tool"
+    ],
+    "exit_conditions": [
+      "Take profit rule: Not explicitly mentioned in the text",
+      "Stop loss rule: Not explicitly mentioned in the text"
+    ],
+    "indicators": [
+      "Trend lines",
+      "Japanese candlestick"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Range Bound Market Trading",
+    "entry_conditions": [
+      "Market stops making higher highs and higher lows in case of an uptrend",
+      "Market stops making lower highs and lower lows in case of a downtrend"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on horizontal support and resistance levels",
+      "Stop loss rule to protect trading account in choppy markets"
+    ],
+    "indicators": [
+      "Horizontal support and resistance levels",
+      "RSI (Relative Strength Index) to identify overbought and oversold conditions",
+      "EMA (Exponential Moving Average) to confirm trend direction or reversal"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be suitable for identifying range bound markets",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Supply and Demand Area Trading",
+    "entry_conditions": [
+      "Market approaches supply and demand zones",
+      "Strong moves characterize these zones"
+    ],
+    "exit_conditions": [
+      "Combine with engulfing bar price action signal",
+      "Potential of 2:1 risk to reward ratio"
+    ],
+    "indicators": [
+      "Candlestick patterns",
+      "Pending orders"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be daily or significant timeframes",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Engulfing Bar Trading",
+    "entry_conditions": [
+      "Formation of an engulfing bar",
+      "Market ranging and approaching major demand and supply zones"
+    ],
+    "exit_conditions": [
+      "2:1 risk to reward ratio",
+      "Combination with supply and demand areas"
+    ],
+    "indicators": [
+      "Candlestick patterns"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be daily or significant timeframes",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Money Management",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Trade with a potential of 2:1 risk to reward ratio",
+      "Ignore price action signals with low risk/reward ratios"
+    ],
+    "indicators": [],
+    "timeframe": "Not explicitly mentioned, but implied to be applicable to any trading timeframe",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Engulfing Bar Trade",
+    "entry_conditions": [
+      "Formation of an engulfing bar pattern in a demand area",
+      "Identification of major demand and supply zones in a ranging market"
+    ],
+    "exit_conditions": [
+      "Take profit rule: Look for the next support or resistance level",
+      "Stop loss rule: Place stop loss below the candlestick pattern"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be suitable for candlestick patterns",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Risk to Reward Ratio Management",
+    "entry_conditions": [
+      "3:1 risk to reward ratio",
+      "Winning trades with a 3:1 risk to reward ratio"
+    ],
+    "exit_conditions": [
+      "Calculate risk to reward ratio before each trade",
+      "Use stop loss to manage potential losses"
+    ],
+    "indicators": [],
+    "timeframe": "Not explicitly mentioned, but implied to be suitable for trades with a 3:1 risk to reward ratio",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Inside Bar Breakout with Support and Resistance",
+    "entry_conditions": [
+      "Breakout of the inside bar pattern",
+      "Price breaks below the support level"
+    ],
+    "exit_conditions": [
+      "Take profit rule: Target next support level",
+      "Stop loss rule: Place stop loss order above the mother candle"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Continuation Patterns",
+    "entry_conditions": [
+      "Significant price action setup",
+      "Formation of specific patterns like support and resistance, Fibonacci retracement levels, moving averages, or pivot points"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "indicators": [
+      "Support and resistance levels",
+      "Fibonacci retracement levels",
+      "Moving averages",
+      "Pivot points"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Inside Bar Pattern Entry",
+    "entry_conditions": [
+      "Breakout of support level",
+      "Confirmation of market control by sellers"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Inside Bar Pattern"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Fibonacci Retracement Levels",
+    "entry_conditions": [
+      "Market trending down",
+      "Sellers in control"
+    ],
+    "exit_conditions": [
+      "Take profit rule: Enter near resistance level",
+      "Stop loss rule: Above breakout level"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "21 Moving Averages and Trend Lines",
+    "entry_conditions": [
+      "Market trending",
+      "Trending markets"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "indicators": [
+      "21 Moving Averages",
+      "Trend Lines"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Inside Bar False Breakout",
+    "entry_conditions": [
+      "Inside bar false breakout",
+      "Market manipulation",
+      "Big players hunting novice traders' stops"
+    ],
+    "exit_conditions": [
+      "Take profit rule: Sell near resistance level",
+      "Stop loss rule: Above breakout level"
+    ],
+    "indicators": [
+      "Not specified"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Fibonacci Retracement with Inside Bar False Breakout",
+    "entry_conditions": [
+      "Market trending",
+      "Inside bar false breakout",
+      "Fibonacci retracement levels"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA",
+      "Fibonacci Retracement Levels"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Fibonacci Retracement and Bar Setup Trading",
+    "entry_conditions": [
+      "Market moves strongly",
+      "Pullback reaches 50% or 61% Fibonacci levels",
+      "Price action signal confirms entry"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Fibonacci retracement",
+      "Candlestick patterns"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be daily or less granular",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Inside Bar False Breakout",
+    "entry_conditions": [
+      "Market is trending",
+      "Market breaks out from the inside bar and the resistance level"
+    ],
+    "exit_conditions": [
+      "Stop loss set above the breakout",
+      "Profit target at the next support level"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Fibonacci Retracement",
+    "entry_conditions": [
+      "Wait for a pin bar",
+      "Wait for an engulfing bar",
+      "Wait for an inside bar",
+      "Wait for an inside bar false breakout"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Risk to Reward Ratio",
+    "entry_conditions": [
+      "Profit is greater than the risk amount"
+    ],
+    "exit_conditions": [
+      "Take profit rule: Profit target should be at least twice the risk amount",
+      "Stop loss rule: Automatic exit when stop loss is hit"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Stop Loss",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule: Not applicable",
+      "Stop loss rule: Automatic exit when stop loss is hit"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The Candle Stick Trading Bible (Sanyog Raut) (Z-Library).pdf"
+  }
+]

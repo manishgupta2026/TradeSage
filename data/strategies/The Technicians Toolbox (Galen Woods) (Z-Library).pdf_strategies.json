@@ -1,0 +1,448 @@
+[
+  {
+    "strategy_name": "MACDHiddenDivergenceTradingStrategy",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "MovingMomentumTradingStrategy",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "TradingTheImpulseSystembyElder",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "2-PeriodADXTrendTradingStrategy",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "2-PeriodRSITradingStrategy",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Open Approach",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [
+      "Price Action"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Using Indicators",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [
+      "ADX",
+      "RSI",
+      "Parabolic SAR",
+      "ATR"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Moving Averages for Trend Detection",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [
+      "Moving Averages"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Oscillators for Momentum and Reversal",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [
+      "Oscillators"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Learning Technical Analysis",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Long Trade with Moving Averages",
+    "entry_conditions": [
+      "Closing above the 3-period simple moving average"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "3-period simple moving average",
+      "2-period moving average"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Long-Term Trend Filtering with Moving Averages",
+    "entry_conditions": [
+      "Using a longer term moving average to figure out the market trend"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "50-period moving average",
+      "200-period moving average"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "CCI Trend Detection",
+    "entry_conditions": [
+      "Using a 100-period CCI to check trends on daily charts"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "100-period CCI"
+    ],
+    "timeframe": "Daily",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Experimenting with Indicator Settings",
+    "entry_conditions": [
+      "Experimenting with different settings for indicators"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "indicators": [
+      "Not specified"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Fibonacci-Based Trading",
+    "entry_conditions": [
+      "Using Fibonacci numbers for trading purposes"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "indicators": [
+      "Fibonacci numbers (3, 8, 21, 55, 144, 233)"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Bearish RSI Divergence",
+    "entry_conditions": [
+      "Bearish divergence between 14-period RSI and price",
+      "Sell with a bearish candlestick pattern"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Daily",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Bearish RSI Divergence Long",
+    "entry_conditions": [
+      "Bearish RSI divergence between 14-period RSI and price",
+      "Buy with a bullish candlestick pattern"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Daily",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Combining Candlestick Patterns and RSI Divergence",
+    "entry_conditions": [
+      "Candlestick patterns",
+      "RSI divergence"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Candlestick patterns",
+      "RSI"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Day Trading Forex with CCI Indicator",
+    "entry_conditions": [
+      "CCI below -100"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Commodity Channel Index (CCI)"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Long Trading Strategy with CCI Break-out",
+    "entry_conditions": [
+      "CCI goes above 100",
+      "Prices retraced down for two bars"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule at one tick below the signal bar"
+    ],
+    "indicators": [
+      "CCI"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Long Trading Strategy with CCI Break-out",
+    "entry_conditions": [
+      "CCI goes above 100",
+      "Prices retraced down for two bars"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule at one tick below the signal bar"
+    ],
+    "indicators": [
+      "CCI"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Long Trading Strategy with MACD Hidden Divergence",
+    "entry_conditions": [
+      "MACD shows hidden divergence"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "indicators": [
+      "MACD"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Moving Momentum trading strategy",
+    "entry_conditions": [
+      "Calibrate the settings of the indicators according to your trading instrument\u2019s volatility"
+    ],
+    "exit_conditions": [],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Trading The Impulse System",
+    "entry_conditions": [
+      "13-period EMA arising",
+      "MACD(12,26,9) histogram rising"
+    ],
+    "exit_conditions": [
+      "13-period EMA falling",
+      "MACD(12,26,9) histogram falling"
+    ],
+    "indicators": [
+      "EMA",
+      "MACD"
+    ],
+    "timeframe": "Higher timeframe (implied)",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "2-Period ADX Trend Trading",
+    "entry_conditions": [
+      "Price falls below the 20-period EMA",
+      "Price breaks above the high of the signal bar"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA",
+      "ADX"
+    ],
+    "timeframe": "5min / Daily etc",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "2-Period ADX Trend Trading",
+    "entry_conditions": [
+      "Price falls below the EMA",
+      "Price breaks below the low of the signal bar"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA",
+      "ADX"
+    ],
+    "timeframe": "5min / Daily etc",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "2-Period ADX Trend Trading",
+    "entry_conditions": [
+      "Price falls below the EMA",
+      "Price breaks below the low of the signal bar"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA",
+      "ADX"
+    ],
+    "timeframe": "5min / Daily etc",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "2-Period ADX and RSI Combination",
+    "entry_conditions": [
+      "Combining 2-period ADX signals with market bias identified with price action",
+      "Patience in trading"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "2-period ADX",
+      "2-period RSI"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "2-Period RSI Trading",
+    "entry_conditions": [
+      "Coupling oscillator with trend indicator",
+      "Adding a twist to the fast oscillator"
+    ],
+    "exit_conditions": [
+      "Not specified",
+      "Not specified"
+    ],
+    "indicators": [
+      "2-period RSI",
+      "200-period moving average"
+    ],
+    "timeframe": "Not specified",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "2-Period RSI Strategy",
+    "entry_conditions": [
+      "Oversold signal",
+      "Well-established trend"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Historical results consideration"
+    ],
+    "indicators": [
+      "RSI"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  },
+  {
+    "strategy_name": "Connors RSI",
+    "entry_conditions": [
+      "Not explicitly mentioned in the text"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the text"
+    ],
+    "indicators": [
+      "RSI"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "The Technicians Toolbox (Galen Woods) (Z-Library).pdf"
+  }
+]

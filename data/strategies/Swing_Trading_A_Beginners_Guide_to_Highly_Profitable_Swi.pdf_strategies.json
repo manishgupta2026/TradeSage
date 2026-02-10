@@ -1,0 +1,1516 @@
+[
+  {
+    "strategy_name": "Swing Trading",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified in the provided text",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Swing Trading Strategy",
+    "entry_conditions": [
+      "Identifying recurring patterns in a stock price line",
+      "Position lasting more than a day but less than a week"
+    ],
+    "exit_conditions": [
+      "Profit from riding the wave",
+      "Focus on one leg of a swing"
+    ],
+    "indicators": [],
+    "timeframe": "Daily",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Swing Trading",
+    "entry_conditions": [
+      "Following advice in the book",
+      "Understanding market fundamentals"
+    ],
+    "exit_conditions": [
+      "Locking in profits",
+      "Continuing to ride the wave for greater profits"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Investment Strategy",
+    "entry_conditions": [
+      "Belief in the company's stock increasing in value",
+      "Informed decision based on future profit expectations"
+    ],
+    "exit_conditions": [
+      "Realizing profit from the increased stock value",
+      "Long-term investment approach"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Speculative Trading Strategy",
+    "entry_conditions": [
+      "Hoping to sell stock at a higher price quickly",
+      "Interest in short-term profit realization"
+    ],
+    "exit_conditions": [
+      "Selling stock at a higher price",
+      "Short-term trading approach"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Over-the-Counter Trading",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Low-volume, low value, retail trades",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Buy the Dip",
+    "entry_conditions": [
+      "Market downtrend",
+      "Sellers outweigh buyers"
+    ],
+    "exit_conditions": [
+      "Price stabilizes or starts to recover",
+      "Reaching a predetenticated target price"
+    ],
+    "indicators": [],
+    "timeframe": "Daily",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Over-the-Counter Exchange Risk Management",
+    "entry_conditions": [
+      "Interest in higher risk, less regulated markets"
+    ],
+    "exit_conditions": [
+      "Reaching a predetermined risk threshold",
+      "Market volatility increases"
+    ],
+    "indicators": [],
+    "timeframe": "Variable",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Traditional Brokerage Service Strategy",
+    "entry_conditions": [
+      "Client is a wealthy investor",
+      "Client requires full-service brokerage"
+    ],
+    "exit_conditions": [
+      "End of service agreement or fee payment",
+      "Client's investment goals met"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Online Brokerage Service Strategy",
+    "entry_conditions": [
+      "Trader has limited funds",
+      "Trader is a beginner"
+    ],
+    "exit_conditions": [
+      "Completion of trading goals",
+      "End of trading session"
+    ],
+    "indicators": [
+      "Low commissions",
+      "Research and opinion services"
+    ],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Market Order Strategy",
+    "entry_conditions": [
+      "Receive stock quote",
+      "Analyze quote"
+    ],
+    "exit_conditions": [
+      "Buy 100 shares at the lowest available price"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Limit Order Strategy",
+    "entry_conditions": [
+      "Specify a fixed price for buying or selling shares",
+      "Confidence in the stock's price movement"
+    ],
+    "exit_conditions": [
+      "Price drop scenario - potential difficulty in finding a buyer at the fixed price",
+      "Stock price increase scenario - risk of missing out on higher prices"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified in the text",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Stop Order Strategy",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Fill-or-Kill (FOK) Order",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Daily",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Good-Till-Cancelled (GTC) Order",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Margin Trading",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Short Selling",
+    "entry_conditions": [
+      "Borrow shares to sell",
+      "Belief that the stock price will continue to fall"
+    ],
+    "exit_conditions": [
+      "Buy back the borrowed shares at a lower price",
+      "Return the borrowed shares to the lender"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Bull Market Strategy",
+    "entry_conditions": [
+      "Time and economic indicators are good",
+      "Unemployment is low",
+      "Domestic product (GDP) is growing"
+    ],
+    "exit_conditions": [
+      "Stocks become overvalued",
+      "Rational trading fundamentals no longer support the upward trend"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Bear Market Strategy",
+    "entry_conditions": [
+      "20% drop in broad market indices such as the SP500"
+    ],
+    "exit_conditions": [
+      "Poor national economic results"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Bear Market Trading Strategy",
+    "entry_conditions": [
+      "Identifying a bear market due to poor national economic results",
+      "Feeling that the bear market is nearing its end"
+    ],
+    "exit_conditions": [
+      "Anticipation of a return to a bull market",
+      "Restoration of rational investing behavior related to fundamentals"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Long-Term Investment in Bear Markets",
+    "entry_conditions": [
+      "Low prices during a bear market"
+    ],
+    "exit_conditions": [
+      "Stocks become good due to eventual market turnaround"
+    ],
+    "indicators": [],
+    "timeframe": "Long-term",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Swing Trading",
+    "entry_conditions": [
+      "Understanding of basic market theory",
+      "Identification of upward or downward trends"
+    ],
+    "exit_conditions": [
+      "Repeat of identified wave pattern",
+      "Profit taking rule",
+      "Stop loss rule"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Sell Short During Pull-Up",
+    "entry_conditions": [
+      "Identifying a stock in a downtrend",
+      "Stock experiencing a pull-up"
+    ],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Identifying Trends for Swing Trading",
+    "entry_conditions": [
+      "Stock displaying characteristics of an uptrend or downtrend",
+      "Stock experiencing a pull-back or pull-up"
+    ],
+    "exit_conditions": [],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Choosing Right Stocks for Swing Trading",
+    "entry_conditions": [
+      "Stock is a large-cap stock",
+      "Market capitalization in excess of $5 billion"
+    ],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Swing Trading",
+    "entry_conditions": [
+      "Stock price movements over periods greater than one day",
+      "Frequent up-pulls and down-pulls in the trend"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Multiple days",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Swing Trading",
+    "entry_conditions": [
+      "Commitment and startup costs are manageable",
+      "Trading advice subscription service",
+      "Broker account"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the text",
+      "Risk management principles to be covered later in the book"
+    ],
+    "indicators": [],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Swing Trading",
+    "entry_conditions": [
+      "Sufficient feedback on trades over a couple of days",
+      "Not overwhited by trading dozens of stocks per day"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the text"
+    ],
+    "indicators": [],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Position Trading",
+    "entry_conditions": [
+      "Belief in the company being undervalued",
+      "Enthusiasm for the company\u2019s product or business plan"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the text"
+    ],
+    "indicators": [],
+    "timeframe": "Long-term",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Swing Trading",
+    "entry_conditions": [
+      "Institutions position trade by buying small batches of stock regularly",
+      "Retail traders select their own targets"
+    ],
+    "exit_conditions": [
+      "Little interruptions in stock price that present opportunities for swing traders"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Swing Trading",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "ETF Swing Trading",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "5min / Daily etc",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Individual Stocks Swing Trading",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Swing Trading Individual Stocks",
+    "entry_conditions": [
+      "Holding a long position on a trending stock"
+    ],
+    "exit_conditions": [
+      "Sudden bad news affecting the stock",
+      "Outperforming an ETF covering the related sector"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Swing Trading Forex",
+    "entry_conditions": [
+      "Comparing relative performances of two currencies"
+    ],
+    "exit_conditions": [
+      "One currency moving up or down relative to the other currency"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Swing Trading Cryptocurrencies",
+    "entry_conditions": [
+      "Attracted by the potential for vast and quick profit"
+    ],
+    "exit_conditions": [
+      "Avoiding greed due to high volatility"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Capital Account Feasibility Strategy",
+    "entry_conditions": [
+      "Current trading account sum is less than 1% of the account",
+      "Transaction rates are lower than the broker's minimum account requirement"
+    ],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Swing Trading Strategy",
+    "entry_conditions": [
+      "Find a broker with good reviews",
+      "Choose an account type suitable for swing trading"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified in the provided text",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Paper Trading",
+    "entry_conditions": [
+      "Deciding the amount to trade based on capital and risk appetite",
+      "Selecting stocks after fundamental analysis indicating a promising trend"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the provided text"
+    ],
+    "indicators": [],
+    "timeframe": "Not explicitly mentioned in the provided text",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Paper Trading Strategy",
+    "entry_conditions": [
+      "Start with a virtual portfolio",
+      "Consider the impact of commission and transaction fees"
+    ],
+    "exit_conditions": [
+      "Track the percentage of price movement for gains or losses",
+      "Evaluate the position based on both price and quantity of stock held"
+    ],
+    "indicators": [],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Pattern Recognition and Chart Interpretation",
+    "entry_conditions": [
+      "Learning how to interpret price charts",
+      "Testing tactics and techniques against charts"
+    ],
+    "exit_conditions": [
+      "Validating effectiveness of technical indicators",
+      "Honing strategy based on historical data analysis"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Historical Data Analysis and Machine Learning",
+    "entry_conditions": [
+      "Analyzing past performance data",
+      "Using machine learning algorithms to find better solutions"
+    ],
+    "exit_conditions": [
+      "Honing strategy before investing real money",
+      "Avoiding repetition of mistakes"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Watch-list Management",
+    "entry_conditions": [
+      "Keeping an eye on potential stocks",
+      "Maintaining a list of borderline stocks"
+    ],
+    "exit_conditions": [
+      "Monitoring missed opportunities"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Risk Management with Demo Accounts",
+    "entry_conditions": [
+      "Using a demo account for practice",
+      "Analyzing gains and losses tactically"
+    ],
+    "exit_conditions": [
+      "Avoiding mistakes in real trading",
+      "Practicing swing trading in a safe environment"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Price Action and Swing Trading",
+    "entry_conditions": [
+      "Practicing reading price lines in demo accounts"
+    ],
+    "exit_conditions": [
+      "Practicing swing trading techniques"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Test Before You Trade",
+    "entry_conditions": [
+      "Trying out new tactics or adjusting your strategy on a demo first"
+    ],
+    "exit_conditions": [
+      "Testing new tactics or adjusting your strategy on a demo to avoid overtrading or premature exit due to fear"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Risk Management",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Complacency avoidance",
+      "Potential unclaimed profits consideration",
+      "Potential trends observation"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Psychological Effects Mitigation",
+    "entry_conditions": [
+      "Understanding of Fear, Hope, and Greed"
+    ],
+    "exit_conditions": [
+      "Avoid trading more than you can afford to lose",
+      "Do not ride a wave for too long"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Overtrading Prevention",
+    "entry_conditions": [
+      "Beginner trader behavior",
+      "Shift to live trading"
+    ],
+    "exit_conditions": [
+      "Avoid overtrading",
+      "Maintain discipline"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Live Trading Adaptation",
+    "entry_conditions": [
+      "Transition from demo to live trading"
+    ],
+    "exit_conditions": [
+      "Adapt to real-time data changes",
+      "Understand the impact of out-of-hours price movements"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Stop-Loss Profit Trap",
+    "entry_conditions": [
+      "Buying a stock at a certain price"
+    ],
+    "exit_conditions": [
+      "Selling when the price hits a predetomed level"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Limit Order for Price Target",
+    "entry_conditions": [
+      "Stock price is above a certain threshold"
+    ],
+    "exit_conditions": [
+      "Buying at a specified price level"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Stop-Loss Order for Downtrend",
+    "entry_conditions": [
+      "Stock price is above a certain level"
+    ],
+    "exit_conditions": [
+      "Selling at a predetermined price to limit losses"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Protective Stop Loss",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Risk Management and Opportunity Cost",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Locking in unclaimed profits in volatile markets",
+      "Securing potential losses"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Balanced Approach to Trading",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Avoiding overly conservative trades",
+      "Avoiding excessive risk-taking"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Simulation Trading",
+    "entry_conditions": [
+      "Use virtual money",
+      "Learn in a virtual environment"
+    ],
+    "exit_conditions": [
+      "Develop a tested strategy",
+      "Hone skills and develop a strategy"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Copying Experienced Swing Traders",
+    "entry_conditions": [
+      "Follow methodologies of experienced swing traders"
+    ],
+    "exit_conditions": [
+      "Develop strategies and skills"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Early Market Analysis",
+    "entry_conditions": [
+      "Rise early before the market opens",
+      "Get an early impression of the prevailinas market conditions"
+    ],
+    "exit_conditions": [
+      "Check existing positions' profitability",
+      "Look out for new potential trades"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Early Market Impression Strategy",
+    "entry_conditions": [
+      "Shake sleep, get coffee",
+      "Computer ready"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the text"
+    ],
+    "indicators": [
+      "Market conditions via CNBC",
+      "Trend analysis in financial markets"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Daily Routine for Swing Trading",
+    "entry_conditions": [
+      "Researched and analyzed previous day's trading",
+      "Gathered intelligence for trading opportunities"
+    ],
+    "exit_conditions": [
+      "Adjusting risk or profit taking positions during market hours",
+      "Reviewing short term trades and assessing overall performance aftermarket"
+    ],
+    "indicators": [],
+    "timeframe": "Daily",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Pre-Market Routine for Swing Traders",
+    "entry_conditions": [
+      "Diligent following of pre-market routine",
+      "Spending time finding trading opportunities and planning the day's trading strategy"
+    ],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Pre-Market",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Selling Short in a Bear Market",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Revealed in Chapter 5 - The Art of Selling Short",
+      "Not explicitly mentioned in the provided text"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified in the provided text",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Reverse Swing Trading Strategy",
+    "entry_conditions": [
+      "Identifying a significant bear market",
+      "Belief that a stock will decline in value"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on reversal of the downward trend",
+      "Stop loss rule to mitigate risks"
+    ],
+    "indicators": [
+      "Not explicitly mentioned in the text"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Short Selling",
+    "entry_conditions": [
+      "Open a margin account with a broker",
+      "Sign a hypothecation/rehypothecation agreement"
+    ],
+    "exit_conditions": [
+      "Buy back the stock at a lower price than sold",
+      "Return the borrowed stock to the owner to close out the loan"
+    ],
+    "indicators": [],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Short Selling",
+    "entry_conditions": [
+      "Set up a margin account with your broker",
+      "Ensure the value of your portfolio meets the minimum ratio (e.g., 50% of the short sale transaction value)"
+    ],
+    "exit_conditions": [
+      "Buy back the same amount of shares as sold earlier to close out the short sale transaction"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Short Selling Strategy",
+    "entry_conditions": [
+      "Stock selected and available",
+      "Credit limit meets sales value"
+    ],
+    "exit_conditions": [
+      "Purchase the same amount of shares that were shorted",
+      "Top up margin account if maintenance level is breached",
+      "Buy back stock if unable to top up margin account"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Up-Tick Rule",
+    "entry_conditions": [
+      "Transaction before short sale executed at a higher price than the previous one"
+    ],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Positive Earnings Revisions Strategy",
+    "entry_conditions": [
+      "Market analysts upgrade a company\u2019s earnings forecasts",
+      "Analysts remain conservative in their upgrades"
+    ],
+    "exit_conditions": [
+      "Actual earnings beat the revised forecast significantly"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Positive Earnings Adjustments Strategy",
+    "entry_conditions": [
+      "Company exceeds market analysts' forecasts",
+      "Analysts are surprised by the company's performance"
+    ],
+    "exit_conditions": [
+      "Continued outperformance of analysts' forecasts"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Sales Growth Strategy",
+    "entry_conditions": [
+      "Year-over-year sales increase of 20% or more"
+    ],
+    "exit_conditions": [
+      "Continued strong sales growth"
+    ],
+    "indicators": [
+      "Sales growth figures",
+      "Year-on-year sales comparison"
+    ],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Operational Growth Margin Strategy",
+    "entry_conditions": [
+      "Increasing operating margin"
+    ],
+    "exit_conditions": [
+      "Sustained increase in operating margin"
+    ],
+    "indicators": [
+      "Operating margin figures"
+    ],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Operational Growth Margin Strategy",
+    "entry_conditions": [
+      "Increased operating margin year over year"
+    ],
+    "exit_conditions": [
+      "Not specified in the provided text"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified in the provided text",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Cash Flow Strategy",
+    "entry_conditions": [
+      "Significant free cash available"
+    ],
+    "exit_conditions": [
+      "Not specified in the provided text"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified in the provided text",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Earnings Growth Strategy",
+    "entry_conditions": [
+      "Earnings per share increasing year-over-year"
+    ],
+    "exit_conditions": [
+      "Not specified in the provided text"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified in the provided text",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Earnings Momentum Strategy",
+    "entry_conditions": [
+      "Earnings growth year-over-year"
+    ],
+    "exit_conditions": [
+      "Not specified in the provided text"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified in the provided text",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Return on Equity Strategy",
+    "entry_conditions": [
+      "High return on equity"
+    ],
+    "exit_conditions": [
+      "Not specified in the provided text"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified in the provided text",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Bull Market Entry Strategy",
+    "entry_conditions": [
+      "Identifying forces behind stock prices during a bull market",
+      "Looking for companies with high market positions within their respective sectors"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the provided text"
+    ],
+    "indicators": [
+      "Return on Equity (ROE)",
+      "Sector market position"
+    ],
+    "timeframe": "Not explicitly mentioned in the provided text",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Debt-to-Equity Risk Avoidance Strategy",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Avoid companies with a debt-to-equity ratio greater than 1"
+    ],
+    "indicators": [
+      "Debt-to-Equity Ratio"
+    ],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "ROE Performance Analysis Strategy",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Consider investing in companies with an increasing ROE over several years",
+      "Invest in companies with an ROI greater than 20%"
+    ],
+    "indicators": [
+      "Return on Equity (ROE)"
+    ],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "P/S Ratio Analysis Strategy",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [
+      "Price to Sales Ratio (P/S)"
+    ],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Current Ratio Liquidity Assessment",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [
+      "Current Ratio"
+    ],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Current Ratio Investment Strategy",
+    "entry_conditions": [
+      "Company's current ratio (CR) greater than 1"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the provided text"
+    ],
+    "indicators": [],
+    "timeframe": "Not explicitly mentioned in the provided text",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "DIY Pattern Recognition",
+    "entry_conditions": [
+      "Stocks are at least $12 in price",
+      "Average (20-day) daily volume of at least 500,000 shares"
+    ],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Identifying Stocks with Upward Movement",
+    "entry_conditions": [
+      "Stocks are moving in an upward direction"
+    ],
+    "exit_conditions": [],
+    "indicators": [
+      "Not specified"
+    ],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Trend Line Analysis",
+    "entry_conditions": [
+      "Stock price moving upwards over a specific period",
+      "Stock price moving downwards over a specific period"
+    ],
+    "exit_conditions": [
+      "Identification of pull-backs as entry points",
+      "Continuation of the primary trend"
+    ],
+    "indicators": [
+      "Trend lines",
+      "Highs and lows"
+    ],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Trend Analysis and Swing Trading",
+    "entry_conditions": [
+      "Spotting early warning signs of a trend reversal",
+      "Buy on the break of the down-pull"
+    ],
+    "exit_conditions": [
+      "Take profits at the break of the up-pull"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Support and Resistance Level Identification",
+    "entry_conditions": [
+      "Stock falls to a certain limit and appears supported",
+      "Stock rises and appears to break through upper price barriers"
+    ],
+    "exit_conditions": [
+      "Price halts its descent and bounces back at support level",
+      "Price is rebuffed at resistance level"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Japanese Candlestick Trading",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [
+      "Japanese Candle"
+    ],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Simple Moving Average (SMA) Trading",
+    "entry_conditions": [
+      "Focus on three moving averages based on 10, 20, and 50 days"
+    ],
+    "exit_conditions": [
+      "Not specified"
+    ],
+    "indicators": [
+      "10-day SMA",
+      "20-day SMA",
+      "50-day SMA"
+    ],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Long Swing Strategy",
+    "entry_conditions": [
+      "Today's closing price is above the 10-day moving average",
+      "Today's closing price is above the 20-day moving average",
+      "The high price today is lower than yesterday's high",
+      "The high from yesterday is lower than the high the day before"
+    ],
+    "exit_conditions": [
+      "Identify a 3-day pullback",
+      "The 10-day moving average is over the 20-day moving average"
+    ],
+    "indicators": [
+      "10-day moving average",
+      "20-day moving average",
+      "High price"
+    ],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Moving Averages Trend Strength",
+    "entry_conditions": [
+      "Current price above the 20-day moving average",
+      "20-day moving average over the period following a higher trajectory"
+    ],
+    "exit_conditions": [
+      "Steepness of the gradient of the MA lines indicates the strength of the trend"
+    ],
+    "indicators": [
+      "20-day moving average"
+    ],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "MA Trend Detection",
+    "entry_conditions": [
+      "Locate short-term trends using a 5-day EMA",
+      "Locate long-term trends using a 20-day EMA"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on the strength of the trend",
+      "Stop loss rule based on the trend reversal"
+    ],
+    "indicators": [
+      "MA",
+      "EMA"
+    ],
+    "timeframe": "Short-term (5-day EMA), Long-term (20-day EMA)",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "MA Volume Confirmation",
+    "entry_conditions": [
+      "Choose markets within the same sector",
+      "Plan 20 & 50 EMA on the chart"
+    ],
+    "exit_conditions": [
+      "Compare the steepness of MA to determine market strength",
+      "Volume analysis to confirm trend strength"
+    ],
+    "indicators": [
+      "MA",
+      "Volume"
+    ],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Volume-Based Trend Reversal",
+    "entry_conditions": [
+      "Above average volume after a huge advance or decline",
+      "Above average volume with significant price shift",
+      "Above average volume with an indication of a successful breakout"
+    ],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Volume and Price Shift Analysis",
+    "entry_conditions": [
+      "Above average volume with significant price shift"
+    ],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Swing Trading Strategy",
+    "entry_conditions": [
+      "Long position when the stock starts to decline",
+      "Short position when looking for the price to drop"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on price information and volume",
+      "Stop loss rule based on price and volume data trail"
+    ],
+    "indicators": [
+      "Price and volume data trail",
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be suitable for swing trading",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Technical Analysis for Position Decision",
+    "entry_conditions": [
+      "Price information reveals stock condition",
+      "Volume and price changes due to buying and selling pressure"
+    ],
+    "exit_conditions": [
+      "Confidence in decision using technical analysis techniques",
+      "Impact of institutional investors' trading on market optimism or pessimism"
+    ],
+    "indicators": [
+      "Price and volume data trail",
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be suitable for swing trading",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Swing Trading Strategy",
+    "entry_conditions": [
+      "Identifying potential stock for profitable trading",
+      "Analyzing technical market data to find ideal entry and exit points"
+    ],
+    "exit_conditions": [
+      "Getting in and out of the market quickly based on market conditions",
+      "Efficiently riding the wave of a stock\u2019s swing"
+    ],
+    "indicators": [],
+    "timeframe": "Not explicitly mentioned, but implied to be short-term",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Following Trends",
+    "entry_conditions": [
+      "Price is in an uptrend",
+      "Price is in a downtrend"
+    ],
+    "exit_conditions": [
+      "Confirm the direction of the trend",
+      "Follow the path of least resistance"
+    ],
+    "indicators": [
+      "Trend lines",
+      "Support/Resistance",
+      "Moving Averages",
+      "Technical patterns and geometrical shapes"
+    ],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Basic Technical Analysis",
+    "entry_conditions": [
+      "Identify peaks and valleys",
+      "Identify support and resistance levels"
+    ],
+    "exit_conditions": [
+      "Efficiently ride the wave of a stock\u2019s swing",
+      "Identify ideal entry and exit points"
+    ],
+    "indicators": [
+      "Trend lines",
+      "Support/Resistance"
+    ],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Protective Entry Strategy",
+    "entry_conditions": [
+      "Prior swing low",
+      "True Range (ATR) multiple of 1.5"
+    ],
+    "exit_conditions": [
+      "Close below the previous three-day lows",
+      "True Range (ATR) multiple of 1e-05"
+    ],
+    "indicators": [
+      "True Range (ATR)",
+      "RSI"
+    ],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Risk Management and Position Sizing",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Pre-determined Exit Strategy",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Price where you will exit the trade"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Risk Management Principles",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Never risk more than 1% per trade",
+      "Never have more than 20% of your total capital in a single security"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Volatility Analysis",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Study the stock\u2019s volatility over a longer period"
+    ],
+    "indicators": [
+      "True average range"
+    ],
+    "timeframe": "Longer period",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Risk/Reward Level Setting",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Set a risk/reward level that you are comfortable with"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Emotion Control in Trading",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Trade rationally to contain losses"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "1% Risk Per Trade Strategy",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Position Size Determination",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Stop-Loss Strategy",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Position Sizing",
+    "entry_conditions": [],
+    "exit_conditions": [],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Diversified Positioning",
+    "entry_conditions": [
+      "Total account capital divided by 10"
+    ],
+    "exit_conditions": [
+      "Stop loss rule"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Fixed Amount with Stop Loss",
+    "entry_conditions": [
+      "Buy a fixed amount of stock on each trade"
+    ],
+    "exit_conditions": [
+      "Stop loss rule"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Risk-Reward Strategy",
+    "entry_conditions": [
+      "Not specified"
+    ],
+    "exit_conditions": [
+      "Risk-reward ratio justifies the trade"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Trading with Profit Targets",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Failure to lock in gains before the market starts pulling back",
+      "Limits upside by placing a cap on potential profit"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Hybrid Profit Targeting",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Set profit margins",
+      "Set profit lock-ins"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  },
+  {
+    "strategy_name": "Swing Trading",
+    "entry_conditions": [
+      "Trade on an Uptrend characterized by a series of higher highs and lows",
+      "Trade on a downtrend characterized by a series of lower highs and lower lows (for risk-tolerant traders)"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the provided text"
+    ],
+    "indicators": [],
+    "timeframe": "Not explicitly mentioned in the provided text",
+    "source": "Swing_Trading_A_Beginners_Guide_to_Highly_Profitable_Swi.pdf"
+  }
+]

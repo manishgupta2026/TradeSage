@@ -1,0 +1,259 @@
+[
+  {
+    "strategy_name": "Breakout Trading",
+    "entry_conditions": [
+      "Preparation: scanning charts",
+      "Analysis",
+      "Gauging markets"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "RSI",
+      "EMA"
+    ],
+    "timeframe": "Not specified in the provided text",
+    "source": "Successful_Breakout_Trading_A_Practical_Guide_traderhr_Z.pdf"
+  },
+  {
+    "strategy_name": "Breakout and Momentum Trading",
+    "entry_conditions": [
+      "Stocks showing a high probability of a breakout in the near future",
+      "Stocks priced between $2 and $2000",
+      "Stocks with an average volume of 400,000 shares or more in the last 3 months"
+    ],
+    "exit_conditions": [
+      "Take profit rule",
+      "Stop loss rule"
+    ],
+    "indicators": [
+      "Not explicitly mentioned in the text"
+    ],
+    "timeframe": "1-20 days",
+    "source": "Successful_Breakout_Trading_A_Practical_Guide_traderhr_Z.pdf"
+  },
+  {
+    "strategy_name": "Symmetrical Triangle Breakout",
+    "entry_conditions": [
+      "Price breaks through one of the trend lines",
+      "Preceded by a sharp advance or decline with heavy volume"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on the direction of the breakout",
+      "Stop loss rule at a level that considers the pattern's historical volatility"
+    ],
+    "indicators": [
+      "Trend lines"
+    ],
+    "timeframe": "Not specified",
+    "source": "Successful_Breakout_Trading_A_Practical_Guide_traderhr_Z.pdf"
+  },
+  {
+    "strategy_name": "Bull Flag",
+    "entry_conditions": [
+      "Recognition of the main definition (body) of a Bull Flag pattern",
+      "Clear breakout point"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on the length of the flag",
+      "Stop loss rule at a level that considers the pattern's historical volatility"
+    ],
+    "indicators": [
+      "Horizontal resistance"
+    ],
+    "timeframe": "Not specified",
+    "source": "Successful_Breakout_Trading_A_Practical_Guide_traderhr_Z.pdf"
+  },
+  {
+    "strategy_name": "Ascending Triangle",
+    "entry_conditions": [
+      "Recognition of the main definition (body) of an Ascending Triangle pattern",
+      "Perceptual flexibility in pattern recognition"
+    ],
+    "exit_conditions": [
+      "Take profit rule based on the pattern's historical volatility and breakout direction",
+      "Stop loss rule at a level that considers the pattern's historical volatility"
+    ],
+    "indicators": [
+      "Trend lines"
+    ],
+    "timeframe": "Not specified",
+    "source": "Successful_Breakout_Trading_A_Practical_Guide_traderhr_Z.pdf"
+  },
+  {
+    "strategy_name": "Ascending Triangle Breakout Strategy",
+    "entry_conditions": [
+      "Penetration of the lower trend lines",
+      "Absence of a third retest of horizontal resistance"
+    ],
+    "exit_conditions": [
+      "Price accelerates after horizontal resistance is broken"
+    ],
+    "indicators": [],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Successful_Breakout_Trading_A_Practical_Guide_traderhr_Z.pdf"
+  },
+  {
+    "strategy_name": "Breakout Chart To Watch (BCTW)",
+    "entry_conditions": [
+      "Displaying intraday breakout patterns",
+      "Breakout point at the same price level as the daily chart"
+    ],
+    "exit_conditions": [
+      "Not explicitly mentioned in the text"
+    ],
+    "indicators": [
+      "Multiple, intraday, time frames (5, 15, 30, 60min)"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Successful_Breakout_Trading_A_Practical_Guide_traderhr_Z.pdf"
+  },
+  {
+    "strategy_name": "Breakout Chart To Watch (BCTW)",
+    "entry_conditions": [
+      "Price approaches and tests resistance at a specific level",
+      "Ascending Triangle pattern formed on a 30-min chart",
+      "Resistance and support levels identified",
+      "Chart meets criteria across all time frames"
+    ],
+    "exit_conditions": [
+      "Take profit rule: Enter above resistance level",
+      "Stop loss rule: Enter below support level"
+    ],
+    "indicators": [
+      "Ascending Triangle pattern",
+      "Resistance and support levels"
+    ],
+    "timeframe": [
+      "Daily",
+      "30-min"
+    ],
+    "source": "Successful_Breakout_Trading_A_Practical_Guide_traderhr_Z.pdf"
+  },
+  {
+    "strategy_name": "Breakout Trade Strategy",
+    "entry_conditions": [
+      "Market trend analysis to determine growth, consolidation, or correction",
+      "Candidate Trade Alert stock's Bollinger Bands transitioning from contraction to expansion"
+    ],
+    "exit_conditions": [
+      "Volume increase and acceleration in the direction of the trade",
+      "If volume does not increase after initial breakout, consider reducing position and tightening stop-loss"
+    ],
+    "indicators": [
+      "Bollinger Bands",
+      "Volume"
+    ],
+    "timeframe": "Not explicitly mentioned, but implied to be aligned with market trend analysis periods",
+    "source": "Successful_Breakout_Trading_A_Practical_Guide_traderhr_Z.pdf"
+  },
+  {
+    "strategy_name": "Breakout Pattern Trading",
+    "entry_conditions": [
+      "Both daily and intraday charts display a bullish formation",
+      "Intraday chart (30min) shows tight consolidation approaching resistance at 11.20"
+    ],
+    "exit_conditions": [
+      "Enter a buy-stop, market order at 11.25"
+    ],
+    "indicators": [
+      "Rising trend line"
+    ],
+    "timeframe": "Daily / 30min",
+    "source": "Successful_Breakout_Trading_A_Practical_Guide_traderhr_Z.pdf"
+  },
+  {
+    "strategy_name": "Breakout Pattern Exit Strategy",
+    "entry_conditions": [
+      "Defined entry",
+      "Initial breakout, momentum, or 1st wave"
+    ],
+    "exit_conditions": [
+      "25%-50% reduction in trade size after initial breakout",
+      "50%-75% reduction in trade size at second target or trailing stop",
+      "Rising resistance trend line at 11.60 area for partial profit",
+      "1.00 Fibonacci extension from the 'Most recent swing low' to 'Most recent swing high' for final target"
+    ],
+    "indicators": [
+      "Fibonacci extensions",
+      "Trend Line charting",
+      "Support and Resistance levels"
+    ],
+    "timeframe": "30min",
+    "source": "Successful_Breakout_Trading_A_Practical_Guide_traderhr_Z.pdf"
+  },
+  {
+    "strategy_name": "Risk Management Rule",
+    "entry_conditions": [],
+    "exit_conditions": [
+      "Never put more than 25% of a portfolio in a single stock",
+      "Check market conditions before placing the trade order"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Successful_Breakout_Trading_A_Practical_Guide_traderhr_Z.pdf"
+  },
+  {
+    "strategy_name": "Risk Management",
+    "entry_conditions": [
+      "Environment has not changed since chart analysis"
+    ],
+    "exit_conditions": [
+      "Adjust risk management based on market conditions",
+      "Maximum loss tolerance",
+      "Initial stop loss rule"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Successful_Breakout_Trading_A_Practical_Guide_traderhr_Z.pdf"
+  },
+  {
+    "strategy_name": "Kelly Criterion for Money Management",
+    "entry_conditions": [
+      "Calculate winning probability (W)",
+      "Calculate win/loss ratio (R)"
+    ],
+    "exit_conditions": [
+      "Position size determined by Kelly percentage (Kelly %)"
+    ],
+    "indicators": [
+      "Winning probability (W)",
+      "Win/loss ratio (R)"
+    ],
+    "timeframe": "Not specified",
+    "source": "Successful_Breakout_Trading_A_Practical_Guide_traderhr_Z.pdf"
+  },
+  {
+    "strategy_name": "Breakout Trading",
+    "entry_conditions": [
+      "Pattern remains valid",
+      "Price does not violate trade entry conditions"
+    ],
+    "exit_conditions": [
+      "Position entry when pattern is valid",
+      "Price triggers trade entry"
+    ],
+    "indicators": [],
+    "timeframe": "Not specified",
+    "source": "Successful_Breakout_Trading_A_Practical_Guide_traderhr_Z.pdf"
+  },
+  {
+    "strategy_name": "Managing Breakout Trades",
+    "entry_conditions": [
+      "New low should be progressively higher than the one before it",
+      "New high should be higher than the last"
+    ],
+    "exit_conditions": [
+      "Partial profit taking after the first wave",
+      "Appropriate stop adjustment based on trend lines and horizontal support"
+    ],
+    "indicators": [
+      "Trend lines",
+      "Horizontal support"
+    ],
+    "timeframe": "Not explicitly mentioned in the text",
+    "source": "Successful_Breakout_Trading_A_Practical_Guide_traderhr_Z.pdf"
+  }
+]
