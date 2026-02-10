@@ -45,13 +45,13 @@ jobs:
         restore-keys: |
           paper-portfolio-
     
-    - name: Run Trading Bot (Paper Mode - Single Scan)
+    - name: Run Trading Bot (Paper Mode - Scan & Exit Check)
       env:
         PYTHONPATH: .
         TRADESAGE_MODE: paper
         TRADESAGE_TRADER_FILE: data/paper_portfolio.json
       run: |
-        # Run a single scan cycle instead of keeping bot alive
+        # Run a single scan cycle with exit checking
         python -c "
         import os
         import sys
@@ -64,17 +64,38 @@ jobs:
         
         async def scan_and_report():
             # Initialize
-            trader = PaperTrader(portfolio_file='data/paper_portfolio.json')
+            trader = PaperTrader(portfolio_file='data/paper_portfolio.json', initial_capital=50000)
             dm = DataManager()
             scanner = NSEScanner(dm)
             bot = Bot(token=os.getenv('TELEGRAM_BOT_TOKEN'))
             chat_id = os.getenv('TELEGRAM_CHAT_ID')
             
-            # Scan market
+            # Check for exits on existing positions first
+            exit_msgs = []
+            if trader.portfolio.get('holdings'):
+                current_prices = {}
+                for ticker in trader.portfolio['holdings'].keys():
+                    df = dm.fetch_data(ticker, use_cache=False)
+                    if not df.empty:
+                        current_prices[ticker] = df.iloc[-1]['Close']
+                
+                exit_msgs = trader.update_portfolio(current_prices)
+            
+            # Scan market for new opportunities
             results = scanner.scan_market()
             
+            msg = '🤖 **GitHub Actions Scan**\n\n'
+            
+            # Report exits first
+            if exit_msgs:
+                msg += '**📈 Position Exits:**\n'
+                for exit_msg in exit_msgs:
+                    msg += f'{exit_msg}\n'
+                msg += '\n'
+            
+            # Report new signals
             if results:
-                msg = '🤖 **GitHub Actions Scan**\n\n'
+                msg += '**🔍 New Signals:**\n'
                 for res in results[:3]:
                     ticker = res['ticker']
                     price = res['price']
@@ -88,11 +109,17 @@ jobs:
                         'target': price * 1.05
                     }
                     trade_msg = trader.execute_trade(signal)
-                    msg += f'📊 {ticker} @ ₹{price}\n{trade_msg}\n\n'
-                
-                await bot.send_message(chat_id=chat_id, text=msg, parse_mode='Markdown')
-            else:
-                await bot.send_message(chat_id=chat_id, text='⚠️ No signals found.')
+                    if trade_msg:
+                        msg += f'📊 {ticker} @ ₹{price}\n{trade_msg}\n\n'
+            
+            # Portfolio Summary
+            summary = trader.get_summary()
+            msg += f'\n💼 **Portfolio:** ₹{summary[\"balance\"]:,.0f} | '
+            msg += f'Open: {summary[\"open_positions\"]} | '
+            msg += f'Closed: {summary[\"closed_trades\"]} | '
+            msg += f'ROI: {summary[\"roi\"]:.2f}%'
+            
+            await bot.send_message(chat_id=chat_id, text=msg, parse_mode='Markdown')
         
         asyncio.run(scan_and_report())
         "

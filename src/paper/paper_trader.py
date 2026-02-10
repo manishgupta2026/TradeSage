@@ -5,7 +5,7 @@ from datetime import datetime
 import pandas as pd
 
 class PaperTrader:
-    def __init__(self, portfolio_file="data/paper_portfolio.json", initial_capital=100000):
+    def __init__(self, portfolio_file="data/paper_portfolio.json", initial_capital=50000):
         self.portfolio_file = portfolio_file
         self.initial_capital = initial_capital
         self.data_dir = os.path.dirname(portfolio_file)
@@ -47,6 +47,10 @@ class PaperTrader:
         date = str(datetime.now())
 
         if action == "BUY":
+            # Check if already holding this ticker
+            if ticker in self.portfolio['holdings']:
+                return f"⚠️ Already holding {ticker}"
+            
             # Position Sizing: Risk 2% of equity per trade
             risk_per_trade = self.portfolio['balance'] * 0.02
             stop_loss = signal.get('sl', price * 0.95)
@@ -68,7 +72,7 @@ class PaperTrader:
             
             if cost > self.portfolio['balance']:
                 self.logger.warning(f"Insufficient funds for {ticker}")
-                return
+                return f"⚠️ Insufficient funds for {ticker}"
 
             # Update Portfolio
             self.portfolio['balance'] -= cost
@@ -83,14 +87,33 @@ class PaperTrader:
             return f"✅ PAPER BUY: {qty} shares of {ticker} @ ₹{price}"
 
         elif action == "SELL":
-            # For now, we only buy, but Sell logic would go here for Exits
-            pass
+            # Manual sell (not used yet, but available)
+            if ticker not in self.portfolio['holdings']:
+                return f"⚠️ No position in {ticker}"
+            
+            position = self.portfolio['holdings'][ticker]
+            pnl = (price - position['avg_price']) * position['qty']
+            self.portfolio['balance'] += (price * position['qty'])
+            
+            del self.portfolio['holdings'][ticker]
+            self.portfolio['history'].append({
+                "ticker": ticker,
+                "pnl": pnl,
+                "exit_price": price,
+                "exit_date": date,
+                "reason": "MANUAL"
+            })
+            self.save_portfolio()
+            return f"✅ PAPER SELL: {ticker} @ ₹{price} (P&L: ₹{pnl:.2f})"
             
     def update_portfolio(self, current_prices: dict):
         """
         Checks current prices against SL/Target to close positions.
+        current_prices = {'RELIANCE': 2550, 'TCS': 3400, ...}
         """
         messages = []
+        date = str(datetime.now())
+        
         for ticker, position in list(self.portfolio['holdings'].items()):
             if ticker in current_prices:
                 price = current_prices[ticker]
@@ -104,9 +127,10 @@ class PaperTrader:
                         "ticker": ticker,
                         "pnl": pnl,
                         "exit_price": price,
+                        "exit_date": date,
                         "reason": "TARGET"
                     })
-                    messages.append(f"🎯 TARGET HIT: {ticker} (+₹{pnl:.2f})")
+                    messages.append(f"🎯 TARGET HIT: {ticker} @ ₹{price} (+₹{pnl:.2f})")
                 
                 # Check Stop Loss
                 elif price <= position['sl']:
@@ -117,18 +141,23 @@ class PaperTrader:
                         "ticker": ticker,
                         "pnl": pnl,
                         "exit_price": price,
+                        "exit_date": date,
                         "reason": "STOPLOSS"
                     })
-                    messages.append(f"🛑 STOP HIT: {ticker} (₹{pnl:.2f})")
+                    messages.append(f"🛑 STOP HIT: {ticker} @ ₹{price} (₹{pnl:.2f})")
                     
-        self.save_portfolio()
+        if messages:
+            self.save_portfolio()
         return messages
 
     def get_summary(self):
-        # Calculate Unrealized PnL
-        warnings = [] # Placeholder
+        """Returns portfolio summary with P&L calculation"""
+        total_pnl = sum([trade.get('pnl', 0) for trade in self.portfolio.get('history', [])])
+        
         return {
             "balance": self.portfolio['balance'],
             "open_positions": len(self.portfolio['holdings']),
-            "closed_trades": len(self.portfolio['history'])
+            "closed_trades": len(self.portfolio['history']),
+            "total_pnl": total_pnl,
+            "roi": (total_pnl / self.initial_capital) * 100 if self.initial_capital > 0 else 0
         }
