@@ -54,6 +54,13 @@ jobs:
         PYTHONPATH: .
         TRADESAGE_MODE: paper
         TRADESAGE_TRADER_FILE: data/paper_portfolio.json
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        ANGEL_MARKET_KEY: ${{ secrets.ANGEL_MARKET_KEY }}
+        ANGEL_HISTORICAL_KEY: ${{ secrets.ANGEL_HISTORICAL_KEY }}
+        ANGEL_CLIENT_ID: ${{ secrets.ANGEL_CLIENT_ID }}
+        ANGEL_MPIN: ${{ secrets.ANGEL_MPIN }}
+        ANGEL_TOTP_SECRET: ${{ secrets.ANGEL_TOTP_SECRET }}
       run: |
         # Run a single scan cycle with exit checking
         python -c "
