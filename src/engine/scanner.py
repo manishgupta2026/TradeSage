@@ -11,13 +11,19 @@ class NSEScanner:
         self.lib = IndicatorLibrary()
         self.executor = StrategyExecutor(self.lib)
         # Broad list of Nifty 50 + Midcap stocks
-        self.tickers = [
-            "RELIANCE", "TCS", "HDFCBANK", "INFY", "ICICIBANK", "HINDUNILVR", "SBIN", "BHARTIARTL", "ITC", "ASIANPAINT",
-            "KOTAKBANK", "LT", "AXISBANK", "HCLTECH", "MARUTI", "SUNPHARMA", "TITAN", "BAJFINANCE", "ULTRACEMCO", "NESTLEIND",
-            "WIPRO", "ONGC", "NTPC", "POWERGRID", "JSWSTEEL", "TATASTEEL", "ADANIENT", "ADANIPORTS", "GRASIM", "COALINDIA",
-            "BAJAJFINSV", "TECHM", "HINDALCO", "DIVISLAB", "CIPLA", "EICHERMOT", "BPCL", "TATAMOTORS", "DRREDDY", "HEROMOTOCO",
-            "UPL", "APOLLOHOSP", "SBILIFE", "BRITANNIA", "INDUSINDBK", "BAJAJ-AUTO", "TATACONSUM", "M&M", "HDFCLIFE", "LTIM"
-        ]
+        try:
+            with open("data/nifty200.json", "r") as f:
+                import json
+                self.tickers = json.load(f)
+        except Exception as e:
+            print(f"Warning: Could not load nifty200.json ({e}), falling back to Nifty 50.")
+            self.tickers = [
+                "RELIANCE", "TCS", "HDFCBANK", "INFY", "ICICIBANK", "HINDUNILVR", "SBIN", "BHARTIARTL", "ITC", "ASIANPAINT",
+                "KOTAKBANK", "LT", "AXISBANK", "HCLTECH", "MARUTI", "SUNPHARMA", "TITAN", "BAJFINANCE", "ULTRACEMCO", "NESTLEIND",
+                "WIPRO", "ONGC", "NTPC", "POWERGRID", "JSWSTEEL", "TATASTEEL", "ADANIENT", "ADANIPORTS", "GRASIM", "COALINDIA",
+                "BAJAJFINSV", "TECHM", "HINDALCO", "DIVISLAB", "CIPLA", "EICHERMOT", "BPCL", "TATAMOTORS", "DRREDDY", "HEROMOTOCO",
+                "UPL", "APOLLOHOSP", "SBILIFE", "BRITANNIA", "INDUSINDBK", "BAJAJ-AUTO", "TATACONSUM", "M&M", "HDFCLIFE", "LTIM"
+            ]
 
     def load_all_strategies(self):
         strategies = []
