@@ -71,8 +71,18 @@ jobs:
             trader = PaperTrader(portfolio_file='data/paper_portfolio.json', initial_capital=50000)
             dm = DataManager()
             scanner = NSEScanner(dm)
-            bot = Bot(token=os.getenv('TELEGRAM_BOT_TOKEN'))
+            
+            # Get Telegram credentials
+            telegram_token = os.getenv('TELEGRAM_BOT_TOKEN')
             chat_id = os.getenv('TELEGRAM_CHAT_ID')
+            
+            # Check if Telegram is configured
+            telegram_enabled = bool(telegram_token and telegram_token.strip() and chat_id and chat_id.strip())
+            
+            if telegram_enabled:
+                bot = Bot(token=telegram_token)
+            else:
+                print('⚠️  Telegram bot token not configured. Running without notifications.')
             
             # Check for exits on existing positions first
             exit_msgs = []
@@ -123,7 +133,13 @@ jobs:
             msg += f'Closed: {summary[\"closed_trades\"]} | '
             msg += f'ROI: {summary[\"roi\"]:.2f}%'
             
-            await bot.send_message(chat_id=chat_id, text=msg, parse_mode='Markdown')
+            # Send notification if Telegram is enabled
+            if telegram_enabled:
+                await bot.send_message(chat_id=chat_id, text=msg, parse_mode='Markdown')
+                print('✅ Telegram notification sent successfully')
+            else:
+                print('📊 Scan Results (No Telegram notification):')
+                print(msg)
         
         asyncio.run(scan_and_report())
         "
