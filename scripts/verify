@@ -1,0 +1,23 @@
+import os
+from dotenv import load_dotenv
+from src.llm.engine import LLMEngine
+
+load_dotenv()
+
+# Force provider to Anthropic for this test
+os.environ["LLM_PROVIDER"] = "anthropic"
+
+def test_api():
+    print("Testing LLM Engine with provider: Anthropic (Claude 3.5 Sonnet)")
+    try:
+        engine = LLMEngine() 
+        prompt = "Extract a simple trade: Buy Apple at 150, Target 160."
+        print(f"Prompt: {prompt}")
+        response = engine.generate(prompt)
+        print(f"Response: {response}")
+        print("Anthropic Verification Successful!")
+    except Exception as e:
+        print(f"Anthropic Verification Failed: {e}")
+
+if __name__ == "__main__":
+    test_api()

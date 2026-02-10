@@ -1,0 +1,104 @@
+name: TradeSage Trading Bot
+
+on:
+  schedule:
+    # Run at 09:25 AM IST (03:55 UTC) - 5 mins before market open
+    - cron: '55 3 * * 1-5'
+    # Run at 02:55 PM IST (09:25 UTC) - Before market close
+    - cron: '25 9 * * 1-5'
+  workflow_dispatch:  # Allow manual triggers
+
+jobs:
+  paper-trading:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+    
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Create .env file
+      run: |
+        echo "ANGEL_MARKET_KEY=${{ secrets.ANGEL_MARKET_KEY }}" >> .env
+        echo "ANGEL_HISTORICAL_KEY=${{ secrets.ANGEL_HISTORICAL_KEY }}" >> .env
+        echo "TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}" >> .env
+        echo "TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}" >> .env
+        echo "ANGEL_CLIENT_ID=${{ secrets.ANGEL_CLIENT_ID }}" >> .env
+        echo "ANGEL_MPIN=${{ secrets.ANGEL_MPIN }}" >> .env
+        echo "ANGEL_TOTP_SECRET=${{ secrets.ANGEL_TOTP_SECRET }}" >> .env
+    
+    - name: Restore Paper Portfolio (if exists)
+      uses: actions/cache@v3
+      with:
+        path: data/paper_portfolio.json
+        key: paper-portfolio-${{ github.run_id }}
+        restore-keys: |
+          paper-portfolio-
+    
+    - name: Run Trading Bot (Paper Mode - Single Scan)
+      env:
+        PYTHONPATH: .
+        TRADESAGE_MODE: paper
+        TRADESAGE_TRADER_FILE: data/paper_portfolio.json
+      run: |
+        # Run a single scan cycle instead of keeping bot alive
+        python -c "
+        import os
+        import sys
+        sys.path.append('.')
+        from src.paper.paper_trader import PaperTrader
+        from src.engine.scanner import NSEScanner
+        from src.engine.data_manager import DataManager
+        import asyncio
+        from telegram import Bot
+        
+        async def scan_and_report():
+            # Initialize
+            trader = PaperTrader(portfolio_file='data/paper_portfolio.json')
+            dm = DataManager()
+            scanner = NSEScanner(dm)
+            bot = Bot(token=os.getenv('TELEGRAM_BOT_TOKEN'))
+            chat_id = os.getenv('TELEGRAM_CHAT_ID')
+            
+            # Scan market
+            results = scanner.scan_market()
+            
+            if results:
+                msg = '🤖 **GitHub Actions Scan**\n\n'
+                for res in results[:3]:
+                    ticker = res['ticker']
+                    price = res['price']
+                    
+                    # Execute paper trade
+                    signal = {
+                        'ticker': ticker,
+                        'action': 'BUY',
+                        'price': price,
+                        'sl': price * 0.98,
+                        'target': price * 1.05
+                    }
+                    trade_msg = trader.execute_trade(signal)
+                    msg += f'📊 {ticker} @ ₹{price}\n{trade_msg}\n\n'
+                
+                await bot.send_message(chat_id=chat_id, text=msg, parse_mode='Markdown')
+            else:
+                await bot.send_message(chat_id=chat_id, text='⚠️ No signals found.')
+        
+        asyncio.run(scan_and_report())
+        "
+    
+    - name: Save Paper Portfolio
+      uses: actions/cache@v3
+      with:
+        path: data/paper_portfolio.json
+        key: paper-portfolio-${{ github.run_id }}

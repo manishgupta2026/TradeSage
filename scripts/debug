@@ -1,0 +1,23 @@
+import os
+import anthropic
+from dotenv import load_dotenv
+
+load_dotenv()
+
+key = os.getenv("ANTHROPIC_API_KEY")
+print(f"Key loaded: {key[:10]}...")
+
+client = anthropic.Anthropic(api_key=key)
+
+try:
+    print("Sending request...")
+    message = client.messages.create(
+        model="claude-3-5-sonnet-20240620",
+        max_tokens=1024,
+        messages=[
+            {"role": "user", "content": "Hello, world"}
+        ]
+    )
+    print(f"Success: {message.content[0].text}")
+except Exception as e:
+    print(f"Error: {e}")

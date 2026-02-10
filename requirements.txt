@@ -1,0 +1,15 @@
+torch --index-url https://download.pytorch.org/whl/cu118
+llama-cpp-python
+pdfplumber
+langchain
+chromadb
+pandas
+numpy
+pydantic
+huggingface_hub
+langchain-community
+langchain-text-splitters
+groq
+google-generativeai
+python-dotenv
+anthropic
