@@ -18,3 +18,4 @@ websocket-client
 # Utilities
 python-dotenv
 pytz
+pyarrow
