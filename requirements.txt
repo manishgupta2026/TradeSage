@@ -3,7 +3,7 @@ git+https://github.com/rongardF/tvdatafeed.git
 yfinance
 pandas
 numpy
-pandas_ta
+git+https://github.com/twopirllc/pandas-ta.git@0f47701cc8d4380eb4c719e7943d043d83833b3a
 
 # Telegram Bot
 python-telegram-bot
