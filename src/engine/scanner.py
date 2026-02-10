@@ -12,11 +12,12 @@ class NSEScanner:
         self.executor = StrategyExecutor(self.lib)
         # Broad list of Nifty 50 + Midcap stocks
         try:
-            with open("data/nifty500.json", "r") as f:
+            with open("data/nse_1200.json", "r") as f:
                 import json
                 self.tickers = json.load(f)
+            print(f"Loaded {len(self.tickers)} NSE stocks (1200 Universe) for scanning.")
         except Exception as e:
-            print(f"Warning: Could not load nifty500.json ({e}), falling back to Nifty 50.")
+            print(f"Warning: Could not load nse_1200.json ({e}), falling back to Nifty 50.")
             self.tickers = [
                 "RELIANCE", "TCS", "HDFCBANK", "INFY", "ICICIBANK", "HINDUNILVR", "SBIN", "BHARTIARTL", "ITC", "ASIANPAINT",
                 "KOTAKBANK", "LT", "AXISBANK", "HCLTECH", "MARUTI", "SUNPHARMA", "TITAN", "BAJFINANCE", "ULTRACEMCO", "NESTLEIND",
