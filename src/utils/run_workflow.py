@@ -57,6 +57,28 @@ async def main():
                     
             exit_msgs = trader.update_portfolio(current_prices)
         
+        # Drawdown Protection: Check if daily loss limit exceeded
+        DAILY_LOSS_LIMIT = float(os.getenv("DAILY_LOSS_LIMIT", "2500"))
+        if trader:
+            summary = trader.get_summary(current_prices, prev_closes)
+            todays_pnl = summary.get('todays_pnl', 0)
+            
+            if todays_pnl < -DAILY_LOSS_LIMIT:
+                print(f"🛑 DRAWDOWN PROTECTION ACTIVATED!")
+                print(f"   Today's P&L: ₹{todays_pnl:.2f}")
+                print(f"   Loss Limit: ₹{DAILY_LOSS_LIMIT}")
+                print(f"   Trading paused to protect capital.")
+                
+                msg = f'🛑 **DRAWDOWN PROTECTION ACTIVATED**\\n\\n'
+                msg += f'Today\\'s P&L: ₹{todays_pnl:.2f}\\n'
+                msg += f'Loss Limit: ₹{DAILY_LOSS_LIMIT}\\n\\n'
+                msg += f'Trading paused for today to prevent further losses.\\n'
+                
+                if telegram_enabled:
+                    await bot.send_message(chat_id=chat_id, text=msg, parse_mode='Markdown')
+                
+                sys.exit(0)  # Exit gracefully without scanning
+        
         # Scan market for new opportunities
         results = scanner.scan_market()
         
@@ -104,6 +126,18 @@ async def main():
                     'target': target,
                     'atr_pct': atr_pct
                 }
+                
+                # Risk-Reward Ratio Filter: Skip poor setups
+                MIN_RR_RATIO = float(os.getenv("MIN_RR_RATIO", "2.0"))
+                risk = price - stop_loss
+                reward = target - price
+                
+                if risk > 0:
+                    rr_ratio = reward / risk
+                    if rr_ratio < MIN_RR_RATIO:
+                        print(f"⏭️  {ticker} skipped: Poor RR ratio ({rr_ratio:.2f} < {MIN_RR_RATIO})")
+                        continue
+                
                 trade_msg = trader.execute_trade(signal)
                 if trade_msg:
                     msg += f'📊 {ticker} @ ₹{price}\n{trade_msg}\n'
