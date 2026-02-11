@@ -1,5 +1,5 @@
 # Core Trading Libraries
-git+https://github.com/rongardF/# tvdatafeed  # Disabled due to nologin timeouts on bulk scan
+# git+https://github.com/rongardF/tvdatafeed.git # Disabled due to nologin timeouts
 yfinance
 pandas
 pandas-ta==0.4.71b0
