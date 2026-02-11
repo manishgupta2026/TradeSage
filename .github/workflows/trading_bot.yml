@@ -112,7 +112,7 @@ jobs:
                                 prev_closes[ticker] = holding_data['avg_price']
                         else:
                             # Fallback if fetch fails
-                            print(f"[WARNING] Could not fetch data for {ticker}, using avg_price.")
+                            print("WARNING: Could not fetch data for " + str(ticker) + ", using avg_price.")
                             current_prices[ticker] = holding_data['avg_price']
                             prev_closes[ticker] = holding_data['avg_price']
                     except Exception as e:
