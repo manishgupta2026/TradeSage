@@ -92,14 +92,20 @@ jobs:
                 print('⚠️  Telegram bot token not configured. Running without notifications.')
             
             # Check for exits on existing positions first
-            exit_msgs = []
-            if trader.portfolio.get('holdings'):
+            # Update Portfolio (Paper Trading)
+            if trader:
+                print("Updating portfolio...")
                 current_prices = {}
+                prev_closes = {}
+                
+                # Fetch live data for held stocks
+                import yfinance as yf
                 for ticker in trader.portfolio['holdings'].keys():
                     df = dm.fetch_data(ticker, use_cache=False)
                     if not df.empty:
                         current_prices[ticker] = df.iloc[-1]['Close']
-                
+                        if len(df) > 1:
+                            prev_closes[ticker] = df.iloc[-2]['Close']
                 exit_msgs = trader.update_portfolio(current_prices)
             
             # Scan market for new opportunities
@@ -134,11 +140,18 @@ jobs:
                         msg += f'📊 {ticker} @ ₹{price}\n{trade_msg}\n\n'
             
             # Portfolio Summary
-            summary = trader.get_summary()
-            msg += f'\n💼 **Portfolio:** ₹{summary[\"balance\"]:,.0f} | '
-            msg += f'Open: {summary[\"open_positions\"]} | '
-            msg += f'Closed: {summary[\"closed_trades\"]} | '
-            msg += f'ROI: {summary[\"roi\"]:.2f}%'
+            summary = trader.get_summary(current_prices, prev_closes)
+            
+            # Format P&L with emoji
+            day_pnl_emoji = "🟢" if summary["todays_pnl"] >= 0 else "🔴"
+            total_pnl_emoji = "🟢" if summary["total_pnl"] >= 0 else "🔴"
+            
+            msg += f'\n💼 **Portfolio Update**\n'
+            msg += f'💰 **Equity:** ₹{summary["equity"]:,.2f}\n'
+            msg += f'💵 **Cash:** ₹{summary["balance"]:,.2f}\n'
+            msg += f'{day_pnl_emoji} **Today:** ₹{summary["todays_pnl"]:,.2f}\n'
+            msg += f'{total_pnl_emoji} **Total P&L:** ₹{summary["total_pnl"]:,.2f} ({summary["roi"]:.2f}%)\n'
+            msg += f'📊 **Trades:** {summary["open_positions"]} Open | {summary["closed_trades"]} Closed'
             
             # Send notification if Telegram is enabled
             if telegram_enabled:

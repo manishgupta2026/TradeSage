@@ -150,14 +150,63 @@ class PaperTrader:
             self.save_portfolio()
         return messages
 
-    def get_summary(self):
-        """Returns portfolio summary with P&L calculation"""
-        total_pnl = sum([trade.get('pnl', 0) for trade in self.portfolio.get('history', [])])
+    def get_summary(self, current_prices: dict = {}, prev_closes: dict = {}):
+        """
+        Calculates detailed portfolio metrics including Realized, Unrealized, and Day's P&L.
+        Returns a dictionary with all metrics.
+        """
+        # 1. Calculate Holdings Value
+        holdings_value = 0
+        unrealized_pnl = 0
+        todays_unrealized_change = 0
         
+        for ticker, pos in self.portfolio['holdings'].items():
+            # Current Price (use avg_price as fallback if missing)
+            price = current_prices.get(ticker, pos['avg_price'])
+            qty = pos['qty']
+            avg_price = pos['avg_price']
+            
+            # Value & Unrealized
+            market_val = price * qty
+            holdings_value += market_val
+            unrealized_pnl += (price - avg_price) * qty
+            
+            # Today's Change (Unrealized part)
+            # If we have prev_close, change is (Price - PrevClose). 
+            # If new position today? fallback to entry price (avg_price) approx.
+            prev_close = prev_closes.get(ticker, avg_price)
+            todays_unrealized_change += (price - prev_close) * qty
+
+        # 2. Total Equity
+        total_equity = self.portfolio['balance'] + holdings_value
+        
+        # 3. Total P&L
+        total_pnl = total_equity - self.initial_capital
+        roi = (total_pnl / self.initial_capital) * 100 if self.initial_capital > 0 else 0
+        
+        # 4. Realized P&L (Total & Today)
+        realized_pnl = sum([t['pnl'] for t in self.portfolio['history']])
+        
+        # Calculate Realized P&L for TODAY
+        today_str = str(datetime.now().date())
+        realized_today = 0
+        for t in self.portfolio['history']:
+            # t['exit_date'] is usually full timestamp "2024-02-10 14:30:00"
+            if t['exit_date'].startswith(today_str):
+                realized_today += t['pnl']
+
+        # 5. Total Day's P&L
+        todays_pnl = todays_unrealized_change + realized_today
+
         return {
+            "equity": total_equity,
             "balance": self.portfolio['balance'],
-            "open_positions": len(self.portfolio['holdings']),
-            "closed_trades": len(self.portfolio['history']),
+            "holdings_val": holdings_value,
             "total_pnl": total_pnl,
-            "roi": (total_pnl / self.initial_capital) * 100 if self.initial_capital > 0 else 0
+            "unrealized_pnl": unrealized_pnl,
+            "realized_pnl": realized_pnl,
+            "todays_pnl": todays_pnl,
+            "roi": roi,
+            "open_positions": len(self.portfolio['holdings']),
+            "closed_trades": len(self.portfolio['history'])
         }
