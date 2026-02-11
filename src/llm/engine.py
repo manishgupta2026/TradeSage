@@ -6,7 +6,19 @@ load_dotenv(override=True)
 
 class LLMEngine:
     def __init__(self, model_path: str = None, n_gpu_layers: int = 20, n_ctx: int = 2048):
-        self.provider = os.getenv("LLM_PROVIDER", "local").lower()
+        # Auto-detect provider if not explicitly set
+        self.provider = os.getenv("LLM_PROVIDER", "").lower()
+        
+        if not self.provider:
+            if os.getenv("GROQ_API_KEY"):
+                self.provider = "groq"
+            elif os.getenv("GEMINI_API_KEY"):
+                self.provider = "gemini"
+            elif os.getenv("ANTHROPIC_API_KEY"):
+                self.provider = "anthropic"
+            else:
+                self.provider = "local"
+                
         self.max_tokens = 4096 # API supports higher limits
         
         print(f"Initializing LLM Engine with provider: {self.provider.upper()}")
