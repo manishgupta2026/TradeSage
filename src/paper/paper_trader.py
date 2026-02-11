@@ -159,6 +159,7 @@ class PaperTrader:
         holdings_value = 0
         unrealized_pnl = 0
         todays_unrealized_change = 0
+        detailed_holdings = []
         
         for ticker, pos in self.portfolio['holdings'].items():
             # Current Price (use avg_price as fallback if missing)
@@ -176,6 +177,19 @@ class PaperTrader:
             # If new position today? fallback to entry price (avg_price) approx.
             prev_close = prev_closes.get(ticker, avg_price)
             todays_unrealized_change += (price - prev_close) * qty
+            
+            # Detailed Holding Stats
+            pnl_val = (price - avg_price) * qty
+            pnl_pct = ((price - avg_price) / avg_price) * 100
+            
+            detailed_holdings.append({
+                "ticker": ticker,
+                "qty": qty,
+                "avg": avg_price,
+                "cmp": price,
+                "pnl": pnl_val,
+                "pnl_pct": pnl_pct
+            })
 
         # 2. Total Equity
         total_equity = self.portfolio['balance'] + holdings_value
@@ -208,5 +222,6 @@ class PaperTrader:
             "todays_pnl": todays_pnl,
             "roi": roi,
             "open_positions": len(self.portfolio['holdings']),
-            "closed_trades": len(self.portfolio['history'])
+            "closed_trades": len(self.portfolio['history']),
+            "holdings": detailed_holdings
         }

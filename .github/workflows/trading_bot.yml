@@ -151,7 +151,16 @@ jobs:
             msg += f'💵 **Cash:** ₹{summary[\"balance\"]:,.2f}\n'
             msg += f'{day_pnl_emoji} **Today:** ₹{summary[\"todays_pnl\"]:,.2f}\n'
             msg += f'{total_pnl_emoji} **Total P&L:** ₹{summary[\"total_pnl\"]:,.2f} ({summary[\"roi\"]:.2f}%)\n'
-            msg += f'📊 **Trades:** {summary[\"open_positions\"]} Open | {summary[\"closed_trades\"]} Closed'
+            msg += f'📊 **Trades:** {summary[\"open_positions\"]} Open | {summary[\"closed_trades\"]} Closed\n'
+            
+            # List Holdings
+            if summary['holdings']:
+                msg += '\n📂 **Holdings:**\n'
+                for h in summary['holdings']:
+                    pnl_emoji = '🟢' if h['pnl'] >= 0 else '🔴'
+                    msg += f'🔹 **{h["ticker"]}** ({h["qty"]}):\n'
+                    msg += f'   Avg: ₹{h["avg"]:,.2f} ➝ CMP: ₹{h["cmp"]:,.2f}\n'
+                    msg += f'   {pnl_emoji} P&L: ₹{h["pnl"]:,.2f} ({h["pnl_pct"]:.2f}%)\n'
             
             # Send notification if Telegram is enabled
             if telegram_enabled:
