@@ -1,4 +1,4 @@
-from tvDatafeed import Interval # keeping Interval enum if used elsewhere, else remove
+# from tvDatafeed import Interval # Removed as tvDatafeed is disabled
 import pandas as pd
 import os
 from datetime import datetime, timedelta
