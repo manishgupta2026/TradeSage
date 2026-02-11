@@ -52,12 +52,31 @@ class StrategyExecutor:
                 # e.g., 'RSI' -> 'RSI_14'
                 col_name = parsed["indicator"]
                 
-                # Try fuzzy matching for column names
+                # Enhanced Mapping for new indicators
                 matched_col = None
+                
+                # 1. Direct Fuzzy Match
                 for col in df.columns:
                     if col_name.upper() in col.upper():
                         matched_col = col
                         break
+                
+                # 2. Specific Mappings (if fuzzy fails or is ambiguous)
+                if not matched_col:
+                    if "STOCH" in col_name.upper() or "%K" in col_name.upper():
+                        # Find the %K column (usually starts with STOCHk)
+                        matched_col = next((c for c in df.columns if "STOCHk" in c), None)
+                    elif "%D" in col_name.upper():
+                        # Find the %D column (usually starts with STOCHd)
+                        matched_col = next((c for c in df.columns if "STOCHd" in c), None)
+                    elif "ATR" in col_name.upper():
+                        matched_col = next((c for c in df.columns if "ATRr" in c), None)
+                    elif "ADX" in col_name.upper():
+                        matched_col = next((c for c in df.columns if "ADX_" in c), None)
+                    elif "WILLIAMS" in col_name.upper() or "%R" in col_name.upper():
+                        matched_col = next((c for c in df.columns if "WILLR" in c), None)
+                    elif "VOLUME" in col_name.upper() and ("AVG" in col_name.upper() or "SMA" in col_name.upper()):
+                        matched_col = "VOL_SMA_20"
                 
                 if matched_col:
                     cond_signal = self.lib.check_condition(

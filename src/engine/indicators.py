@@ -20,17 +20,26 @@ class IndicatorLibrary:
             # Add a placeholder if not enough data
             df['EMA_200'] = float('nan')
         
+        df.ta.adx(length=14, append=True) # ADX for Trend Strength
+
         # Momentum Indicators
         df.ta.rsi(length=14, append=True)
         df.ta.macd(append=True)
+        df.ta.stoch(append=True) # Stochastic Oscillator (%K, %D)
+        df.ta.willr(append=True) # Williams %R
         
         # Volatility
         df.ta.bbands(length=20, std=2, append=True)
+        df.ta.atr(length=14, append=True) # Average True Range
         
         # Volume
         df.ta.obv(append=True)
+        # Volume SMA (for volume spikes)
+        df['VOL_SMA_20'] = df['Volume'].rolling(window=20).mean()
         
         # Clean up column names (remove underscores or spaces if any)
+        # pandas_ta columns often look like "STOCHk_14_3_3", "ATRr_14"
+        # We normalize them for easier parsing
         df.columns = [c.replace(" ", "_") for c in df.columns]
 
         return df
