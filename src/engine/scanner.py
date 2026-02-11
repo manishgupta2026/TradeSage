@@ -44,9 +44,9 @@ class NSEScanner:
         for ticker in self.tickers:
             print(f"Scanning {ticker}...", end="\r")
             try:
-                # Updated for new TvDatafeed DataManager
+                # Updated for new DataManager (yfinance)
                 # Force REAL-TIME check (no cache)
-                df = self.dm.fetch_data(ticker, exchange="NSE", n_bars=300, use_cache=False)
+                df = self.dm.fetch_data(ticker, exchange="NSE", use_cache=False)
                 if df.empty: continue
 
                 current_price = float(df.iloc[-1]['Close'])

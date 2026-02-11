@@ -1,4 +1,4 @@
-from tvDatafeed import TvDatafeed, Interval
+from tvDatafeed import Interval # keeping Interval enum if used elsewhere, else remove
 import pandas as pd
 import os
 from datetime import datetime, timedelta
@@ -7,58 +7,48 @@ class DataManager:
     def __init__(self, cache_dir="data/market_cache"):
         self.cache_dir = cache_dir
         os.makedirs(self.cache_dir, exist_ok=True)
-        # Initialize TVDatafeed in guest mode (nologin)
-        # Note: Guest mode has limits, but works for limited symbols.
-        self.tv = TvDatafeed()
+        # Switched to yfinance for better reliability on large scans
 
-    def fetch_data(self, ticker: str, exchange="NSE", interval=Interval.in_daily, n_bars=300, use_cache=True) -> pd.DataFrame:
-        """Fetches historical data from TradingView."""
+    def fetch_data(self, ticker: str, exchange="NSE", interval="1d", n_bars=300, use_cache=True) -> pd.DataFrame:
+        """Fetches historical data using yfinance (More reliable for bulk)."""
         cache_path = os.path.join(self.cache_dir, f"{ticker}_{exchange}_daily.parquet")
 
         if use_cache and os.path.exists(cache_path):
             mtime = datetime.fromtimestamp(os.path.getmtime(cache_path))
             if datetime.now() - mtime < timedelta(hours=24):
-                # print(f"Loading {ticker} from cache...") # Silece log for cleaner output
-                df = pd.read_parquet(cache_path)
-                return df
-
-        import time
-        import random
-        
-        # print(f"Fetching {ticker} from {exchange} (TradingView) - LIVE...") 
-        max_retries = 3
-        for attempt in range(max_retries):
-            try:
-                # Add random delay to avoid rate limits
-                time.sleep(random.uniform(0.5, 2.0))
-                
-                df = self.tv.get_hist(symbol=ticker, exchange=exchange, interval=interval, n_bars=n_bars)
-                
-                if df is not None and not df.empty:
-                    df.rename(columns={'open': 'Open', 'high': 'High', 'low': 'Low', 'close': 'Close', 'volume': 'Volume'}, inplace=True)
-                    if 'symbol' in df.columns: df.drop(columns=['symbol'], inplace=True)
-                    df.to_parquet(cache_path)
+                # print(f"Loading {ticker} from cache...") 
+                try:
+                    df = pd.read_parquet(cache_path)
                     return df
-                else:
-                    # If data is empty, it might be an invalid symbol or temporary issue.
-                    # Don't retry immediately for empty data unless we suspect connection.
-                    if attempt == max_retries - 1:
-                        return pd.DataFrame()
-            
-            except Exception as e:
-                # print(f"Error fetching {ticker} (Attempt {attempt+1}/{max_retries}): {e}")
-                if "Connection" in str(e) or "timeout" in str(e).lower():
-                    # Re-initialize on connection error
-                    try:
-                        self.tv = TvDatafeed()
-                    except:
-                        pass
-                    time.sleep(2 * (attempt + 1)) # Backoff
-                else:
-                    # If it's not a connection error (e.g. symbol not found), break
-                    break
+                except:
+                    pass # Corrupt cache
+
+        import yfinance as yf
+        # yfinance expects .NS for NSE
+        ns_ticker = f"{ticker}.NS" if not ticker.endswith(".NS") else ticker
         
-        return pd.DataFrame()
+        try:
+            # Fetch 1 year of data to ensure enough bars for indicators (200 EMA + buffer)
+            df = yf.download(ns_ticker, period="1y", interval="1d", progress=False, auto_adjust=True)
+            
+            if not df.empty:
+                # Standardize columns
+                # yfinance returns: Open, High, Low, Close, Volume
+                # Ensure Proper Case
+                df = df[['Open', 'High', 'Low', 'Close', 'Volume']].copy()
+                
+                # Drop multi-level index if present (common in new yf)
+                if isinstance(df.columns, pd.MultiIndex):
+                     df.columns = df.columns.droplevel(1)
+                
+                df.to_parquet(cache_path)
+                return df
+            else:
+                return pd.DataFrame()
+                
+        except Exception as e:
+            print(f"Error fetching {ticker}: {e}")
+            return pd.DataFrame()
 
     def verify_price(self, ticker: str, current_price: float) -> dict:
         """Cross-checks price with Yahoo Finance for maximum accuracy."""
