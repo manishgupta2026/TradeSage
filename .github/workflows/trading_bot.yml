@@ -44,7 +44,9 @@ jobs:
     - name: Restore Paper Portfolio (if exists)
       uses: actions/cache@v3
       with:
-        path: data/paper_portfolio.json
+        path: |
+          data/paper_portfolio.json
+          data/angel_scrip_master.json
         key: paper-portfolio-${{ github.run_id }}
         restore-keys: |
           paper-portfolio-
@@ -99,7 +101,7 @@ jobs:
                 prev_closes = {}
                 
                 # Fetch live data for held stocks
-                import yfinance as yf
+                # Fetch live data for held stocks
                 for ticker in trader.portfolio['holdings'].keys():
                     df = dm.fetch_data(ticker, use_cache=False)
                     if not df.empty:
@@ -176,5 +178,7 @@ jobs:
     - name: Save Paper Portfolio
       uses: actions/cache@v3
       with:
-        path: data/paper_portfolio.json
+        path: |
+          data/paper_portfolio.json
+          data/angel_scrip_master.json
         key: paper-portfolio-${{ github.run_id }}

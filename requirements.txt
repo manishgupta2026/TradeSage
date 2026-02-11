@@ -18,4 +18,5 @@ websocket-client
 # Utilities
 python-dotenv
 pytz
+requests
 pyarrow
