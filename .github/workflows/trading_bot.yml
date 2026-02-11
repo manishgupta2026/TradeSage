@@ -101,13 +101,25 @@ jobs:
                 prev_closes = {}
                 
                 # Fetch live data for held stocks
-                # Fetch live data for held stocks
-                for ticker in trader.portfolio['holdings'].keys():
-                    df = dm.fetch_data(ticker, use_cache=False)
-                    if not df.empty:
-                        current_prices[ticker] = df.iloc[-1]['Close']
-                        if len(df) > 1:
-                            prev_closes[ticker] = df.iloc[-2]['Close']
+                for ticker, holding_data in trader.portfolio['holdings'].items():
+                    try:
+                        df = dm.fetch_data(ticker, use_cache=False)
+                        if not df.empty:
+                            current_prices[ticker] = df.iloc[-1]['Close']
+                            if len(df) > 1:
+                                prev_closes[ticker] = df.iloc[-2]['Close']
+                            else:
+                                prev_closes[ticker] = holding_data['avg_price']
+                        else:
+                            # Fallback if fetch fails
+                            print(f"⚠️ Could not fetch data for {ticker}, using avg_price.")
+                            current_prices[ticker] = holding_data['avg_price']
+                            prev_closes[ticker] = holding_data['avg_price']
+                    except Exception as e:
+                        print(f"Error updating {ticker}: {e}")
+                        current_prices[ticker] = holding_data['avg_price']
+                        prev_closes[ticker] = holding_data['avg_price']
+                        
                 exit_msgs = trader.update_portfolio(current_prices)
             
             # Scan market for new opportunities
