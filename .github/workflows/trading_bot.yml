@@ -63,53 +63,9 @@ jobs:
         ANGEL_CLIENT_ID: ${{ secrets.ANGEL_CLIENT_ID }}
         ANGEL_MPIN: ${{ secrets.ANGEL_MPIN }}
         ANGEL_TOTP_SECRET: ${{ secrets.ANGEL_TOTP_SECRET }}
-                        'price': price,
-                        'sl': price * 0.98,
-                        'target': price * 1.05
-                    }
-                    trade_msg = trader.execute_trade(signal)
-                    if trade_msg:
-                        msg += f'📊 {ticker} @ ₹{price}\n{trade_msg}\n'
-                        # Add Sentiment Info if available
-                        if res.get('sentiment_score'):
-                             s_score = res['sentiment_score']
-                             s_emoji = '🤖' if s_score > 0 else '⚠️'
-                             msg += f'{s_emoji} **Sentiment:** {s_score} ({res["sentiment_reason"]})\n'
-                        msg += '\n'
-            
-            # Portfolio Summary
-            summary = trader.get_summary(current_prices, prev_closes)
-            
-            # Format P&L with emoji
-            day_pnl_emoji = '🟢' if summary['todays_pnl'] >= 0 else '🔴'
-            total_pnl_emoji = '🟢' if summary['total_pnl'] >= 0 else '🔴'
-            
-            msg += f'\n💼 **Portfolio Update**\n'
-            msg += f'💰 **Equity:** ₹{summary[\"equity\"]:,.2f}\n'
-            msg += f'💵 **Cash:** ₹{summary[\"balance\"]:,.2f}\n'
-            msg += f'{day_pnl_emoji} **Today:** ₹{summary[\"todays_pnl\"]:,.2f}\n'
-            msg += f'{total_pnl_emoji} **Total P&L:** ₹{summary[\"total_pnl\"]:,.2f} ({summary[\"roi\"]:.2f}%)\n'
-            msg += f'📊 **Trades:** {summary[\"open_positions\"]} Open | {summary[\"closed_trades\"]} Closed\n'
-            
-            # List Holdings
-            if summary['holdings']:
-                msg += '\n📂 **Holdings:**\n'
-                for h in summary['holdings']:
-                    pnl_emoji = '🟢' if h['pnl'] >= 0 else '🔴'
-                    msg += f'🔹 **{h["ticker"]}** ({h["qty"]}):\n'
-                    msg += f'   Avg: ₹{h["avg"]:,.2f} ➝ CMP: ₹{h["cmp"]:,.2f}\n'
-                    msg += f'   {pnl_emoji} P&L: ₹{h["pnl"]:,.2f} ({h["pnl_pct"]:.2f}%)\n'
-            
-            # Send notification if Telegram is enabled
-            if telegram_enabled:
-                await bot.send_message(chat_id=chat_id, text=msg, parse_mode='Markdown')
-                print('✅ Telegram notification sent successfully')
-            else:
-                print('📊 Scan Results (No Telegram notification):')
-                print(msg)
-        
-        asyncio.run(scan_and_report())
-        "
+        GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      run: |
+        python src/utils/run_workflow.py
     
     - name: Save Paper Portfolio
       uses: actions/cache@v3
