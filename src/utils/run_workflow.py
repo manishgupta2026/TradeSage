@@ -76,12 +76,33 @@ async def main():
                 ticker = res['ticker']
                 price = res['price']
                 strategies = ', '.join(res['active_strategies'])
+                
+                # Fetch DataFrame to get ATR for dynamic stops
+                try:
+                    df = dm.fetch_data(ticker, use_cache=False)
+                    if not df.empty and 'ATRr_14' in df.columns:
+                        atr = df.iloc[-1]['ATRr_14']
+                        atr_pct = (atr / price) * 100
+                        stop_loss = max(price - (2 * atr), price * 0.95)
+                        target = price + (3 * atr)
+                    else:
+                        atr_pct = 0
+                        stop_loss = price * 0.95
+                        target = price * 1.10
+                except Exception as e:
+                    print(f"Error fetching ATR for {ticker}: {e}")
+                    atr_pct = 0
+                    stop_loss = price * 0.95
+                    target = price * 1.10
+                
                 signal = {
                     'ticker': ticker,
                     'price': price,
+                    'action': 'BUY',
                     'strategies': strategies,
-                    'stop_loss': price * 0.95,
-                    'target': price * 1.10
+                    'stop_loss': stop_loss,
+                    'target': target,
+                    'atr_pct': atr_pct
                 }
                 trade_msg = trader.execute_trade(signal)
                 if trade_msg:

@@ -59,15 +59,45 @@ class NSEScanner:
                 # Check latest signals (last row)
                 latest_signals = signals.iloc[-1]
                 
-                # Count True signals
+                # Count True signals with weighted scoring
                 active_strats = latest_signals[latest_signals == True].index.tolist()
+                
+                # Weighted Scoring: Prioritize momentum/volatility strategies
+                weighted_score = 0
+                for strat in active_strats:
+                    strat_lower = strat.lower()
+                    if any(keyword in strat_lower for keyword in ['stoch', 'rsi', 'macd', 'williams']):
+                        weighted_score += 1.5  # Momentum indicators
+                    elif any(keyword in strat_lower for keyword in ['atr', 'bollinger']):
+                        weighted_score += 1.2  # Volatility indicators
+                    elif any(keyword in strat_lower for keyword in ['volume', 'obv']):
+                        weighted_score += 1.0  # Volume indicators
+                    else:
+                        weighted_score += 1.0  # Default weight
+                
                 score = len(active_strats)
                 
                 if score > 0:
+                    # Multi-Timeframe Confirmation: Check Weekly trend
+                    try:
+                        weekly_df = self.dm.fetch_data(ticker, interval="1wk", use_cache=False)
+                        if not weekly_df.empty and len(weekly_df) >= 50:
+                            weekly_df = self.lib.add_standard_indicators(weekly_df)
+                            weekly_ema50 = weekly_df.iloc[-1].get('EMA_50', 0)
+                            weekly_ema200 = weekly_df.iloc[-1].get('EMA_200', 0)
+                            
+                            if weekly_ema50 < weekly_ema200:
+                                print(f"⏭️  {ticker} skipped: Weekly downtrend (EMA50 < EMA200)")
+                                continue  # Skip if weekly trend is down
+                    except Exception as e:
+                        print(f"Warning: Could not fetch weekly data for {ticker}: {e}")
+                        # Continue anyway if weekly data fails
+                    
                     results.append({
                         "ticker": ticker,
                         "price": round(current_price, 2),
                         "score": score,
+                        "weighted_score": round(weighted_score, 2),
                         "score_pct": round((score / total_strategies) * 100, 1),
                         "active_strategies": active_strats
                     })
@@ -82,7 +112,8 @@ class NSEScanner:
             from src.analysis.sentiment import SentimentAnalyzer
             sentiment_analyzer = SentimentAnalyzer()
             use_sentiment = True
-            print("🧠 AI Sentiment Analysis: ENABLED")
+            sentiment_threshold = float(os.getenv("SENTIMENT_THRESHOLD", "-0.3"))
+            print(f"🧠 AI Sentiment Analysis: ENABLED (Threshold: {sentiment_threshold})")
         except Exception as e:
             print(f"⚠️ AI Sentiment Analysis: DISABLED ({e})")
             use_sentiment = False
@@ -97,7 +128,7 @@ class NSEScanner:
                     res['sentiment_score'] = s_data['score']
                     res['sentiment_reason'] = s_data['reason']
                     
-                    if s_data['score'] < -0.3:
+                    if s_data['score'] < sentiment_threshold:
                         print(f"❌ Skipped {res['ticker']}: Negative News Sentiment ({s_data['score']})")
                         continue
                     else:

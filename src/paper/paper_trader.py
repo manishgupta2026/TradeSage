@@ -53,6 +53,13 @@ class PaperTrader:
             
             # Position Sizing: Risk 2% of equity per trade
             risk_per_trade = self.portfolio['balance'] * 0.02
+            
+            # Volatility-Adjusted Sizing: Reduce for high ATR stocks
+            atr_pct = signal.get('atr_pct', 0)
+            if atr_pct > 5:  # If ATR > 5% of price, reduce position
+                risk_per_trade *= 0.5
+                print(f"⚠️ High volatility ({atr_pct:.1f}% ATR) - Reducing position size by 50%")
+            
             stop_loss = signal.get('sl', price * 0.95)
             risk_per_share = price - stop_loss
             
@@ -117,6 +124,15 @@ class PaperTrader:
         for ticker, position in list(self.portfolio['holdings'].items()):
             if ticker in current_prices:
                 price = current_prices[ticker]
+                entry_price = position['avg_price']
+                current_pnl_pct = ((price - entry_price) / entry_price) * 100
+                
+                # Trailing Stop-Loss: Move SL to breakeven+2% if up >5%
+                if current_pnl_pct > 5:
+                    new_sl = entry_price * 1.02  # Breakeven + 2%
+                    if new_sl > position['sl']:
+                        position['sl'] = new_sl
+                        print(f"📈 Trailing SL activated for {ticker}: New SL = ₹{new_sl:.2f}")
                 
                 # Check Target
                 if price >= position['target']:
