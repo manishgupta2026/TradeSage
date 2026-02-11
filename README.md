@@ -1,77 +1,73 @@
-# TradeSage AI - Automated Trading Bot 🤖📈
+# TradeSage AI - Intelligent Swing Trading Bot 🤖📈
 
-An AI-powered algorithmic trading system for the Indian stock market (NSE) with 799 strategy combinations, dual-source data validation, and paper trading capabilities.
+TradeSage AI is a fully automated, **serverless swing trading bot** designed for the Indian Stock Market (NSE). It combines a rigorous **Technical Strategy Funnel** with **AI-Based Sentiment Analysis** to identify high-probability trade setups.
 
-## Features
+## 🚀 Key Features
 
-- **799 Trading Strategies**: Extracted from professional trading books using AI
-- **Dual-Source Validation**: Cross-checks prices between TradingView and Yahoo Finance (>99.9% accuracy)
-- **Paper Trading**: Simulate trades for 30 days before going live
-- **Telegram Integration**: Real-time alerts and portfolio updates
-- **Angel One Broker**: Ready for live trading integration
-- **Risk Management**: Automatic position sizing and stop-loss calculation
+*   **1200+ Stock Universe:** Scans Nifty 500, Microcaps, and High-Beta stocks daily.
+*   **Funnel Strategy:**
+    1.  **Trend Filter:** EMA 200 checks for long-term uptrends.
+    2.  **Momentum Filter:** RSI (14) ensures the stock is not overbought/oversold.
+    3.  **Pattern Recognition:** Detects Candlestick patterns (Engulfing, Hammer, Morning Star).
+*   **🧠 AI "Brain" (New!):**
+    *   Fetches real-time news via **Google News RSS**.
+    *   Uses **Llama-3-70b (Groq)** to score sentiment (-1 to +1).
+    *   **Safety Net:** Rejects technically good trades if breaking news is negative.
+*   **Infrastructure:**
+    *   **Data:** **Angel One SmartAPI** (Official Data) + *yfinance* (Fallback).
+    *   **Execution:** **GitHub Actions** (Runs automatically at 09:25 AM & 02:55 PM IST).
+    *   **Paper Trading:** Persists portfolio (Holdings, P&L) across runs using GitHub Cache.
+*   **Reporting:** Sends detailed **Telegram Alerts** with:
+    *   Entry Price, Stop Loss, Target.
+    *   AI Sentiment Reason.
+    *   Portfolio Summary (Equity, ROI, Holdings Breakdown).
 
-## Tech Stack
+## 🛠 Tech Stack
 
-- Python 3.10+
-- TradingView (tvDatafeed) + Yahoo Finance (yfinance)
-- Telegram Bot API
-- Angel One SmartAPI
-- pandas, pandas_ta, numpy
+*   **Language:** Python 3.10
+*   **Broker:** Angel One (SmartAPI)
+*   **LLM:** Groq (Llama-3)
+*   **Deployment:** GitHub Actions (Cron + Workflow Dispatch)
+*   **Libraries:** `pandas-ta`, `feedparser`, `smartapi-python`, `python-telegram-bot`
 
-## Quick Start
+## ⚙️ Setup & Installation
 
-### 1. Clone & Setup
-```bash
-git clone <your-repo>
-cd "Trade AI"
-python -m venv venv
-.\venv\Scripts\activate  # Windows
-pip install -r requirements.txt
-```
+1.  **Clone the Repository:**
+    ```bash
+    git clone https://github.com/manishgupta2026/TradeSage.git
+    cd TradeSage
+    ```
 
-### 2. Configure Environment
-```bash
-cp .env.example .env
-# Edit .env with your API keys
-```
+2.  **Install Dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-### 3. Run Paper Trading
-```bash
-.\venv\Scripts\python main.py --mode=paper --init-capital=100000
-```
+3.  **Set Up Secrets (GitHub Settings -> Secrets):**
+    *   `ANGEL_CLIENT_ID`, `ANGEL_MPIN`, `ANGEL_TOTP_SECRET`, `ANGEL_MARKET_KEY` (Broker)
+    *   `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` (Alerts)
+    *   `GROQ_API_KEY` (AI Sentiment)
 
-## Commands (Telegram)
+4.  **Run Manually (Local):**
+    ```bash
+    python main.py
+    ```
+    *(Note: Local runs require `.env` file with the above keys)*
 
-- `/start` - Initialize bot
-- `/scan` - Run market scan
-- `/portfolio` - View paper trading portfolio
-- `/status` - Check market status
+## 📊 Workflow
 
-## Project Structure
+1.  **Trigger:** Scheduled Cron or Manual Dispatch.
+2.  **Restore:** Loads `paper_portfolio.json` & `angel_scrip_master.json` from Cache.
+3.  **Data Fetch:** Downloads daily candles for 1200 stocks via Angel One.
+4.  **Scan:** Applies Technical Funnel Filters.
+5.  **AI Analysis:** Checks news for shortlisted candidates.
+6.  **Trade:** Executes Paper Trades (Buy/Sell/SL Hit/Target Hit).
+7.  **Report:** Sends Telegram summary.
+8.  **Save:** Caches updated portfolio state.
 
-```
-Trade AI/
-├── src/
-│   ├── engine/         # Trading engine (Scanner, DataManager, Indicators)
-│   ├── paper/          # Paper trading module
-│   ├── bot/            # Telegram bot
-│   ├── broker/         # Angel One integration
-│   └── extraction/     # Strategy extraction (Phase 1)
-├── data/
-│   └── strategies/     # 799 extracted strategies (JSON)
-├── scripts/            # Utility scripts
-└── main.py             # Entry point
-```
+## ⚠️ Disclaimer
 
-## Deployment
+This project is for **educational purposes only**. The "Paper Trading" mode simulates trades with fake money. Do not use this for live trading with real capital unless you fully understand the risks. The authors are not responsible for any financial losses.
 
-See `implementation_plan_phase5.md` (coming soon) for cloud deployment instructions.
-
-## License
-
-MIT
-
-## Disclaimer
-
-This software is for educational purposes only. Trading involves substantial risk. Never trade with money you cannot afford to lose.
+---
+*Built with ❤️ by TradeSage Team*
