@@ -139,7 +139,13 @@ jobs:
                     }
                     trade_msg = trader.execute_trade(signal)
                     if trade_msg:
-                        msg += f'📊 {ticker} @ ₹{price}\n{trade_msg}\n\n'
+                        msg += f'📊 {ticker} @ ₹{price}\n{trade_msg}\n'
+                        # Add Sentiment Info if available
+                        if res.get('sentiment_score'):
+                             s_score = res['sentiment_score']
+                             s_emoji = '🤖' if s_score > 0 else '⚠️'
+                             msg += f'{s_emoji} **Sentiment:** {s_score} ({res["sentiment_reason"]})\n'
+                        msg += '\n'
             
             # Portfolio Summary
             summary = trader.get_summary(current_prices, prev_closes)

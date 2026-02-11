@@ -20,3 +20,5 @@ python-dotenv
 pytz
 requests
 pyarrow
+feedparser
+groq

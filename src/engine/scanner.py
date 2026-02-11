@@ -74,11 +74,45 @@ class NSEScanner:
             except Exception as e:
                 print(f"Error scanning {ticker}: {e}")
 
-        # Sort by Score (Desc)
-        results.sort(key=lambda x: x['score'], reverse=True)
+        # Filter Results
+        final_results = []
+        
+        # Initialize Sentiment Analyzer
+        try:
+            from src.analysis.sentiment import SentimentAnalyzer
+            sentiment_analyzer = SentimentAnalyzer()
+            use_sentiment = True
+            print("🧠 AI Sentiment Analysis: ENABLED")
+        except Exception as e:
+            print(f"⚠️ AI Sentiment Analysis: DISABLED ({e})")
+            use_sentiment = False
 
+        for res in results:
+            if res['score_pct'] >= 50: # Minimum technical score
+                
+                # AI Sentiment Check
+                if use_sentiment:
+                    print(f"Analyzing sentiment for {res['ticker']}...")
+                    s_data = sentiment_analyzer.analyze_sentiment(res['ticker'])
+                    res['sentiment_score'] = s_data['score']
+                    res['sentiment_reason'] = s_data['reason']
+                    
+                    if s_data['score'] < -0.3:
+                        print(f"❌ Skipped {res['ticker']}: Negative News Sentiment ({s_data['score']})")
+                        continue
+                    else:
+                        print(f"✅ {res['ticker']} Sentiment: {s_data['score']} ({s_data['reason']})")
+                else:
+                     res['sentiment_score'] = 0
+                     res['sentiment_reason'] = "N/A"
+
+                final_results.append(res)
+        
+        # Sort by Technical Score then Sentiment
+        final_results.sort(key=lambda x: (x['score_pct'], x.get('sentiment_score', 0)), reverse=True)
+        
         print("\nScan Complete.")
-        return results
+        return final_results
 
 if __name__ == "__main__":
     scanner = NSEScanner()
