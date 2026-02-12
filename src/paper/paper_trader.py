@@ -47,6 +47,11 @@ class PaperTrader:
         date = str(datetime.now())
 
         if action == "BUY":
+            # Maximum Open Positions Limit
+            MAX_POSITIONS = int(os.getenv("MAX_POSITIONS", "5"))
+            if len(self.portfolio['holdings']) >= MAX_POSITIONS:
+                return f"⏭️  Max positions limit reached ({MAX_POSITIONS}). Skipping {ticker}."
+            
             # Check if already holding this ticker
             if ticker in self.portfolio['holdings']:
                 return f"⚠️ Already holding {ticker}"
