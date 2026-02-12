@@ -65,14 +65,14 @@ async def main():
             
             if todays_pnl < -DAILY_LOSS_LIMIT:
                 print(f"🛑 DRAWDOWN PROTECTION ACTIVATED!")
-                print(f"   Today's P&L: ₹{todays_pnl:.2f}")
-                print(f"   Loss Limit: ₹{DAILY_LOSS_LIMIT}")
+                print(f"   Today's P&L: Rs.{todays_pnl:.2f}")
+                print(f"   Loss Limit: Rs.{DAILY_LOSS_LIMIT}")
                 print(f"   Trading paused to protect capital.")
                 
-                msg = f'🛑 **DRAWDOWN PROTECTION ACTIVATED**\\n\\n'
-                msg += f'Today\\'s P&L: ₹{todays_pnl:.2f}\\n'
-                msg += f'Loss Limit: ₹{DAILY_LOSS_LIMIT}\\n\\n'
-                msg += f'Trading paused for today to prevent further losses.\\n'
+                msg = '🛑 **DRAWDOWN PROTECTION ACTIVATED**\n\n'
+                msg += f'Today P&L: Rs.{todays_pnl:.2f}\n'
+                msg += f'Loss Limit: Rs.{DAILY_LOSS_LIMIT}\n\n'
+                msg += 'Trading paused for today to prevent further losses.\n'
                 
                 if telegram_enabled:
                     await bot.send_message(chat_id=chat_id, text=msg, parse_mode='Markdown')
