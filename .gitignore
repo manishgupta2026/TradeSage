@@ -37,6 +37,7 @@ env/
 
 # Data Files (Exclude portfolio and cache, but KEEP strategies)
 data/paper_portfolio.json
+data/angel_scrip_master.json
 data/cache/
 data/*.parquet
 logs/
