@@ -1,0 +1,67 @@
+[
+  {
+    "strategy_name": "Golden Cross (EMA20 > EMA50)",
+    "entry_conditions": [
+      "EMA_20 > EMA_50"
+    ],
+    "indicators": ["EMA"],
+    "source": "Generated"
+  },
+  {
+    "strategy_name": "RSI Oversold (< 35)",
+    "entry_conditions": [
+      "RSI < 35"
+    ],
+    "indicators": ["RSI"],
+    "source": "Generated"
+  },
+  {
+    "strategy_name": "RSI Bullish (> 65)",
+    "entry_conditions": [
+      "RSI > 65"
+    ],
+    "indicators": ["RSI"],
+    "source": "Generated"
+  },
+  {
+    "strategy_name": "Strong Uptrend (ADX > 25 & EMA20 > EMA50)",
+    "entry_conditions": [
+      "ADX > 25",
+      "EMA_20 > EMA_50"
+    ],
+    "indicators": ["ADX", "EMA"],
+    "source": "Generated"
+  },
+  {
+    "strategy_name": "Price Near Lower Bollinger Band",
+    "entry_conditions": [
+      "Close < BBL"
+    ],
+    "indicators": ["Bollinger Bands"],
+    "source": "Generated"
+  },
+  {
+    "strategy_name": "MACD Bullish Crossover",
+    "entry_conditions": [
+      "MACD > MACDs"
+    ],
+    "indicators": ["MACD"],
+    "source": "Generated"
+  },
+  {
+    "strategy_name": "Long Term Uptrend (Price > EMA200)",
+    "entry_conditions": [
+      "Close > EMA_200"
+    ],
+    "indicators": ["EMA"],
+    "source": "Generated"
+  },
+  {
+    "strategy_name": "Volume Spike (Vol > Avg Vol)",
+    "entry_conditions": [
+      "Volume > VOL_SMA_20"
+    ],
+    "indicators": ["Volume"],
+    "source": "Generated"
+  }
+]
