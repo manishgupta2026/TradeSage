@@ -19,18 +19,54 @@ class StrategyExecutor:
 
     def _parse_condition(self, condition: str) -> Dict[str, Any]:
         """
-        Parses a string condition like 'RSI < 30' into parts.
-        This is a basic parser and might need refinement for complex rules.
+        Parses a string condition like 'RSI < 30' or 'EMA_20 > EMA_50' into parts.
         """
-        # Supported patterns: [Indicator] [Operator] [Value]
-        pattern = r"([A-Za-z0-9_]+)\s*([<>=!]+)\s*(\d+\.?\d*)"
+        # Supported patterns: [Indicator] [Operator] [Value or Indicator]
+        # Matches numbers (30, 0.5) or strings (EMA_50) on RHS
+        pattern = r"([A-Za-z0-9_]+)\s*([<>=!]+)\s*([A-Za-z0-9_\.]+)"
         match = re.search(pattern, condition)
         if match:
+            raw_value = match.group(3)
+            try:
+                value = float(raw_value)
+            except ValueError:
+                value = raw_value  # Keep as string (likely a column name)
+
             return {
                 "indicator": match.group(1),
                 "operator": match.group(2),
-                "value": float(match.group(3))
+                "value": value
             }
+        return None
+
+    def _resolve_column(self, df: pd.DataFrame, col_name: str) -> str:
+        """Helper to resolve fuzzy column names to actual DataFrame columns."""
+        # 1. Direct Exact Match (Case Insensitive)
+        for col in df.columns:
+            if col_name.upper() == col.upper():
+                return col
+
+        # 2. Fuzzy Match
+        for col in df.columns:
+             if col_name.upper() in col.upper():
+                 return col
+
+        # 3. Specific Mappings
+        if "STOCH" in col_name.upper() or "%K" in col_name.upper():
+            return next((c for c in df.columns if "STOCHk" in c), None)
+        elif "%D" in col_name.upper():
+            return next((c for c in df.columns if "STOCHd" in c), None)
+        elif "ATR" in col_name.upper():
+            return next((c for c in df.columns if "ATRr" in c), None)
+        elif "ADX" in col_name.upper():
+            return next((c for c in df.columns if "ADX_" in c), None)
+        elif "WILLIAMS" in col_name.upper() or "%R" in col_name.upper():
+            return next((c for c in df.columns if "WILLR" in c), None)
+        elif "VOLUME" in col_name.upper() and ("AVG" in col_name.upper() or "SMA" in col_name.upper()):
+            return "VOL_SMA_20"
+        elif "CLOSE" in col_name.upper():
+             return next((c for c in df.columns if c.upper() == "CLOSE"), None)
+
         return None
 
     def evaluate_strategy(self, df: pd.DataFrame, strategy: Dict) -> pd.Series:
@@ -48,47 +84,27 @@ class StrategyExecutor:
         for cond_str in entry_conditions:
             parsed = self._parse_condition(cond_str)
             if parsed:
-                # Map common names to column names if necessary
-                # e.g., 'RSI' -> 'RSI_14'
-                col_name = parsed["indicator"]
+                # Resolve LHS Column
+                matched_lhs = self._resolve_column(df, parsed["indicator"])
                 
-                # Enhanced Mapping for new indicators
-                matched_col = None
-                
-                # 1. Direct Fuzzy Match
-                for col in df.columns:
-                    if col_name.upper() in col.upper():
-                        matched_col = col
-                        break
-                
-                # 2. Specific Mappings (if fuzzy fails or is ambiguous)
-                if not matched_col:
-                    if "STOCH" in col_name.upper() or "%K" in col_name.upper():
-                        # Find the %K column (usually starts with STOCHk)
-                        matched_col = next((c for c in df.columns if "STOCHk" in c), None)
-                    elif "%D" in col_name.upper():
-                        # Find the %D column (usually starts with STOCHd)
-                        matched_col = next((c for c in df.columns if "STOCHd" in c), None)
-                    elif "ATR" in col_name.upper():
-                        matched_col = next((c for c in df.columns if "ATRr" in c), None)
-                    elif "ADX" in col_name.upper():
-                        matched_col = next((c for c in df.columns if "ADX_" in c), None)
-                    elif "WILLIAMS" in col_name.upper() or "%R" in col_name.upper():
-                        matched_col = next((c for c in df.columns if "WILLR" in c), None)
-                    elif "VOLUME" in col_name.upper() and ("AVG" in col_name.upper() or "SMA" in col_name.upper()):
-                        matched_col = "VOL_SMA_20"
-                
-                if matched_col:
+                # Resolve RHS Value (if it's a string, try to find a column)
+                rhs_value = parsed["value"]
+                if isinstance(rhs_value, str):
+                    matched_rhs = self._resolve_column(df, rhs_value)
+                    if matched_rhs:
+                        rhs_value = matched_rhs  # Pass the column name
+                    # If not matched, it stays as a string
+
+                if matched_lhs:
                     cond_signal = self.lib.check_condition(
-                        df, matched_col, parsed["operator"], parsed["value"]
+                        df, matched_lhs, parsed["operator"], rhs_value
                     )
                     signals = signals & cond_signal
                     found_any_valid_condition = True
                 else:
-                    # RRR (Risk Reward Ratio) is a planning metric, not a historical indicator.
-                    # We can safely ignore this warning for now.
-                    if col_name != "RRR":
-                        print(f"Warning: Indicator '{col_name}' not found in DataFrame.")
+                    if parsed["indicator"] != "RRR":
+                        # print(f"Warning: Indicator '{parsed['indicator']}' not found in DataFrame.")
+                        pass # Squelch warnings
 
         return signals if found_any_valid_condition else pd.Series([False] * len(df), index=df.index)
 

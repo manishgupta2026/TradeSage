@@ -1,5 +1,6 @@
 import pandas as pd
 import pandas_ta as ta
+from typing import Any
 
 class IndicatorLibrary:
     @staticmethod
@@ -45,20 +46,27 @@ class IndicatorLibrary:
         return df
 
     @staticmethod
-    def check_condition(df: pd.DataFrame, column: str, operator: str, value: float) -> pd.Series:
-        """Helper to check conditions like 'RSI_14 < 30'."""
+    def check_condition(df: pd.DataFrame, column: str, operator: str, value: Any) -> pd.Series:
+        """Helper to check conditions like 'RSI_14 < 30' or 'EMA_20 > EMA_50'."""
         if column not in df.columns:
             return pd.Series([False] * len(df))
             
+        lhs = df[column]
+        rhs = value
+
+        # If value is a string and exists in columns, use that series
+        if isinstance(value, str) and value in df.columns:
+            rhs = df[value]
+
         if operator == "<":
-            return df[column] < value
+            return lhs < rhs
         elif operator == ">":
-            return df[column] > value
+            return lhs > rhs
         elif operator == "<=":
-            return df[column] <= value
+            return lhs <= rhs
         elif operator == ">=":
-            return df[column] >= value
+            return lhs >= rhs
         elif operator == "==":
-            return df[column] == value
+            return lhs == rhs
         
         return pd.Series([False] * len(df))

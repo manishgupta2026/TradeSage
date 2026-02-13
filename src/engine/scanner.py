@@ -31,7 +31,21 @@ class NSEScanner:
         files = glob.glob("data/strategies/*.json")
         for f in files:
             strategies.extend(self.executor.load_strategy_from_json(f))
-        return strategies
+
+        # New Step: Filter out invalid strategies
+        valid_strategies = []
+        for strategy in strategies:
+            entry_conditions = strategy.get("entry_conditions", [])
+            has_valid_condition = False
+            for cond in entry_conditions:
+                if self.executor._parse_condition(cond):
+                    has_valid_condition = True
+                    break
+            if has_valid_condition:
+                valid_strategies.append(strategy)
+
+        print(f"Filtered {len(strategies)} strategies down to {len(valid_strategies)} executable strategies.")
+        return valid_strategies
 
     def scan_market(self):
         print(f"Starting NSE Scanner for {len(self.tickers)} stocks (Full Market)...")
