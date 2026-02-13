@@ -37,7 +37,7 @@ class SentimentAnalyzer:
         """Fetches news and returns a sentiment score (-1 to 1) and summary."""
         headlines = self.fetch_news(ticker)
         if not headlines:
-            return {"score": 0, "summary": "No recent news found.", "headlines": []}
+            return {"score": 0, "reason": "No recent news found.", "headlines": []}
             
         prompt = f"""
         Analyze the sentiment of the following news headlines for the stock '{ticker}':
@@ -57,6 +57,10 @@ class SentimentAnalyzer:
             clean_resp = re.search(r'\{.*\}', response, re.DOTALL)
             if clean_resp:
                 data = json.loads(clean_resp.group())
+                # Validate that required keys exist
+                if 'score' not in data or 'reason' not in data:
+                    print(f"LLM response missing required keys. Got: {data.keys()}")
+                    return {"score": 0, "reason": "LLM response format error", "headlines": headlines[:2]}
                 data['headlines'] = headlines[:2] # Keep top 2 for display
                 return data
             else:

@@ -139,14 +139,14 @@ class NSEScanner:
                 if use_sentiment:
                     print(f"Analyzing sentiment for {res['ticker']}...")
                     s_data = sentiment_analyzer.analyze_sentiment(res['ticker'])
-                    res['sentiment_score'] = s_data['score']
-                    res['sentiment_reason'] = s_data['reason']
+                    res['sentiment_score'] = s_data.get('score', 0)
+                    res['sentiment_reason'] = s_data.get('reason', 'N/A')
                     
-                    if s_data['score'] < sentiment_threshold:
-                        print(f"❌ Skipped {res['ticker']}: Negative News Sentiment ({s_data['score']})")
+                    if res['sentiment_score'] < sentiment_threshold:
+                        print(f"❌ Skipped {res['ticker']}: Negative News Sentiment ({res['sentiment_score']})")
                         continue
                     else:
-                        print(f"✅ {res['ticker']} Sentiment: {s_data['score']} ({s_data['reason']})")
+                        print(f"✅ {res['ticker']} Sentiment: {res['sentiment_score']} ({res['sentiment_reason']})")
                 else:
                      res['sentiment_score'] = 0
                      res['sentiment_reason'] = "N/A"
