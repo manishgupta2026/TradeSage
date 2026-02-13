@@ -59,7 +59,7 @@ class SentimentAnalyzer:
                 data = json.loads(clean_resp.group())
                 # Validate that required keys exist
                 if 'score' not in data or 'reason' not in data:
-                    print(f"LLM response missing required keys. Got: {data.keys()}")
+                    print(f"LLM response missing required keys. Got: {list(data.keys())}")
                     return {"score": 0, "reason": "LLM response format error", "headlines": headlines[:2]}
                 data['headlines'] = headlines[:2] # Keep top 2 for display
                 return data
