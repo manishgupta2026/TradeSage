@@ -122,7 +122,8 @@ class TradeSageBot:
                         "action": "BUY",
                         "price": price,
                         "sl": stop_loss,
-                        "target": target
+                        "target": target,
+                        "sentiment_score": res.get('sentiment_score', 0)
                     }
                     trade_res = self.trader.execute_trade(signal)
                     if trade_res:

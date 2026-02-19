@@ -39,7 +39,8 @@ class PaperTrader:
     def execute_trade(self, signal: dict):
         """
         Simulates a trade execution.
-        signal = {'ticker': 'RELIANCE', 'action': 'BUY', 'price': 2500, 'sl': 2400, 'target': 2600}
+        signal = {'ticker': 'RELIANCE', 'action': 'BUY', 'price': 2500, 'sl': 2400, 'target': 2600, 
+                 'sentiment_score': 0.6, 'atr_pct': 3.5}
         """
         ticker = signal['ticker']
         price = signal['price']
@@ -47,10 +48,37 @@ class PaperTrader:
         date = str(datetime.now())
 
         if action == "BUY":
-            # Maximum Open Positions Limit
+            # Maximum Open Positions Limit with Smart Cash-Based Override
             MAX_POSITIONS = int(os.getenv("MAX_POSITIONS", "5"))
-            if len(self.portfolio['holdings']) >= MAX_POSITIONS:
-                return f"⏭️  Max positions limit reached ({MAX_POSITIONS}). Skipping {ticker}."
+            current_positions = len(self.portfolio['holdings'])
+            
+            # Cash-based position limit: Allow exceeding MAX_POSITIONS if cash is available and signal is strong
+            ENABLE_CASH_BASED_LIMIT = os.getenv("ENABLE_CASH_BASED_LIMIT", "true").lower() == "true"
+            MIN_SENTIMENT_FOR_OVERRIDE = float(os.getenv("MIN_SENTIMENT_FOR_OVERRIDE", "0.4"))
+            MIN_CASH_PCT_FOR_OVERRIDE = float(os.getenv("MIN_CASH_PCT_FOR_OVERRIDE", "0.15"))  # 15% of initial capital
+            
+            if current_positions >= MAX_POSITIONS:
+                # Check if we can override the limit
+                sentiment_score = signal.get('sentiment_score', 0)
+                cash_available = self.portfolio['balance']
+                min_cash_required = self.initial_capital * MIN_CASH_PCT_FOR_OVERRIDE
+                
+                can_override = (
+                    ENABLE_CASH_BASED_LIMIT and
+                    sentiment_score >= MIN_SENTIMENT_FOR_OVERRIDE and
+                    cash_available >= min_cash_required
+                )
+                
+                if can_override:
+                    self.logger.info(f"💡 Overriding position limit for {ticker}: Sentiment={sentiment_score:.2f}, Cash=₹{cash_available:,.2f}")
+                    print(f"💡 Position limit override: Strong signal (Sentiment: {sentiment_score:.2f}) + Sufficient cash (₹{cash_available:,.2f})")
+                else:
+                    if not ENABLE_CASH_BASED_LIMIT:
+                        return f"⏭️  Max positions limit reached ({MAX_POSITIONS}). Skipping {ticker}."
+                    elif sentiment_score < MIN_SENTIMENT_FOR_OVERRIDE:
+                        return f"⏭️  Max positions limit reached ({MAX_POSITIONS}). Skipping {ticker} (Sentiment {sentiment_score:.2f} < {MIN_SENTIMENT_FOR_OVERRIDE})."
+                    else:
+                        return f"⏭️  Max positions limit reached ({MAX_POSITIONS}). Skipping {ticker} (Insufficient cash: ₹{cash_available:,.2f} < ₹{min_cash_required:,.2f})."
             
             # Check if already holding this ticker
             if ticker in self.portfolio['holdings']:

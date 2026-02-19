@@ -17,6 +17,11 @@ TradeSage AI is a fully automated, **serverless swing trading bot** designed for
     *   **Data:** **Angel One SmartAPI** (Official Data) + *yfinance* (Fallback).
     *   **Execution:** **GitHub Actions** (Runs automatically at 09:25 AM & 02:55 PM IST).
     *   **Paper Trading:** Persists portfolio (Holdings, P&L) across runs using GitHub Cache.
+*   **Smart Position Management:**
+    *   **Cash-Based Limit Override:** Automatically considers buying additional stocks beyond the max position limit when:
+        *   Sufficient cash is available (≥15% of initial capital by default)
+        *   Stock signal has strong sentiment score (≥0.4 by default)
+    *   **Risk Management:** Maintains strict allocation limits (max 10% per stock) and daily loss protection.
 *   **Reporting:** Sends detailed **Telegram Alerts** with:
     *   Entry Price, Stop Loss, Target.
     *   AI Sentiment Reason.
@@ -48,7 +53,17 @@ TradeSage AI is a fully automated, **serverless swing trading bot** designed for
     *   `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` (Alerts)
     *   `GROQ_API_KEY` (AI Sentiment)
 
-4.  **Run Manually (Local):**
+4.  **Configure Trading Parameters (Optional):**
+    Create a `.env` file with the following parameters (see `.env.example`):
+    *   `MAX_POSITIONS=5` - Maximum number of open positions (default: 5)
+    *   `ENABLE_CASH_BASED_LIMIT=true` - Allow exceeding position limit if cash is available and signals are strong (default: true)
+    *   `MIN_SENTIMENT_FOR_OVERRIDE=0.4` - Minimum sentiment score required to override position limit (default: 0.4)
+    *   `MIN_CASH_PCT_FOR_OVERRIDE=0.15` - Minimum cash as % of initial capital to allow override (default: 15%)
+    *   `SENTIMENT_THRESHOLD=-0.3` - Minimum sentiment score to accept any trade (default: -0.3)
+    *   `DAILY_LOSS_LIMIT=2500` - Maximum daily loss before trading stops (default: 2500)
+    *   `MIN_RR_RATIO=2.0` - Minimum risk-reward ratio for trades (default: 2.0)
+
+5.  **Run Manually (Local):**
     ```bash
     python main.py
     ```
