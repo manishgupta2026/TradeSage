@@ -122,11 +122,10 @@ async def main():
                     'price': price,
                     'action': 'BUY',
                     'strategies': strategies,
-                    'stop_loss': stop_loss,
+                    'sl': stop_loss,
                     'target': target,
                     'atr_pct': atr_pct,
-                    'sentiment_score': res.get('sentiment_score', 0),
-                    'sl': stop_loss  # Also add 'sl' key for consistency
+                    'sentiment_score': res.get('sentiment_score', 0)
                 }
                 
                 # Risk-Reward Ratio Filter: Skip poor setups

@@ -41,6 +41,16 @@ class PaperTrader:
         Simulates a trade execution.
         signal = {'ticker': 'RELIANCE', 'action': 'BUY', 'price': 2500, 'sl': 2400, 'target': 2600, 
                  'sentiment_score': 0.6, 'atr_pct': 3.5}
+        
+        Args:
+            signal: Dictionary containing:
+                - ticker (str): Stock symbol
+                - action (str): 'BUY' or 'SELL'
+                - price (float): Current market price
+                - sl (float): Stop-loss price
+                - target (float): Target price
+                - sentiment_score (float, optional): Sentiment score from -1 to 1
+                - atr_pct (float, optional): ATR as percentage of price
         """
         ticker = signal['ticker']
         price = signal['price']
