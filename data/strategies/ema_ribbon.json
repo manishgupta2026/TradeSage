@@ -1,0 +1,1 @@
+[{"strategy_name": "EMA Ribbon Bullish", "entry_conditions": ["EMA_8 > EMA_13 > EMA_21 > EMA_34 > EMA_55", "Close > EMA_8"]}]

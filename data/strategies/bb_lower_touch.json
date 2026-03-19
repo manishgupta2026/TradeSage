@@ -1,0 +1,1 @@
+[{"strategy_name": "Bollinger Lower Band Touch", "entry_conditions": ["Close < BB_lower", "RSI_14 < 40", "Volume > VOL_SMA_20"]}]

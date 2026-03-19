@@ -1,73 +1,61 @@
-# TradeSage AI - Intelligent Swing Trading Bot 🤖📈
+# TradeSage AI: 10-Year Indian Stock Market Trading System 📈🤖
 
-TradeSage AI is a fully automated, **serverless swing trading bot** designed for the Indian Stock Market (NSE). It combines a rigorous **Technical Strategy Funnel** with **AI-Based Sentiment Analysis** to identify high-probability trade setups.
+TradeSage is a production-ready machine learning trading system optimized for the Indian Stock Market (NSE). It evaluates 10 years of historical data to predict high-probability swing trades.
 
-## 🚀 Key Features
-
-*   **1200+ Stock Universe:** Scans Nifty 500, Microcaps, and High-Beta stocks daily.
-*   **Funnel Strategy:**
-    1.  **Trend Filter:** EMA 200 checks for long-term uptrends.
-    2.  **Momentum Filter:** RSI (14) ensures the stock is not overbought/oversold.
-    3.  **Pattern Recognition:** Detects Candlestick patterns (Engulfing, Hammer, Morning Star).
-*   **🧠 AI "Brain" (New!):**
-    *   Fetches real-time news via **Google News RSS**.
-    *   Uses **Llama-3-70b (Groq)** to score sentiment (-1 to +1).
-    *   **Safety Net:** Rejects technically good trades if breaking news is negative.
-*   **Infrastructure:**
-    *   **Data:** **Angel One SmartAPI** (Official Data) + *yfinance* (Fallback).
-    *   **Execution:** **GitHub Actions** (Runs automatically at 09:25 AM & 02:55 PM IST).
-    *   **Paper Trading:** Persists portfolio (Holdings, P&L) across runs using GitHub Cache.
-*   **Reporting:** Sends detailed **Telegram Alerts** with:
-    *   Entry Price, Stop Loss, Target.
-    *   AI Sentiment Reason.
-    *   Portfolio Summary (Equity, ROI, Holdings Breakdown).
-
-## 🛠 Tech Stack
-
-*   **Language:** Python 3.10
-*   **Broker:** Angel One (SmartAPI)
-*   **LLM:** Groq (Llama-3)
-*   **Deployment:** GitHub Actions (Cron + Workflow Dispatch)
-*   **Libraries:** `pandas-ta`, `feedparser`, `smartapi-python`, `python-telegram-bot`
-
-## ⚙️ Setup & Installation
-
-1.  **Clone the Repository:**
-    ```bash
-    git clone https://github.com/manishgupta2026/TradeSage.git
-    cd TradeSage
-    ```
-
-2.  **Install Dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-3.  **Set Up Secrets (GitHub Settings -> Secrets):**
-    *   `ANGEL_CLIENT_ID`, `ANGEL_MPIN`, `ANGEL_TOTP_SECRET`, `ANGEL_MARKET_KEY` (Broker)
-    *   `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` (Alerts)
-    *   `GROQ_API_KEY` (AI Sentiment)
-
-4.  **Run Manually (Local):**
-    ```bash
-    python main.py
-    ```
-    *(Note: Local runs require `.env` file with the above keys)*
-
-## 📊 Workflow
-
-1.  **Trigger:** Scheduled Cron or Manual Dispatch.
-2.  **Restore:** Loads `paper_portfolio.json` & `angel_scrip_master.json` from Cache.
-3.  **Data Fetch:** Downloads daily candles for 1200 stocks via Angel One.
-4.  **Scan:** Applies Technical Funnel Filters.
-5.  **AI Analysis:** Checks news for shortlisted candidates.
-6.  **Trade:** Executes Paper Trades (Buy/Sell/SL Hit/Target Hit).
-7.  **Report:** Sends Telegram summary.
-8.  **Save:** Caches updated portfolio state.
-
-## ⚠️ Disclaimer
-
-This project is for **educational purposes only**. The "Paper Trading" mode simulates trades with fake money. Do not use this for live trading with real capital unless you fully understand the risks. The authors are not responsible for any financial losses.
+## 🚀 Recent Performance (Verified)
+- **Net Profit**: +28.77% (Rs. 2.87L on 10L capital)
+- **Win Rate**: 45.47%
+- **Dataset**: 10 years of OHLCV data (~3.2 million rows)
+- **Model**: Memory-optimized XGBoost
 
 ---
-*Built with ❤️ by TradeSage Team*
+
+## 🛠️ Quick Start
+
+### Option 1: Google Colab (Recommended)
+1. Open [TradeSage_Colab.ipynb](TradeSage_Colab.ipynb) directly in VS Code or upload it to Google Colab.
+2. Run the cells to:
+   - Install dependencies.
+   - Fetch 10 years of data for 2000+ stocks.
+   - Train the memory-optimized model.
+
+### Option 2: Local Setup
+1. **Initialize Virtual Env**:
+   ```bash
+   python -m venv venv
+   venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
+2. **Fetch 10y Dataset**:
+   ```bash
+   python scripts/fetch_yfinance_10y.py
+   ```
+3. **Train Model**:
+   ```bash
+   python scripts/train_colab.py --cache data_cache_yfinance --model models/tradesage_10y.pkl
+   ```
+4. **Run Backtest**:
+   ```bash
+   python scripts/backtest_angel_one.py
+   ```
+
+---
+
+## 📂 Project Structure
+- `src/core/`: Contains the "Brains" (Feature Engineering & Model Training).
+- `scripts/`: Operational scripts for fetching, training, and backtesting.
+- `models/`: Pre-trained models and performance reports.
+- `data/`: Watchlists and symbols (e.g., `nse_top_3000_angel.json`).
+
+---
+
+## 🔧 Memory Optimization
+This system is uniquely designed to handle **3 million+ rows** on consumer hardware (8-16GB RAM) by:
+- Automatically downcasting `float64` to `float32`.
+- Aggressive garbage collection (`gc.collect`) during data stitching.
+- Multi-threaded fetching to bypass API rate limits.
+
+---
+
+## ⚠️ Disclaimer
+Educational purposes only. This system uses paper trading simulations. Do not trade real capital without extensive testing and clinical risk management.

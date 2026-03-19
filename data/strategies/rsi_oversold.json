@@ -1,0 +1,1 @@
+[{"strategy_name": "RSI Oversold Bounce", "entry_conditions": ["RSI_14 < 35", "Close > EMA_20"]}]

@@ -1,0 +1,1 @@
+[{"strategy_name": "Volume Spike + Trend", "entry_conditions": ["Volume > VOL_SMA_20 * 1.8", "Close > EMA_50", "Close > Close.shift(5)"]}]

@@ -1,0 +1,1 @@
+[{"strategy_name": "MACD Bullish Crossover", "entry_conditions": ["MACD_12_26_9 > MACDs_12_26_9", "MACDh_12_26_9 > 0"]}]

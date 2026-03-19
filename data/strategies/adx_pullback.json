@@ -1,0 +1,1 @@
+[{"strategy_name": "ADX Strong Trend Pullback", "entry_conditions": ["ADX_14 > 25", "RSI_14 < 45", "Close > EMA_50"]}]

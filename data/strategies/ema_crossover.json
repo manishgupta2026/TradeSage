@@ -1,0 +1,1 @@
+[{"strategy_name": "EMA Crossover Bullish", "entry_conditions": ["EMA_20 > EMA_50", "Close > EMA_20", "EMA_20 > EMA_20.shift(1)"]}]

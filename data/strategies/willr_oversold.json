@@ -1,0 +1,1 @@
+[{"strategy_name": "Williams %R Oversold", "entry_conditions": ["WILLR_14 > -80", "Close > EMA_20"]}]

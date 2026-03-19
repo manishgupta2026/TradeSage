@@ -1,0 +1,1 @@
+[{"strategy_name": "Supertrend Buy Signal", "entry_conditions": ["SUPERT_10_3 > Close.shift(1)", "SUPERT_10_3 < Close"]}]

@@ -12,7 +12,7 @@ class NSEScanner:
         self.executor = StrategyExecutor(self.lib)
         # Broad list of Nifty 50 + Midcap stocks
         try:
-            with open("data/nse_1200.json", "r") as f:
+            with open("data/stocks.json", "r") as f:
                 import json
                 self.tickers = json.load(f)
             print(f"Loaded {len(self.tickers)} NSE stocks (1200 Universe) for scanning.")
