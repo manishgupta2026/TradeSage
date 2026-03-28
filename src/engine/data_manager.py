@@ -1,4 +1,4 @@
-from src.broker.angel import AngelOneManager
+from trading.angel_one_executor import AngelOneManager
 import pandas as pd
 import os
 from datetime import datetime, timedelta

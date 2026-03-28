@@ -67,6 +67,20 @@ jobs:
         LLM_PROVIDER: groq
       run: |
         python src/utils/run_workflow.py
+
+    - name: Run Daily ML Pipeline & Trading (ML Model Mode)
+      env:
+        PYTHONPATH: .
+        TRADESAGE_MODE: ml_live
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        ANGEL_MARKET_KEY: ${{ secrets.ANGEL_MARKET_KEY }}
+        ANGEL_CLIENT_ID: ${{ secrets.ANGEL_CLIENT_ID }}
+        ANGEL_MPIN: ${{ secrets.ANGEL_MPIN }}
+        ANGEL_TOTP_SECRET: ${{ secrets.ANGEL_TOTP_SECRET }}
+      run: |
+        # Only run the ML live trading script
+        python scripts/live_trading_angel.py
     
     - name: Save Paper Portfolio
       uses: actions/cache@v3

@@ -14,8 +14,8 @@ from datetime import datetime
 import json
 
 from data_fetcher import MarketDataFetcher
-from src.core.feature_engineering import FeatureEngineer
-from src.core.model_training import TradingModelTrainer
+from features.technical_indicators import FeatureEngineer
+from models.train_xgboost import TradingModelTrainer
 
 class LargeScaleTrainer:
     """Train TradeSage on large datasets (100-1200+ stocks)"""

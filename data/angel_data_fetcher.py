@@ -13,7 +13,7 @@ from pathlib import Path
 from tqdm import tqdm
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-from src.angel.angel_one_api import AngelOneAPI
+from data.angel_one_api import AngelOneAPI
 
 logger = logging.getLogger(__name__)
 

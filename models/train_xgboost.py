@@ -14,6 +14,11 @@ from sklearn.metrics import (
 import joblib
 import os
 import warnings
+import optuna
+from xgboost import XGBClassifier
+from sklearn.linear_model import LogisticRegression
+import lightgbm as lgb
+from catboost import CatBoostClassifier
 
 warnings.filterwarnings('ignore')
 
@@ -22,9 +27,65 @@ class TradingModelTrainer:
     """Trains and manages XGBoost trading prediction models."""
 
     def __init__(self):
-        self.model = None
+        self.model = None # Main/Meta model
+        self.xgb_model = None
+        self.lgb_model = None
+        self.cat_model = None
         self.feature_names = None
         self.training_metrics = {}
+
+    def _optimize_hyperparameters(self, X_train, y_train, spw):
+        """Use Optuna for hyperparameter tuning on XGBoost"""
+        print("\nRunning Optuna hyperparameter tuning...")
+
+        def objective(trial):
+            param = {
+                'max_depth': trial.suggest_int('max_depth', 3, 9),
+                'learning_rate': trial.suggest_float('learning_rate', 0.01, 0.1, log=True),
+                'n_estimators': trial.suggest_int('n_estimators', 100, 500, step=100),
+                'subsample': trial.suggest_float('subsample', 0.6, 1.0, step=0.1),
+                'colsample_bytree': trial.suggest_float('colsample_bytree', 0.6, 1.0, step=0.1),
+                'min_child_weight': trial.suggest_int('min_child_weight', 1, 5),
+                'gamma': trial.suggest_float('gamma', 0.0, 0.2, step=0.1),
+                'scale_pos_weight': spw,
+                'objective': 'binary:logistic',
+                'eval_metric': 'auc',
+                'random_state': 42,
+                'n_jobs': -1,
+                'verbosity': 0
+            }
+
+            tscv = TimeSeriesSplit(n_splits=3)
+            aucs = []
+
+            # Using XGBClassifier directly instead of xgb.cv for compatibility
+            for train_idx, val_idx in tscv.split(X_train):
+                X_tr, y_tr = X_train.iloc[train_idx], y_train.iloc[train_idx]
+                X_va, y_va = X_train.iloc[val_idx], y_train.iloc[val_idx]
+
+                model = XGBClassifier(**param)
+                model.fit(X_tr, y_tr, eval_set=[(X_va, y_va)], verbose=False)
+
+                preds = model.predict_proba(X_va)[:, 1]
+                aucs.append(roc_auc_score(y_va, preds))
+
+            return np.mean(aucs)
+
+        study = optuna.create_study(direction='maximize')
+        # Limiting n_trials for execution speed, in real-world use 50-100
+        study.optimize(objective, n_trials=10, show_progress_bar=False)
+
+        print(f"Best Optuna params: {study.best_params}")
+        print(f"Best Optuna AUC: {study.best_value:.4f}")
+
+        best_params = study.best_params
+        best_params['scale_pos_weight'] = spw
+        best_params['objective'] = 'binary:logistic'
+        best_params['eval_metric'] = 'auc'
+        best_params['random_state'] = 42
+        best_params['n_jobs'] = -1
+        best_params['verbosity'] = 0
+        return best_params
 
     def train_model(self, X_train, y_train, X_val=None, y_val=None):
         """
@@ -51,48 +112,10 @@ class TradingModelTrainer:
         spw = max(0.5, min(3.0, neg / max(1, pos)))
         print(f"scale_pos_weight       : {spw:.2f}")
 
-        # ---- TimeSeriesSplit CV to pick best n_estimators ---- #
-        print("\nRunning 3-fold TimeSeriesSplit CV...")
-        tscv = TimeSeriesSplit(n_splits=3)
-        cv_aucs = []
+        # Ensure no data leakage - avoid entire dataset operations before this
 
-        probe_model = xgb.XGBClassifier(
-            max_depth=4,
-            learning_rate=0.02,
-            n_estimators=1000,
-            subsample=0.7,
-            colsample_bytree=0.7,
-            min_child_weight=5,
-            gamma=0.5,
-            reg_alpha=0.5,
-            reg_lambda=2.0,
-            scale_pos_weight=spw,
-            objective='binary:logistic',
-            eval_metric='auc',
-            random_state=42,
-            n_jobs=-1,
-            early_stopping_rounds=40,
-            verbosity=0,
-        )
-
-        best_iters = []
-        for fold, (tr_idx, va_idx) in enumerate(tscv.split(X_train), 1):
-            Xf_tr, Xf_va = X_train.iloc[tr_idx], X_train.iloc[va_idx]
-            yf_tr, yf_va = y_train.iloc[tr_idx], y_train.iloc[va_idx]
-
-            probe_model.fit(
-                Xf_tr, yf_tr,
-                eval_set=[(Xf_va, yf_va)],
-                verbose=False
-            )
-            fold_auc = roc_auc_score(yf_va, probe_model.predict_proba(Xf_va)[:, 1])
-            best_iters.append(probe_model.best_iteration)
-            cv_aucs.append(fold_auc)
-            print(f"  Fold {fold}: AUC={fold_auc:.4f}  best_iter={probe_model.best_iteration}")
-
-        mean_auc = np.mean(cv_aucs)
-        best_n   = max(200, int(np.mean(best_iters)) + 50)   # minimum 200 trees
-        print(f"\nCV mean AUC: {mean_auc:.4f}  ->  using n_estimators={best_n}")
+        # Optimize XGBoost hyperparameters via Optuna
+        best_params = self._optimize_hyperparameters(X_train, y_train, spw)
 
         # ---- Final model on full training data ---- #
         if X_val is not None and y_val is not None:
@@ -107,35 +130,41 @@ class TradingModelTrainer:
             y_train = y_train.iloc[:split]
             eval_set = [(X_val, y_val)]
 
-        print(f"\nTraining final model  (train={len(X_train):,}  val={len(X_val):,})...")
+        print(f"\nTraining final ensemble  (train={len(X_train):,}  val={len(X_val):,})...")
 
-        self.model = xgb.XGBClassifier(
-            max_depth=4,
-            learning_rate=0.02,
-            n_estimators=best_n,
-            subsample=0.7,
-            colsample_bytree=0.7,
-            min_child_weight=5,
-            gamma=0.5,
-            reg_alpha=0.5,
-            reg_lambda=2.0,
-            scale_pos_weight=spw,
-            objective='binary:logistic',
-            eval_metric='auc',
-            random_state=42,
-            n_jobs=-1,
-            early_stopping_rounds=40,
-            verbosity=0,
+        # 1. XGBoost with tuned parameters
+        self.xgb_model = XGBClassifier(**best_params, early_stopping_rounds=40)
+        self.xgb_model.fit(X_train, y_train, eval_set=eval_set, verbose=False)
+        print(" XGBoost trained")
+
+        # 2. LightGBM
+        self.lgb_model = lgb.LGBMClassifier(
+            n_estimators=300, learning_rate=0.05, scale_pos_weight=spw, random_state=42,
+            early_stopping_rounds=40, verbose=-1, metric='auc'
         )
+        self.lgb_model.fit(X_train, y_train, eval_set=eval_set)
+        print(" LightGBM trained")
 
-        self.model.fit(
-            X_train, y_train,
-            eval_set=eval_set,
-            verbose=False
+        # 3. CatBoost
+        self.cat_model = CatBoostClassifier(
+            iterations=300, learning_rate=0.05, auto_class_weights='Balanced', random_seed=42,
+            early_stopping_rounds=40, verbose=0, eval_metric='AUC'
         )
+        self.cat_model.fit(X_train, y_train, eval_set=eval_set, verbose=False)
+        print(" CatBoost trained")
 
-        final_iter = self.model.best_iteration
-        print(f" Training complete  best iteration: {final_iter}")
+        # Create meta-learner features (out-of-fold predictions on validation set)
+        print("\nTraining Meta-Learner (Logistic Regression)...")
+        xgb_val_preds = self.xgb_model.predict_proba(X_val)[:, 1]
+        lgb_val_preds = self.lgb_model.predict_proba(X_val)[:, 1]
+        cat_val_preds = self.cat_model.predict_proba(X_val)[:, 1]
+
+        meta_X = np.column_stack((xgb_val_preds, lgb_val_preds, cat_val_preds))
+        self.model = LogisticRegression() # This is the meta-learner
+        self.model.fit(meta_X, y_val)
+
+        print(" Meta-Learner trained")
+
         return self.model
 
     def evaluate_model(self, X_test, y_test):
@@ -148,8 +177,13 @@ class TradingModelTrainer:
 
         X_test, y_test = self._sanitize(X_test, y_test)
 
-        probs = self.model.predict_proba(X_test)[:, 1]
-        preds = self.model.predict(X_test)
+        xgb_preds = self.xgb_model.predict_proba(X_test)[:, 1]
+        lgb_preds = self.lgb_model.predict_proba(X_test)[:, 1]
+        cat_preds = self.cat_model.predict_proba(X_test)[:, 1]
+
+        meta_X = np.column_stack((xgb_preds, lgb_preds, cat_preds))
+        probs = self.model.predict_proba(meta_X)[:, 1]
+        preds = self.model.predict(meta_X)
 
         auc       = roc_auc_score(y_test, probs)
         accuracy  = accuracy_score(y_test, preds)
@@ -163,6 +197,12 @@ class TradingModelTrainer:
         actual_wins = int(y_arr[preds == 1].sum()) if predicted_buys > 0 else 0
         win_rate = actual_wins / predicted_buys if predicted_buys > 0 else 0
 
+        # Custom Eval Metric: profit_score
+        # Simulate trading returns based on model predictions
+        # True Positive (actual=1, pred=1): +6% avg gain
+        # False Positive (actual=0, pred=1): -2% avg loss (stop hit)
+        profit_score = (actual_wins * 6.0) - ((predicted_buys - actual_wins) * 2.0)
+
         metrics = {
             'auc_score':          round(float(auc), 4),
             'accuracy':           round(float(accuracy), 4),
@@ -172,6 +212,7 @@ class TradingModelTrainer:
             'predicted_win_rate': round(float(win_rate), 4),
             'buy_signals':        predicted_buys,
             'actual_profitable':  actual_wins,
+            'profit_score':       round(float(profit_score), 2),
             'confusion_matrix':   cm,
         }
         self.training_metrics = metrics
@@ -185,6 +226,7 @@ class TradingModelTrainer:
         print(f"Recall     : {recall:.4f}")
         print(f"F1         : {f1:.4f}")
         print(f"Win Rate   : {win_rate*100:.1f}%  ({actual_wins}/{predicted_buys} signals)")
+        print(f"Profit Score: {profit_score:.2f}")
         print(f"\nConfusion Matrix:")
         print(f"               Predicted 0   Predicted 1")
         print(f"Actual 0       {cm[0][0]:8d}      {cm[0][1]:8d}")
@@ -209,14 +251,23 @@ class TradingModelTrainer:
                 X[col] = 0
             X = X[self.feature_names]
         X, _ = self._sanitize(X)
-        return self.model.predict(X), self.model.predict_proba(X)[:, 1]
+
+        xgb_preds = self.xgb_model.predict_proba(X)[:, 1]
+        lgb_preds = self.lgb_model.predict_proba(X)[:, 1]
+        cat_preds = self.cat_model.predict_proba(X)[:, 1]
+
+        meta_X = np.column_stack((xgb_preds, lgb_preds, cat_preds))
+
+        return self.model.predict(meta_X), self.model.predict_proba(meta_X)[:, 1]
 
     def get_feature_importance(self, top_n=15):
-        if self.model is None:
+        if self.xgb_model is None:
             raise ValueError("No model trained.")
+        # Meta-learner doesn't have native feature importances for original features,
+        # so we rely on the primary XGBoost model's feature importances.
         imp = pd.DataFrame({
             'feature':    self.feature_names,
-            'importance': self.model.feature_importances_
+            'importance': self.xgb_model.feature_importances_
         }).sort_values('importance', ascending=False)
 
         print(f"\n{'='*60}")
@@ -233,6 +284,9 @@ class TradingModelTrainer:
         os.makedirs(os.path.dirname(path) if os.path.dirname(path) else '.', exist_ok=True)
         joblib.dump({
             'model':         self.model,
+            'xgb_model':     self.xgb_model,
+            'lgb_model':     self.lgb_model,
+            'cat_model':     self.cat_model,
             'feature_names': self.feature_names,
             'metrics':       self.training_metrics,
         }, path)
@@ -243,6 +297,9 @@ class TradingModelTrainer:
             raise FileNotFoundError(f"Model not found: {path}")
         data = joblib.load(path)
         self.model         = data['model']
+        self.xgb_model     = data.get('xgb_model')
+        self.lgb_model     = data.get('lgb_model')
+        self.cat_model     = data.get('cat_model')
         self.feature_names = data.get('feature_names')
         self.training_metrics = data.get('metrics', {})
         print(f" Model loaded  {path}")
