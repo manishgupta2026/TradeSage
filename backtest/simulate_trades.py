@@ -32,6 +32,8 @@ class Backtester:
         self.position_size = position_size
         self.sl_atr_mult = stop_loss_atr_multiplier
         self.tp_pct = take_profit_pct
+        self.brokerage_fee = 20.0  # ₹20 flat fee per order (buy/sell)
+        self.slippage_pct = 0.001  # 0.1% slippage
         self.trades = []
         self.equity_curve = []
 
@@ -96,6 +98,7 @@ class Backtester:
             current_high = row['high']
             current_low = row['low']
             current_close = row['close']
+            current_vol = row['volume']
             current_date = df.index[i]
 
             # Get ATR from previous day (no look-ahead)
@@ -119,17 +122,20 @@ class Backtester:
                     exit_price = position['take_profit']
 
                 if exit_reason:
-                    pnl = (exit_price - position['entry_price']) * position['shares']
-                    pnl_pct = (exit_price / position['entry_price'] - 1) * 100
-                    capital += exit_price * position['shares']
+                    # Apply slippage on exit
+                    actual_exit = exit_price * (1 - self.slippage_pct) if exit_reason == 'stop_loss' else exit_price * (1 - self.slippage_pct)
+                    gross_pnl = (actual_exit - position['entry_price']) * position['shares']
+                    net_pnl = gross_pnl - self.brokerage_fee  # Sell fee
+                    pnl_pct = (actual_exit / position['entry_price'] - 1) * 100
+                    capital += (actual_exit * position['shares']) - self.brokerage_fee
 
                     self.trades.append({
                         'entry_date': position['entry_date'],
                         'exit_date': current_date,
                         'entry_price': position['entry_price'],
-                        'exit_price': exit_price,
+                        'exit_price': actual_exit,
                         'shares': position['shares'],
-                        'pnl': round(pnl, 2),
+                        'pnl': round(net_pnl, 2),
                         'pnl_pct': round(pnl_pct, 2),
                         'exit_reason': exit_reason,
                         'confidence': position['confidence']
@@ -141,20 +147,21 @@ class Backtester:
                 prev_pred = predictions[i - 1]
                 prev_prob = probabilities[i - 1]
 
-                if prev_pred == 1 and prev_prob >= min_confidence:
-                    # Enter at today's open
-                    entry_price = current_open
-                    shares = self.calculate_position_size(capital, entry_price, atr)
+                # Market Impact constraint
+                if prev_pred == 1 and prev_prob >= min_confidence and prev_row.get('volume', float('inf')) >= 100000:
+                    # Enter at today's open with slippage
+                    actual_entry = current_open * (1 + self.slippage_pct)
+                    shares = self.calculate_position_size(capital, actual_entry, atr)
 
-                    if shares > 0 and entry_price * shares <= capital:
-                        stop_loss = entry_price - (self.sl_atr_mult * atr)
-                        take_profit = entry_price * (1 + self.tp_pct)
-                        cost = entry_price * shares
+                    cost = (actual_entry * shares) + self.brokerage_fee # Buy fee
+                    if shares > 0 and cost <= capital:
+                        stop_loss = actual_entry - (self.sl_atr_mult * atr)
+                        take_profit = actual_entry * (1 + self.tp_pct)
                         capital -= cost
 
                         position = {
                             'shares': shares,
-                            'entry_price': entry_price,
+                            'entry_price': actual_entry,
                             'stop_loss': stop_loss,
                             'take_profit': take_profit,
                             'entry_date': current_date,
@@ -167,10 +174,11 @@ class Backtester:
 
         # ─── CLOSE ANY REMAINING POSITION ───
         if position is not None:
-            exit_price = df.iloc[-1]['close']
-            pnl = (exit_price - position['entry_price']) * position['shares']
+            exit_price = df.iloc[-1]['close'] * (1 - self.slippage_pct)
+            gross_pnl = (exit_price - position['entry_price']) * position['shares']
+            net_pnl = gross_pnl - self.brokerage_fee
             pnl_pct = (exit_price / position['entry_price'] - 1) * 100
-            capital += exit_price * position['shares']
+            capital += (exit_price * position['shares']) - self.brokerage_fee
 
             self.trades.append({
                 'entry_date': position['entry_date'],
@@ -178,7 +186,7 @@ class Backtester:
                 'entry_price': position['entry_price'],
                 'exit_price': exit_price,
                 'shares': position['shares'],
-                'pnl': round(pnl, 2),
+                'pnl': round(net_pnl, 2),
                 'pnl_pct': round(pnl_pct, 2),
                 'exit_reason': 'end_of_data',
                 'confidence': position['confidence']
@@ -231,6 +239,13 @@ class Backtester:
         else:
             sharpe = 0
 
+        # Calmar Ratio
+        annualized_return = (final_capital / self.initial_capital) ** (252 / len(equity)) - 1
+        calmar = annualized_return / (abs(max_drawdown)/100) if max_drawdown < 0 else 0
+
+        # Average Win/Loss Ratio
+        aw_al_ratio = abs(avg_win / avg_loss) if avg_loss != 0 else float('inf')
+
         # Exit reason breakdown
         exit_reasons = trades_df['exit_reason'].value_counts().to_dict()
 
@@ -247,9 +262,11 @@ class Backtester:
             'win_rate': round(win_rate, 2),
             'avg_win': round(avg_win, 2),
             'avg_loss': round(avg_loss, 2),
+            'aw_al_ratio': round(aw_al_ratio, 2),
             'profit_factor': round(profit_factor, 2),
             'max_drawdown_pct': round(max_drawdown, 2),
             'sharpe_ratio': round(sharpe, 2),
+            'calmar_ratio': round(calmar, 2),
             'avg_confidence': round(avg_confidence, 1),
             'stop_loss_atr_mult': self.sl_atr_mult,
             'exit_reasons': exit_reasons
@@ -274,9 +291,11 @@ class Backtester:
         print(f"")
         print(f"Average Win:         ₹{results['avg_win']:,.2f}")
         print(f"Average Loss:        ₹{results['avg_loss']:,.2f}")
+        print(f"Avg Win/Loss Ratio:  {results['aw_al_ratio']:.2f}")
         print(f"Profit Factor:       {results['profit_factor']:.2f}")
         print(f"Max Drawdown:        {results['max_drawdown_pct']:.2f}%")
         print(f"Sharpe Ratio:        {results['sharpe_ratio']:.2f}")
+        print(f"Calmar Ratio:        {results['calmar_ratio']:.2f}")
         print(f"")
         print(f"Stop Loss ATR Mult:  {results['stop_loss_atr_mult']}x")
         print(f"Avg Confidence:      {results['avg_confidence']:.1f}%")

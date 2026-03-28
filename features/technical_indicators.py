@@ -26,6 +26,7 @@ class FeatureEngineer:
         df = self._add_momentum(df)
         df = self._add_volatility(df)
         df = self._add_volume_features(df)
+        df = self._add_market_structure(df)
         df = self._add_derived_features(df)
         df = self._add_regime_features(df)
         df = self._add_candle_features(df)
@@ -63,11 +64,23 @@ class FeatureEngineer:
         df['stoch_d'] = momentum.stoch_signal(df['high'], df['low'], df['close'])
         df['williams_r'] = momentum.williams_r(df['high'], df['low'], df['close'])
 
+        # Stochastic RSI
+        df['stoch_rsi'] = momentum.stochrsi(df['close'])
+
         # MACD components (not just diff)
         macd_ind = trend.MACD(df['close'])
         df['macd_line']   = macd_ind.macd()
         df['macd_signal'] = macd_ind.macd_signal()
         df['macd_hist']   = macd_ind.macd_diff()
+
+        # MACD Histogram divergence
+        # Detect if price is making lower lows but MACD hist is making higher lows
+        df['macd_hist_slope'] = df['macd_hist'].diff(3)
+        df['price_slope'] = df['close'].diff(3)
+        df['macd_divergence'] = np.where(
+            (df['price_slope'] < 0) & (df['macd_hist_slope'] > 0), 1,
+            np.where((df['price_slope'] > 0) & (df['macd_hist_slope'] < 0), -1, 0)
+        )
 
         # ADX + directional indicators
         adx_ind = trend.ADXIndicator(df['high'], df['low'], df['close'])
@@ -75,9 +88,10 @@ class FeatureEngineer:
         df['adx_pos'] = adx_ind.adx_pos()
         df['adx_neg'] = adx_ind.adx_neg()
 
-        # Price momentum
+        # Price momentum (Rate of Change)
         for d in [1, 3, 5, 10, 20]:
-            df[f'price_change_{d}d'] = df['close'].pct_change(d)
+            df[f'roc_{d}d'] = momentum.roc(df['close'], window=d)
+            df[f'price_change_{d}d'] = df['close'].pct_change(d) # Keeping this for legacy compatibility
 
         return df
 
@@ -88,27 +102,78 @@ class FeatureEngineer:
         df['bb_low']   = bb.bollinger_lband()
         df['bb_width'] = bb.bollinger_wband()
         df['bb_pct']   = bb.bollinger_pband()   # 0=lower, 1=upper
+        # Bollinger Band %B is df['bb_pct']
 
         kc = volatility.KeltnerChannel(df['high'], df['low'], df['close'])
         df['kc_high'] = kc.keltner_channel_hband()
+        df['kc_mid'] = kc.keltner_channel_mband()
         df['kc_low']  = kc.keltner_channel_lband()
+        # Keltner Channel Position
+        df['kc_position'] = (df['close'] - df['kc_low']) / (df['kc_high'] - df['kc_low'] + 1e-10)
+
         df['squeeze_on'] = (
             (df['bb_low'] > df['kc_low']) & (df['bb_high'] < df['kc_high'])
         ).astype(int)
 
         df['atr'] = volatility.average_true_range(df['high'], df['low'], df['close'])
-        df['atr_pct'] = df['atr'] / df['close']   # normalized ATR
+        df['atr_pct'] = df['atr'] / df['close']   # ATR as % of price
 
+        # Historical Volatility (20-day annualized)
         df['volatility_5d']  = df['close'].pct_change().rolling(5).std()
         df['volatility_20d'] = df['close'].pct_change().rolling(20).std()
+        df['hist_vol_20d'] = df['volatility_20d'] * np.sqrt(252)
 
         return df
 
     def _add_volume_features(self, df):
+        # Existing features
         df['obv'] = volume.on_balance_volume(df['close'], df['volume'])
         df['volume_sma_20'] = df['volume'].rolling(20).mean()
         df['volume_ratio']  = df['volume'] / (df['volume_sma_20'] + 1e-10)
         df['volume_change'] = df['volume'].pct_change()
+
+        # New advanced volume features
+        # Volume Price Trend (VPT)
+        df['vpt'] = volume.volume_price_trend(df['close'], df['volume'])
+        # Money Flow Index (MFI)
+        df['mfi'] = volume.money_flow_index(df['high'], df['low'], df['close'], df['volume'])
+        # Accumulation/Distribution Line (ADI)
+        df['adi'] = volume.acc_dist_index(df['high'], df['low'], df['close'], df['volume'])
+
+        return df
+
+    def _add_market_structure(self, df):
+        """Market structure, support/resistance, pivots."""
+        eps = 1e-10
+        # Rolling Support/Resistance (20-day)
+        df['rolling_high_20'] = df['high'].rolling(window=20).max()
+        df['rolling_low_20'] = df['low'].rolling(window=20).min()
+
+        # Position within 20-day range
+        df['range_position_20d'] = (df['close'] - df['rolling_low_20']) / (df['rolling_high_20'] - df['rolling_low_20'] + eps)
+
+        # Higher Highs / Lower Lows (simple detection over 5 days)
+        df['hh_ll'] = np.where(
+            (df['high'] > df['high'].shift(1)) & (df['low'] > df['low'].shift(1)), 1,
+            np.where((df['high'] < df['high'].shift(1)) & (df['low'] < df['low'].shift(1)), -1, 0)
+        )
+
+        # Fibonacci retracements from 20-day high/low
+        diff = df['rolling_high_20'] - df['rolling_low_20']
+        df['fib_382'] = df['rolling_high_20'] - 0.382 * diff
+        df['fib_618'] = df['rolling_high_20'] - 0.618 * diff
+        df['dist_fib_382'] = (df['close'] - df['fib_382']) / (df['close'] + eps)
+        df['dist_fib_618'] = (df['close'] - df['fib_618']) / (df['close'] + eps)
+
+        # Classic Pivot Points (using previous day's data)
+        prev_high = df['high'].shift(1)
+        prev_low = df['low'].shift(1)
+        prev_close = df['close'].shift(1)
+        df['pivot'] = (prev_high + prev_low + prev_close) / 3
+        df['r1'] = (2 * df['pivot']) - prev_low
+        df['s1'] = (2 * df['pivot']) - prev_high
+        df['dist_pivot'] = (df['close'] - df['pivot']) / (df['close'] + eps)
+
         return df
 
     def _add_derived_features(self, df):
@@ -167,6 +232,21 @@ class FeatureEngineer:
         # Volume-price relationship
         df['vp_trend'] = df['price_change_1d'] * df['volume_ratio']
 
+        # Advanced Interactions
+        # RSI * Volume (momentum with conviction)
+        df['rsi_volume_conviction'] = df['rsi_dist_50'] * df['volume_ratio']
+
+        # Normalized Deviation from 20 SMA / ATR
+        df['dev_sma20_atr'] = (df['close'] - df['sma_20']) / (df['atr'] + eps)
+
+        # MACD * Stoch (Dual Momentum)
+        df['macd_stoch'] = df['macd_hist_norm'] * (df['stoch_k'] - 50)
+
+        # Dark pool / hidden accumulation proxy (narrow range + volume spike)
+        df['hidden_accum'] = np.where(
+            (df['hl_range'] < df['hl_range'].rolling(20).mean()) & (df['volume_ratio'] > 1.5), 1, 0
+        )
+
         # 52-week high/low distance (use 200 bars to match SMA warmup)
         df['dist_52w_high'] = (df['close'] - df['high'].rolling(200).max()) / (df['high'].rolling(200).max() + eps)
         df['dist_52w_low']  = (df['close'] - df['low'].rolling(200).min())  / (df['low'].rolling(200).min()  + eps)
@@ -212,6 +292,34 @@ class FeatureEngineer:
             (df['macd_hist'] > 0) &
             (df['macd_hist'].shift(1) <= 0)
         ).astype(int)
+
+        # Volatility Regime (VIX Proxy - rolling 20d volatility relative to 100d average)
+        df['high_vol_regime'] = (df['volatility_20d'] > df['volatility_20d'].rolling(100).mean()).astype(int)
+
+        # Market Regime Detection
+        # Trending vs. Ranging
+        df['is_trending'] = (df['adx'] > 25).astype(int)
+        df['is_ranging'] = (df['adx'] < 20).astype(int)
+
+        # Bull/Bear/Neutral Market Regime (using 50 & 200 SMA)
+        # 1: Bull (Price > 50 > 200), -1: Bear (Price < 50 < 200), 0: Neutral (Choppy)
+        df['market_regime'] = np.where(
+            (df['close'] > df['sma_50']) & (df['sma_50'] > df['sma_200']), 1,
+            np.where((df['close'] < df['sma_50']) & (df['sma_50'] < df['sma_200']), -1, 0)
+        )
+        # Note: 'market_regime' can be kept as continuous (1, 0, -1) or split into binary
+        df['bull_market'] = (df['market_regime'] == 1).astype(int)
+        df['bear_market'] = (df['market_regime'] == -1).astype(int)
+
+        # Quarter end proxy (Earnings Season flag)
+        # Typically companies announce earnings end of quarter (March, June, Sept, Dec) + 1 month
+        # Since we use datetime index, we can extract month (requires df to have datetime index)
+        if isinstance(df.index, pd.DatetimeIndex):
+            months = df.index.month
+            # Simple proxy: months following quarter ends (Jan, Apr, Jul, Oct) see high earnings activity
+            df['earnings_season'] = np.isin(months, [1, 2, 4, 5, 7, 8, 10, 11]).astype(int)
+        else:
+            df['earnings_season'] = 0
 
         # ADX trend strength
         df['strong_trend'] = (df['adx'] > 25).astype(int)

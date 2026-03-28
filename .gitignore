@@ -45,7 +45,8 @@ logs/
 *.parquet
 
 # Models
-models/
+models/*.pkl
+models/*.json
 *.gguf
 *.bin
 *.pdf
@@ -66,3 +67,4 @@ cache/
 *.tmp
 *.bak
 *.backup
+catboost_info/

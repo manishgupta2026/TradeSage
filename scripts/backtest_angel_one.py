@@ -13,8 +13,8 @@ from pathlib import Path
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(PROJECT_ROOT)
 
-from src.core.feature_engineering import FeatureEngineer
-from src.core.model_training import TradingModelTrainer
+from features.technical_indicators import FeatureEngineer
+from models.train_xgboost import TradingModelTrainer
 
 logging.basicConfig(level=logging.INFO, format='%(message)s')
 logger = logging.getLogger(__name__)
