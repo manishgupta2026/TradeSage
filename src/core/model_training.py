@@ -1,6 +1,7 @@
 """
 TradeSage Model Training Module
-XGBoost with TimeSeriesSplit CV, tuned hyperparameters for AUC 0.75+
+XGBoost with TimeSeriesSplit CV, Optuna tuning, and profit-focused evaluation.
+Target: AUC ≥ 0.75 on out-of-sample test set.
 """
 
 import numpy as np
@@ -17,6 +18,40 @@ import warnings
 
 warnings.filterwarnings('ignore')
 
+try:
+    import optuna
+    optuna.logging.set_verbosity(optuna.logging.WARNING)
+    OPTUNA_AVAILABLE = True
+except ImportError:
+    OPTUNA_AVAILABLE = False
+
+
+def profit_score(y_true, y_pred_proba, threshold=0.5,
+                 avg_gain=0.06, avg_loss=0.02):
+    """
+    Simulate actual trading returns given a probability threshold.
+
+    Payoffs:
+    - True Positive  (+BUY, stock went up):   +avg_gain
+    - False Positive (+BUY, stock went down): -avg_loss  (stop-loss hit)
+    - True/False Negative:                     0
+
+    Parameters
+    ----------
+    y_true       : 1-D array of true binary labels
+    y_pred_proba : 1-D array of predicted probabilities
+    threshold    : decision boundary (default 0.5)
+    avg_gain     : average return per winning trade (default 6%)
+    avg_loss     : average loss per losing trade (default 2%)
+    """
+    preds = (y_pred_proba >= threshold).astype(int)
+    tp = int(((preds == 1) & (y_true == 1)).sum())
+    fp = int(((preds == 1) & (y_true == 0)).sum())
+    total_signals = tp + fp
+    if total_signals == 0:
+        return 0.0
+    return round((tp * avg_gain - fp * avg_loss) / total_signals, 6)
+
 
 class TradingModelTrainer:
     """Trains and manages XGBoost trading prediction models."""
@@ -25,11 +60,17 @@ class TradingModelTrainer:
         self.model = None
         self.feature_names = None
         self.training_metrics = {}
+        self.best_params = {}
 
-    def train_model(self, X_train, y_train, X_val=None, y_val=None):
+    def train_model(self, X_train, y_train, X_val=None, y_val=None, params=None):
         """
         Train XGBoost with TimeSeriesSplit CV for robust evaluation.
         Uses conservative hyperparameters to avoid overfitting on noisy market data.
+
+        Parameters
+        ----------
+        params : dict, optional
+            Override default hyperparameters (e.g. from Optuna tuning).
         """
         self.feature_names = list(X_train.columns)
 
@@ -56,7 +97,7 @@ class TradingModelTrainer:
         tscv = TimeSeriesSplit(n_splits=3)
         cv_aucs = []
 
-        probe_model = xgb.XGBClassifier(
+        default_params = dict(
             max_depth=4,
             learning_rate=0.02,
             n_estimators=1000,
@@ -74,6 +115,10 @@ class TradingModelTrainer:
             early_stopping_rounds=40,
             verbosity=0,
         )
+        if params:
+            default_params.update(params)
+
+        probe_model = xgb.XGBClassifier(**default_params)
 
         best_iters = []
         for fold, (tr_idx, va_idx) in enumerate(tscv.split(X_train), 1):
@@ -109,24 +154,9 @@ class TradingModelTrainer:
 
         print(f"\nTraining final model  (train={len(X_train):,}  val={len(X_val):,})...")
 
-        self.model = xgb.XGBClassifier(
-            max_depth=4,
-            learning_rate=0.02,
-            n_estimators=best_n,
-            subsample=0.7,
-            colsample_bytree=0.7,
-            min_child_weight=5,
-            gamma=0.5,
-            reg_alpha=0.5,
-            reg_lambda=2.0,
-            scale_pos_weight=spw,
-            objective='binary:logistic',
-            eval_metric='auc',
-            random_state=42,
-            n_jobs=-1,
-            early_stopping_rounds=40,
-            verbosity=0,
-        )
+        default_params['n_estimators'] = best_n
+        self.model = xgb.XGBClassifier(**default_params)
+        self.best_params = default_params
 
         self.model.fit(
             X_train, y_train,
@@ -172,6 +202,7 @@ class TradingModelTrainer:
             'predicted_win_rate': round(float(win_rate), 4),
             'buy_signals':        predicted_buys,
             'actual_profitable':  actual_wins,
+            'profit_score':       profit_score(y_arr, probs),
             'confusion_matrix':   cm,
         }
         self.training_metrics = metrics
@@ -179,27 +210,147 @@ class TradingModelTrainer:
         print(f"\n{'='*60}")
         print("MODEL EVALUATION")
         print(f"{'='*60}")
-        print(f"ROC AUC    : {auc:.4f}")
-        print(f"Accuracy   : {accuracy:.4f}")
-        print(f"Precision  : {precision:.4f}   signal quality (key for trading)")
-        print(f"Recall     : {recall:.4f}")
-        print(f"F1         : {f1:.4f}")
-        print(f"Win Rate   : {win_rate*100:.1f}%  ({actual_wins}/{predicted_buys} signals)")
+        print(f"ROC AUC      : {auc:.4f}")
+        print(f"Accuracy     : {accuracy:.4f}")
+        print(f"Precision    : {precision:.4f}   signal quality (key for trading)")
+        print(f"Recall       : {recall:.4f}")
+        print(f"F1           : {f1:.4f}")
+        print(f"Win Rate     : {win_rate*100:.1f}%  ({actual_wins}/{predicted_buys} signals)")
+        print(f"Profit Score : {metrics['profit_score']:.4f}  (simulated avg return/trade)")
         print(f"\nConfusion Matrix:")
         print(f"               Predicted 0   Predicted 1")
         print(f"Actual 0       {cm[0][0]:8d}      {cm[0][1]:8d}")
         print(f"Actual 1       {cm[1][0]:8d}      {cm[1][1]:8d}")
 
         if auc >= 0.75:
-            print("\n Excellent  strong predictive power")
+            print("\n✅ Excellent  strong predictive power (target achieved)")
         elif auc >= 0.65:
-            print("\n Good  useful predictive power")
+            print("\n✓ Good  useful predictive power")
         elif auc >= 0.60:
-            print("\n- Moderate  some predictive power")
+            print("\n~ Moderate  some predictive power")
         else:
-            print("\n Weak  limited predictive power")
+            print("\n✗ Weak  limited predictive power")
 
         return metrics
+
+    def tune_hyperparams(self, X_train, y_train, n_trials=100, n_cv_splits=3):
+        """
+        Optuna-based hyperparameter search using walk-forward CV.
+
+        Returns the best parameter dict, which can then be passed to
+        train_model() via the *params* argument.
+
+        Parameters
+        ----------
+        n_trials    : number of Optuna trials (100 is a good balance;
+                      increase to 300 for production tuning)
+        n_cv_splits : TimeSeriesSplit folds per trial
+        """
+        if not OPTUNA_AVAILABLE:
+            print("⚠  optuna not installed. Run: pip install optuna")
+            return {}
+
+        X_train, y_train = self._sanitize(X_train, y_train)
+        neg = (y_train == 0).sum()
+        pos = (y_train == 1).sum()
+        spw = float(np.clip(neg / max(1, pos), 0.5, 3.0))
+        tscv = TimeSeriesSplit(n_splits=n_cv_splits)
+
+        def objective(trial):
+            params = dict(
+                max_depth=trial.suggest_int('max_depth', 3, 7),
+                learning_rate=trial.suggest_float('learning_rate', 0.005, 0.1, log=True),
+                n_estimators=trial.suggest_int('n_estimators', 200, 800, step=50),
+                subsample=trial.suggest_float('subsample', 0.5, 1.0),
+                colsample_bytree=trial.suggest_float('colsample_bytree', 0.5, 1.0),
+                min_child_weight=trial.suggest_int('min_child_weight', 3, 10),
+                gamma=trial.suggest_float('gamma', 0.0, 1.0),
+                reg_alpha=trial.suggest_float('reg_alpha', 0.0, 2.0),
+                reg_lambda=trial.suggest_float('reg_lambda', 0.5, 4.0),
+                scale_pos_weight=spw,
+                objective='binary:logistic',
+                eval_metric='auc',
+                random_state=42,
+                n_jobs=-1,
+                verbosity=0,
+            )
+            fold_aucs = []
+            for tr_idx, va_idx in tscv.split(X_train):
+                model = xgb.XGBClassifier(**params)
+                model.fit(
+                    X_train.iloc[tr_idx], y_train.iloc[tr_idx],
+                    eval_set=[(X_train.iloc[va_idx], y_train.iloc[va_idx])],
+                    verbose=False,
+                )
+                fold_aucs.append(roc_auc_score(
+                    y_train.iloc[va_idx],
+                    model.predict_proba(X_train.iloc[va_idx])[:, 1],
+                ))
+            return np.mean(fold_aucs)
+
+        print(f"\nRunning Optuna ({n_trials} trials, {n_cv_splits}-fold walk-forward)…")
+        study = optuna.create_study(direction='maximize')
+        study.optimize(objective, n_trials=n_trials, show_progress_bar=False)
+
+        best = study.best_params
+        print(f"\n✓ Optuna complete  Best AUC: {study.best_value:.4f}")
+        print(f"  Best params: {best}")
+        self.best_params = best
+        return best
+
+    def evaluate_walk_forward(self, df_all, feature_cols,
+                              target_col='target', n_splits=5):
+        """
+        Walk-forward validation: train on expanding window, test on next slice.
+        Returns list of per-fold metric dicts.
+        """
+        df_clean = df_all.dropna(subset=[target_col] + feature_cols)
+        tscv = TimeSeriesSplit(n_splits=n_splits)
+        X = df_clean[feature_cols].copy()
+        y = df_clean[target_col].copy()
+        X.replace([np.inf, -np.inf], np.nan, inplace=True)
+        X.fillna(0, inplace=True)
+
+        fold_results = []
+        print(f"\n{'='*60}")
+        print(f"WALK-FORWARD VALIDATION  ({n_splits} folds)")
+        print(f"{'='*60}")
+
+        for fold, (tr_idx, va_idx) in enumerate(tscv.split(X), 1):
+            Xf_tr, Xf_va = X.iloc[tr_idx], X.iloc[va_idx]
+            yf_tr, yf_va = y.iloc[tr_idx], y.iloc[va_idx]
+
+            neg = (yf_tr == 0).sum()
+            pos = (yf_tr == 1).sum()
+            spw = float(np.clip(neg / max(1, pos), 0.5, 3.0))
+
+            model = xgb.XGBClassifier(
+                max_depth=4, learning_rate=0.02, n_estimators=500,
+                subsample=0.7, colsample_bytree=0.7, min_child_weight=5,
+                gamma=0.5, reg_alpha=0.5, reg_lambda=2.0,
+                scale_pos_weight=spw, objective='binary:logistic',
+                eval_metric='auc', random_state=42, n_jobs=-1, verbosity=0,
+            )
+            model.fit(Xf_tr, yf_tr, verbose=False)
+
+            probs = model.predict_proba(Xf_va)[:, 1]
+            auc = roc_auc_score(yf_va, probs)
+            ps = profit_score(yf_va.values, probs)
+
+            fold_results.append({
+                'fold': fold, 'train_size': len(Xf_tr),
+                'test_size': len(Xf_va), 'auc': round(auc, 4),
+                'profit_score': ps,
+            })
+            print(
+                f"  Fold {fold}: train={len(Xf_tr):>6,}  test={len(Xf_va):>5,}  "
+                f"AUC={auc:.4f}  ProfitScore={ps:.4f}"
+            )
+
+        mean_auc = np.mean([r['auc'] for r in fold_results])
+        mean_ps  = np.mean([r['profit_score'] for r in fold_results])
+        print(f"\nMean AUC: {mean_auc:.4f}   Mean ProfitScore: {mean_ps:.4f}")
+        return fold_results
 
     def predict(self, X):
         if self.model is None:
@@ -235,17 +386,19 @@ class TradingModelTrainer:
             'model':         self.model,
             'feature_names': self.feature_names,
             'metrics':       self.training_metrics,
+            'best_params':   getattr(self, 'best_params', {}),
         }, path)
-        print(f" Model saved  {path}")
+        print(f"✓ Model saved → {path}")
 
     def load_model(self, path='tradesage_model.pkl'):
         if not os.path.exists(path):
             raise FileNotFoundError(f"Model not found: {path}")
         data = joblib.load(path)
-        self.model         = data['model']
-        self.feature_names = data.get('feature_names')
+        self.model            = data['model']
+        self.feature_names    = data.get('feature_names')
         self.training_metrics = data.get('metrics', {})
-        print(f" Model loaded  {path}")
+        self.best_params      = data.get('best_params', {})
+        print(f"✓ Model loaded ← {path}")
         if self.feature_names:
             print(f"  Features : {len(self.feature_names)}")
         auc = self.training_metrics.get('auc_score', 'N/A')
