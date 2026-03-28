@@ -2,9 +2,9 @@
 TradeSage - Full Training Pipeline (scripts/train_final_model.py)
 
 Orchestrates the complete ML pipeline:
-  1. Fetch 10y NSE data via yfinance
+  1. Fetch 20y NSE data via yfinance
   2. Feature engineering (80+ indicators)
-  3. Walk-forward validation
+  3. Chronological split: 17y train, 1y val, 2y test
   4. Optional Optuna hyperparameter tuning
   5. Final model training
   6. Backtest with realistic NSE costs
@@ -45,7 +45,10 @@ logger = logging.getLogger(__name__)
 
 # ── Defaults ──────────────────────────────────────────────────────────────────
 DEFAULT_UNIVERSE = "data/nifty200.json"
-DEFAULT_YEARS = 10
+DEFAULT_YEARS = 20
+DEFAULT_TRAIN_YEARS = 17
+DEFAULT_VAL_YEARS = 1
+DEFAULT_TEST_YEARS = 2
 DEFAULT_FORWARD_DAYS = 10
 DEFAULT_GAIN_THRESHOLD = 0.04     # 4% swing gain
 DEFAULT_MODEL_PATH = "models/tradesage_model.pkl"
@@ -69,6 +72,27 @@ def load_symbols(universe_name: str) -> list:
         f"Symbol universe '{universe_name}' not found. "
         f"Tried: {candidates}"
     )
+
+
+def split_by_years(df: pd.DataFrame, train_years: int, val_years: int,
+                   test_years: int, days_per_year: int = 252):
+    """
+    Chronologically split a DataFrame into train/val/test by approximate trading years.
+    Skips if there is insufficient history.
+    """
+    df = df.sort_index()
+    required = (train_years + val_years + test_years) * days_per_year
+    if len(df) < required:
+        return None
+
+    train_end = train_years * days_per_year
+    val_end = train_end + val_years * days_per_year
+    test_end = val_end + test_years * days_per_year
+
+    train_df = df.iloc[:train_end].copy()
+    val_df = df.iloc[train_end:val_end].copy()
+    test_df = df.iloc[val_end:test_end].copy()
+    return train_df, val_df, test_df
 
 
 def main(args: argparse.Namespace) -> None:
@@ -96,61 +120,87 @@ def main(args: argparse.Namespace) -> None:
         f"Data ready: {len(stock_data)} stocks  |  {len(failed)} failed"
     )
 
-    # ── 3. Feature engineering ────────────────────────────────────────────
+    # ── 3. Feature engineering + per-stock chronological split ────────────
     engineer = FeatureEngineer()
-    all_frames = []
+    train_parts, val_parts, test_parts = [], [], []
 
     logger.info("Engineering features…")
-    ok, skipped = 0, 0
+    ok, skipped_insufficient, skipped_error = 0, 0, 0
     for symbol, df in stock_data.items():
         try:
             df_feat = engineer.add_technical_indicators(df)
-            df_feat = engineer.create_target_variable(
+            split = split_by_years(
                 df_feat,
+                args.train_years,
+                args.val_years,
+                args.test_years,
+            )
+            if split is None:
+                skipped_insufficient += 1
+                continue
+
+            train_df_raw, val_df_raw, test_df_raw = split
+
+            # Recompute target inside each split to avoid look-ahead across boundaries
+            train_df = engineer.create_target_variable(
+                train_df_raw,
                 forward_days=args.forward_days,
                 gain_threshold=args.gain_threshold,
             )
-            df_feat["symbol"] = symbol
-            all_frames.append(df_feat)
+            val_df = engineer.create_target_variable(
+                val_df_raw,
+                forward_days=args.forward_days,
+                gain_threshold=args.gain_threshold,
+            )
+            test_df = engineer.create_target_variable(
+                test_df_raw,
+                forward_days=args.forward_days,
+                gain_threshold=args.gain_threshold,
+            )
+
+            for part in (train_df, val_df, test_df):
+                part["symbol"] = symbol
+
+            train_parts.append(train_df)
+            val_parts.append(val_df)
+            test_parts.append(test_df)
             ok += 1
         except Exception as exc:
             logger.debug(f"  Skipped {symbol}: {exc}")
-            skipped += 1
+            skipped_error += 1
 
-    if not all_frames:
-        logger.error("No usable data after feature engineering — aborting.")
+    if not train_parts or not val_parts or not test_parts:
+        logger.error("No usable data after feature engineering + 17/1/2 split — aborting.")
         sys.exit(1)
-    logger.info(f"Feature engineering: {ok} ok  |  {skipped} skipped")
-
-    # ── 4. Per-stock 80/20 chronological split ────────────────────────────
-    #  Splitting per-stock (not globally) prevents market-regime leakage.
-    #  (Global split → val = only recent bear market → biased AUC)
-    train_parts, val_parts = [], []
-    for df in all_frames:
-        n = len(df)
-        sp = int(n * 0.8)
-        train_parts.append(df.iloc[:sp])
-        val_parts.append(df.iloc[sp:])
+    logger.info(
+        f"Feature engineering + split: {ok} ok  |  {skipped_insufficient} insufficient | "
+        f"{skipped_error} errors"
+    )
 
     train_df = pd.concat(train_parts, ignore_index=True)
     val_df = pd.concat(val_parts, ignore_index=True)
+    test_df = pd.concat(test_parts, ignore_index=True)
 
     X_train, y_train, feature_cols = engineer.prepare_training_data(train_df)
     X_val, y_val, _ = engineer.prepare_training_data(val_df)
+    X_test, y_test, _ = engineer.prepare_training_data(test_df)
 
     # Align val columns
     for col in set(feature_cols) - set(X_val.columns):
         X_val[col] = 0
     X_val = X_val[feature_cols]
+    for col in set(feature_cols) - set(X_test.columns):
+        X_test[col] = 0
+    X_test = X_test[feature_cols]
 
     logger.info(
         f"Train: {len(X_train):,} rows  |  Val: {len(X_val):,} rows  |  "
-        f"Features: {len(feature_cols)}"
+        f"Test: {len(X_test):,} rows  |  Features: {len(feature_cols)}"
     )
 
     # ── 5. Walk-forward validation ─────────────────────────────────────────
     trainer = TradingModelTrainer()
-    all_data = pd.concat(all_frames, ignore_index=True).sort_index()
+    all_data = pd.concat(train_parts + val_parts + test_parts, ignore_index=True).sort_index()
     wf_results = trainer.evaluate_walk_forward(
         all_data, feature_cols, n_splits=5
     )
@@ -168,29 +218,17 @@ def main(args: argparse.Namespace) -> None:
     # ── 7. Final model training ────────────────────────────────────────────
     trainer.train_model(X_train, y_train, X_val, y_val, params=best_params or None)
 
-    # ── 8. Evaluate on val set ────────────────────────────────────────────
-    metrics = trainer.evaluate_model(X_val, y_val)
+    # ── 8. Evaluate on test set ────────────────────────────────────────────
+    metrics = trainer.evaluate_model(X_test, y_test)
     trainer.get_feature_importance(top_n=20)
 
-    # ── 9. Backtest on first stock that has enough data ────────────────────
-    logger.info("\nRunning backtest on sample stock…")
-    sample_sym = next(iter(stock_data))
-    sample_df_raw = stock_data[sample_sym]
+    # ── 9. Backtest on first test stock ─────────────────────────────────────
+    logger.info("\nRunning backtest on sample test stock…")
+    sample_df = test_parts[0].copy()
+    sample_df = sample_df.sort_index()
+    sample_sym = sample_df["symbol"].iloc[0]
     try:
-        sample_feat = engineer.add_technical_indicators(sample_df_raw)
-        # Add ATR column for backtester
-        if "atr" not in sample_feat.columns:
-            from ta.volatility import average_true_range
-            sample_feat["atr"] = average_true_range(
-                sample_feat["high"], sample_feat["low"], sample_feat["close"]
-            )
-
-        X_bt, _, _ = engineer.prepare_training_data(
-            engineer.create_target_variable(
-                sample_feat, forward_days=args.forward_days,
-                gain_threshold=args.gain_threshold
-            )
-        )
+        X_bt, _, _ = engineer.prepare_training_data(sample_df)
         for col in set(feature_cols) - set(X_bt.columns):
             X_bt[col] = 0
         X_bt = X_bt[feature_cols]
@@ -198,11 +236,12 @@ def main(args: argparse.Namespace) -> None:
         preds, probs = trainer.predict(X_bt)
         bt = Backtester(initial_capital=100_000)
         bt.run_backtest(
-            sample_feat.loc[X_bt.index],
+            sample_df.loc[X_bt.index],
             preds,
             probs,
             min_confidence=DEFAULT_MIN_CONFIDENCE,
         )
+        logger.info(f"Backtest complete on sample symbol: {sample_sym}")
     except Exception as exc:
         logger.warning(f"Backtest skipped: {exc}")
 
@@ -239,7 +278,22 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--years", type=int, default=DEFAULT_YEARS,
-        help="Years of historical data (default: 10)"
+        help="Years of historical data to download (default: 20)"
+    )
+    parser.add_argument(
+        "--train-years", type=int, default=DEFAULT_TRAIN_YEARS,
+        dest="train_years",
+        help="Years for training split (default: 17)"
+    )
+    parser.add_argument(
+        "--val-years", type=int, default=DEFAULT_VAL_YEARS,
+        dest="val_years",
+        help="Years for validation split (default: 1)"
+    )
+    parser.add_argument(
+        "--test-years", type=int, default=DEFAULT_TEST_YEARS,
+        dest="test_years",
+        help="Years for test split (default: 2)"
     )
     parser.add_argument(
         "--forward-days", type=int, default=DEFAULT_FORWARD_DAYS,
