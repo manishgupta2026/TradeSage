@@ -1,6 +1,13 @@
 """
-TradeSage - Feature Engineering v2
+TradeSage - Feature Engineering v3
 Normalized, derived features + regime flags for XGBoost AUC 0.75+
+
+New in v3:
+  - Volume-based: VPT, MFI (volume-weighted RSI), A/D Line
+  - Momentum: StochRSI, ROC (5/10/20-day)
+  - Market Structure: Pivot Points, Fibonacci retracement, HH/LL detection
+  - Regime: bull/bear flag, MFI overbought/oversold, dark pool proxy
+  - Feature Interactions: 7 cross-indicator features
 """
 
 import pandas as pd
@@ -19,16 +26,18 @@ class FeatureEngineer:
     def add_technical_indicators(self, df):
         """
         Full feature pipeline: raw indicators → normalized derived features → regime flags.
-        Returns DataFrame with 70+ ML-ready features.
+        Returns DataFrame with 80+ ML-ready features.
         """
         df = self._clean_df(df)
         df = self._add_moving_averages(df)
         df = self._add_momentum(df)
         df = self._add_volatility(df)
         df = self._add_volume_features(df)
+        df = self._add_market_structure(df)
         df = self._add_derived_features(df)
         df = self._add_regime_features(df)
         df = self._add_candle_features(df)
+        df = self._add_feature_interactions(df)
         return df
 
     # ------------------------------------------------------------------ #
@@ -79,6 +88,20 @@ class FeatureEngineer:
         for d in [1, 3, 5, 10, 20]:
             df[f'price_change_{d}d'] = df['close'].pct_change(d)
 
+        # Rate of Change (named ROC periods)
+        df['roc_5']  = df['close'].pct_change(5)  * 100
+        df['roc_10'] = df['close'].pct_change(10) * 100
+        df['roc_20'] = df['close'].pct_change(20) * 100
+
+        # Stochastic RSI
+        rsi = df['rsi_14'].copy()
+        rsi_min = rsi.rolling(14).min()
+        rsi_max = rsi.rolling(14).max()
+        rsi_range = rsi_max - rsi_min
+        df['stoch_rsi']   = np.where(rsi_range > 0, (rsi - rsi_min) / rsi_range, 0.5)
+        df['stoch_rsi_k'] = df['stoch_rsi'].rolling(3).mean()
+        df['stoch_rsi_d'] = df['stoch_rsi_k'].rolling(3).mean()
+
         return df
 
     def _add_volatility(self, df):
@@ -109,6 +132,78 @@ class FeatureEngineer:
         df['volume_sma_20'] = df['volume'].rolling(20).mean()
         df['volume_ratio']  = df['volume'] / (df['volume_sma_20'] + 1e-10)
         df['volume_change'] = df['volume'].pct_change()
+
+        # Volume Price Trend (VPT)
+        price_change_pct = df['close'].pct_change().fillna(0)
+        df['vpt'] = (price_change_pct * df['volume']).cumsum()
+        df['vpt_sma_14'] = df['vpt'].rolling(14).mean()
+        df['vpt_signal'] = df['vpt'] - df['vpt_sma_14']
+
+        # Accumulation / Distribution Line
+        hl_range = df['high'] - df['low']
+        clv = np.where(
+            hl_range > 0,
+            ((df['close'] - df['low']) - (df['high'] - df['close'])) / hl_range,
+            0,
+        )
+        df['ad_line'] = (clv * df['volume']).cumsum()
+        df['ad_slope'] = df['ad_line'].diff(5) / (df['ad_line'].abs().rolling(5).mean() + 1e-10)
+
+        # Money Flow Index (MFI) — volume-weighted RSI
+        typical_price = (df['high'] + df['low'] + df['close']) / 3
+        money_flow = typical_price * df['volume']
+        delta_tp = typical_price.diff()
+        pos_flow = money_flow.where(delta_tp > 0, 0).rolling(14).sum()
+        neg_flow = money_flow.where(delta_tp < 0, 0).rolling(14).sum()
+        mfi_ratio = pos_flow / (neg_flow + 1e-10)
+        df['mfi_14'] = 100 - (100 / (1 + mfi_ratio))
+
+        return df
+
+    def _add_market_structure(self, df):
+        """Pivot points, Fibonacci retracement, support/resistance, HH/LL."""
+        # Classic Pivot Points (previous bar)
+        prev_h = df['high'].shift(1)
+        prev_l = df['low'].shift(1)
+        prev_c = df['close'].shift(1)
+        pivot = (prev_h + prev_l + prev_c) / 3
+        df['pivot'] = pivot
+        df['r1'] = 2 * pivot - prev_l
+        df['r2'] = pivot + (prev_h - prev_l)
+        df['s1'] = 2 * pivot - prev_h
+        df['s2'] = pivot - (prev_h - prev_l)
+
+        atr = df['atr'].replace(0, np.nan).fillna(df['close'] * 0.02)
+        df['dist_pivot'] = (df['close'] - pivot) / (atr + 1e-10)
+        df['dist_r1']    = (df['close'] - df['r1']) / (atr + 1e-10)
+        df['dist_s1']    = (df['close'] - df['s1']) / (atr + 1e-10)
+
+        # Fibonacci retracement (20-bar swing)
+        swing_high = df['high'].rolling(20).max()
+        swing_low  = df['low'].rolling(20).min()
+        fib_range  = swing_high - swing_low
+        df['fib_236'] = swing_high - 0.236 * fib_range
+        df['fib_382'] = swing_high - 0.382 * fib_range
+        df['fib_500'] = swing_high - 0.500 * fib_range
+        df['fib_618'] = swing_high - 0.618 * fib_range
+        for col in ['fib_236', 'fib_382', 'fib_500', 'fib_618']:
+            df[f'dist_{col}'] = (df['close'] - df[col]) / (atr + 1e-10)
+
+        # 52-week high/low distances
+        df['dist_52w_high'] = (df['close'] - df['high'].rolling(200).max()) / (df['high'].rolling(200).max() + 1e-10)
+        df['dist_52w_low']  = (df['close'] - df['low'].rolling(200).min())  / (df['low'].rolling(200).min()  + 1e-10)
+
+        # Higher Highs / Lower Lows (10-bar)
+        recent_high = df['high'].rolling(10).max()
+        prior_high  = df['high'].rolling(10).max().shift(10)
+        recent_low  = df['low'].rolling(10).min()
+        prior_low   = df['low'].rolling(10).min().shift(10)
+        df['higher_high'] = (recent_high > prior_high).astype(int)
+        df['lower_low']   = (recent_low  < prior_low).astype(int)
+        df['trend_structure_bull'] = (
+            (df['higher_high'] == 1) & (df['lower_low'] == 0)
+        ).astype(int)
+
         return df
 
     def _add_derived_features(self, df):
@@ -176,6 +271,12 @@ class FeatureEngineer:
         df['consec_up'] = up_days.groupby((up_days != up_days.shift()).cumsum()).cumcount() + 1
         df['consec_up'] = df['consec_up'] * up_days  # zero on down days
 
+        # MACD histogram divergence (expanding or contracting)
+        df['macd_hist_slope'] = df['macd_hist'].diff(3)
+
+        # (Close - 20 SMA) / ATR — normalised deviation
+        df['close_sma20_atr'] = (df['close'] - df['sma_20']) / (df['atr'] + eps)
+
         return df
 
     def _add_regime_features(self, df):
@@ -220,6 +321,23 @@ class FeatureEngineer:
         # Volume breakout
         df['vol_breakout'] = (df['volume_ratio'] > 2.0).astype(int)
 
+        # Dark pool proxy: volume spike + narrow range
+        df['dark_pool_proxy'] = (
+            (df['volume_ratio'] > 1.5) & (df['hl_range'] < df['atr_pct'])
+        ).astype(int)
+
+        # Market regime: bull / bear
+        df['regime_bull'] = (
+            (df['close'] > df['sma_50']) & (df['sma_50'] > df['sma_200'])
+        ).astype(int)
+        df['regime_bear'] = (
+            (df['close'] < df['sma_50']) & (df['sma_50'] < df['sma_200'])
+        ).astype(int)
+
+        # MFI zones
+        df['mfi_oversold']   = (df['mfi_14'] < 20).astype(int)
+        df['mfi_overbought'] = (df['mfi_14'] > 80).astype(int)
+
         # Squeeze release (was squeezed, now expanding)
         df['squeeze_release'] = (
             (df['squeeze_on'].shift(1) == 1) & (df['squeeze_on'] == 0)
@@ -253,6 +371,33 @@ class FeatureEngineer:
             (df['close'] > df['open'].shift(1)) &
             (df['open'] < df['close'].shift(1))
         ).astype(int)
+
+        return df
+
+    def _add_feature_interactions(self, df):
+        """Engineered cross-indicator features."""
+        eps = 1e-10
+
+        # RSI × Volume ratio — momentum with conviction
+        df['rsi_x_vol']      = (df['rsi_14'] / 100.0) * df['volume_ratio']
+
+        # MACD histogram × Stoch %K — dual momentum
+        df['macd_x_stoch']   = df['macd_hist_norm'] * (df['stoch_k'] / 100.0)
+
+        # ADX × di_diff — trend strength × direction
+        df['adx_x_di']       = (df['adx'] / 100.0) * np.sign(df['di_diff'])
+
+        # BB %B × RSI
+        df['bb_x_rsi']       = df['bb_pct'] * (df['rsi_14'] / 100.0)
+
+        # Volume ratio × ROC — volume-weighted price acceleration
+        df['vol_x_roc10']    = df['volume_ratio'] * df['roc_10'] / 100.0
+
+        # StochRSI × MFI — dual overbought/oversold signal
+        df['stochrsi_x_mfi'] = df['stoch_rsi'] * (df['mfi_14'] / 100.0)
+
+        # ADX × close_sma20_atr — trend confirmation of deviation
+        df['adx_x_dev']      = (df['adx'] / 100.0) * df['close_sma20_atr']
 
         return df
 
@@ -319,6 +464,11 @@ class FeatureEngineer:
             'atr',
             # raw volume (use volume_ratio instead)
             'volume_sma_20',
+            # pivot / fib raw levels (use distances)
+            'pivot', 'r1', 'r2', 's1', 's2',
+            'fib_236', 'fib_382', 'fib_500', 'fib_618',
+            # raw VPT and AD line (use derived signals)
+            'vpt', 'vpt_sma_14', 'ad_line',
         }
 
         feature_cols = [c for c in df.columns if c not in exclude_cols]
