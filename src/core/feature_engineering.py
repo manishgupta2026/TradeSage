@@ -99,8 +99,8 @@ class FeatureEngineer:
         rsi_max = rsi.rolling(14).max()
         rsi_range = rsi_max - rsi_min
         df['stoch_rsi']   = np.where(rsi_range > 0, (rsi - rsi_min) / rsi_range, 0.5)
-        df['stoch_rsi_k'] = pd.Series(df['stoch_rsi']).rolling(3).mean()
-        df['stoch_rsi_d'] = pd.Series(df['stoch_rsi_k']).rolling(3).mean()
+        df['stoch_rsi_k'] = df['stoch_rsi'].rolling(3).mean()
+        df['stoch_rsi_d'] = df['stoch_rsi_k'].rolling(3).mean()
 
         return df
 

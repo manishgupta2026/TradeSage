@@ -165,8 +165,7 @@ class FeatureEngineer:
     def _add_moving_averages(self, df: pd.DataFrame) -> pd.DataFrame:
         for w in [5, 10, 20, 50, 100]:
             df[f"sma_{w}"] = df["close"].rolling(w).mean()
-        # sma_200 alias (100 bars to reduce warmup rows)
-        df["sma_200"] = df["close"].rolling(100).mean()
+        df["sma_200"] = df["close"].rolling(200).mean()
         for s in [9, 21, 50]:
             df[f"ema_{s}"] = df["close"].ewm(span=s, adjust=False).mean()
         return df
