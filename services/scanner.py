@@ -492,7 +492,7 @@ def run_scanner():
                     positions = {}
                 
                 new_trades_count = 0
-                for sig in top_signals:
+                for sig in local_signals:
                     if sig['probability'] >= 0.75:
                         sym = sig['symbol']
                         if sym not in positions or positions[sym].get('status') != 'open':

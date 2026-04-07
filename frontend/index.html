@@ -225,9 +225,12 @@
             background: var(--surface-container);
             border-radius: var(--radius);
             overflow: hidden;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
         table {
             width: 100%;
+            min-width: 760px;
             border-collapse: collapse;
             font-size: 0.8125rem;
         }
@@ -518,6 +521,23 @@
             .main { flex-direction: column; }
             .sidebar { width: 100%; max-height: 300px; }
             .stat-cards { grid-template-columns: repeat(2, 1fr); }
+            .header { flex-wrap: wrap; gap: 0.5rem; padding: 0.625rem 1rem; }
+            .header-left { flex-wrap: wrap; gap: 0.75rem; }
+            .header-left nav { margin-left: 0 !important; }
+            .header-right { flex-wrap: wrap; gap: 0.5rem; font-size: 0.6875rem; }
+            .content { padding: 0.75rem; }
+            .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            .signal-table { min-width: 800px; }
+        }
+        @media (max-width: 600px) {
+            .header { padding: 0.5rem 0.75rem; }
+            .logo { font-size: 1.125rem; }
+            .header-left nav a { font-size: 0.75rem !important; }
+            .stat-cards { grid-template-columns: 1fr; }
+            .content { padding: 0.5rem; }
+            .sidebar { max-height: 250px; }
+            .signal-table th, .signal-table td { font-size: 0.6875rem; padding: 0.5rem 0.5rem; }
+            .bottom-row { gap: 0.75rem; }
         }
 
         /* ── ANIMATIONS ── */
@@ -552,7 +572,7 @@
                 </div>
                 <nav style="display:flex; gap:1.5rem; margin-left: 2rem;">
                     <a href="/" style="color:var(--green);text-decoration:none;font-weight:600;font-size:0.875rem;">Dashboard</a>
-                    <a href="/static/portfolio.html" style="color:var(--text);text-decoration:none;font-size:0.875rem;">Paper Portfolio</a>
+                    <a href="/static/portfolio.html" style="color:var(--on-surface-variant);text-decoration:none;font-size:0.875rem;">Paper Portfolio</a>
                 </nav>
                 <div id="market-badge" class="badge badge-closed">● CLOSED</div>
                 <div class="meta-pill">
