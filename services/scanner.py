@@ -475,6 +475,50 @@ def run_scanner():
                 except Exception:
                     pass
 
+                # --- AUTONOMOUS PAPER TRADING ---
+                # Initial capital setup: 50k INR | Max alloc per trade: 10k INR
+                positions_path = PROJECT_ROOT / "data" / "positions.json"
+                if not positions_path.exists():
+                    try:
+                        with open(positions_path, "w") as f:
+                            json.dump({}, f)
+                    except Exception:
+                        pass
+                
+                try:
+                    with open(positions_path, "r") as f:
+                        positions = json.load(f)
+                except Exception:
+                    positions = {}
+                
+                new_trades_count = 0
+                for sig in top_signals:
+                    if sig['probability'] >= 0.75:
+                        sym = sig['symbol']
+                        if sym not in positions or positions[sym].get('status') != 'open':
+                            entry = sig['entry_price']
+                            shares = int(10000 // entry) if entry > 0 else 0
+                            if shares > 0:
+                                positions[sym] = {
+                                    "status": "open",
+                                    "entry_price": entry,
+                                    "shares": shares,
+                                    "stop_loss": sig['stop_loss'],
+                                    "take_profit": sig['take_profit'],
+                                    "entry_date": datetime.now(IST).isoformat(),
+                                    "confidence": sig['confidence'],
+                                    "fundamentals": sig.get('fundamentals', {})
+                                }
+                                new_trades_count += 1
+                                logger.info(f"🤖 [AUTO-TRADE] Executed {shares} shares of {sym} at ₹{entry:.2f}")
+
+                if new_trades_count > 0:
+                    try:
+                        with open(positions_path, "w") as f:
+                            json.dump(positions, f, indent=2)
+                    except Exception as e:
+                        logger.error(f"Failed to save paper trades: {e}")
+
                 logger.info(f"\n{'─' * 60}")
                 logger.info(
                     f"SCAN COMPLETE — {signal_count} signals ({high_conf_count} HIGH) | "

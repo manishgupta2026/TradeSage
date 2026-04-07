@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeSage | Live Trading Terminal</title>
+    <meta name="description" content="TradeSage — AI-powered NSE swing trading dashboard with live signals, model analytics, and portfolio tracking.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <style>
+        /* ═══════════════════════════════════════════════════════════
+           DESIGN SYSTEM: Obsidian Flux (Stitch MCP Generated)
+           ═══════════════════════════════════════════════════════════ */
+        :root {
+            --bg: #0b1326;
+            --surface: #0b1326;
+            --surface-container-lowest: #060e20;
+            --surface-container-low: #131b2e;
+            --surface-container: #171f33;
+            --surface-container-high: #222a3d;
+            --surface-container-highest: #2d3449;
+            --surface-bright: #31394d;
+            --surface-variant: #2d3449;
+            --primary: #4be277;
+            --primary-container: #22c55e;
+            --primary-dim: #4ae176;
+            --secondary: #bcc7de;
+            --secondary-container: #3e495d;
+            --tertiary: #f7bf1e;
+            --tertiary-container: #d7a400;
+            --error: #ffb4ab;
+            --error-container: #93000a;
+            --on-surface: #dae2fd;
+            --on-surface-variant: #bccbb9;
+            --on-primary: #003915;
+            --outline: #869585;
+            --outline-variant: #3d4a3d;
+            --red: #ef4444;
+            --yellow: #eab308;
+            --green: #22c55e;
+            --font-headline: 'Manrope', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+            --radius: 0.5rem;
+            --radius-sm: 0.25rem;
+            --transition: 150ms ease-out;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--on-surface);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── SCROLLBAR ── */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--surface-container-lowest); }
+        ::-webkit-scrollbar-thumb { background: var(--surface-bright); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--outline); }
+
+        /* ── LAYOUT ── */
+        .app { display: flex; flex-direction: column; min-height: 100vh; }
+
+        /* ── HEADER ── */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1.5rem;
+            background: var(--surface-container-low);
+            z-index: 100;
+            position: sticky;
+            top: 0;
+        }
+        .header-left { display: flex; align-items: center; gap: 1.5rem; }
+        .logo {
+            font-family: var(--font-headline);
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--on-surface);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+        .logo-icon {
+            width: 28px; height: 28px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-container));
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+            box-shadow: 0 0 12px rgba(75, 226, 119, 0.3);
+        }
+        .logo-icon::after {
+            content: '';
+            width: 8px; height: 8px;
+            background: var(--on-primary);
+            border-radius: 50%;
+            animation: pulse-icon 2s ease-in-out infinite;
+        }
+        @keyframes pulse-icon {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.4); opacity: 0.6; }
+        }
+        .header-right { display: flex; align-items: center; gap: 1rem; }
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .badge-open {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--green);
+            box-shadow: 0 0 8px rgba(34, 197, 94, 0.2);
+        }
+        .badge-closed {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--red);
+        }
+        .badge-premarket {
+            background: rgba(234, 179, 8, 0.15);
+            color: var(--yellow);
+        }
+        .meta-pill {
+            font-size: 0.75rem;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+        .meta-pill .dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--outline);
+        }
+        .auc-pill {
+            background: var(--surface-container-high);
+            padding: 0.25rem 0.625rem;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* ── MAIN CONTENT ── */
+        .main { display: flex; flex: 1; overflow: hidden; }
+        .content { flex: 1; padding: 1.25rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1.25rem; }
+
+        /* ── STAT CARDS ── */
+        .stat-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+        .stat-card {
+            background: var(--surface-container-high);
+            border-radius: var(--radius);
+            padding: 1.25rem 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: background var(--transition), box-shadow var(--transition);
+        }
+        .stat-card:hover {
+            background: var(--surface-container-highest);
+            box-shadow: 0 0 20px rgba(75, 226, 119, 0.08);
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), transparent);
+            opacity: 0.5;
+        }
+        .stat-card-label {
+            font-size: 0.6875rem;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        .stat-card-value {
+            font-family: var(--font-headline);
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1;
+            color: var(--on-surface);
+        }
+        .stat-card-value.green { color: var(--primary); }
+        .stat-card-value.yellow { color: var(--yellow); }
+        .stat-card-sub {
+            font-size: 0.6875rem;
+            color: var(--outline);
+            margin-top: 0.375rem;
+            font-family: var(--font-mono);
+        }
+
+        /* ── SIGNALS TABLE ── */
+        .section-header {
+            font-family: var(--font-headline);
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--on-surface);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+        }
+        .section-header .accent-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--outline-variant), transparent);
+        }
+        .table-wrap {
+            background: var(--surface-container);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8125rem;
+        }
+        thead th {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--secondary);
+            background: var(--surface-container-low);
+            position: sticky;
+            top: 0;
+        }
+        tbody tr {
+            transition: background var(--transition);
+            cursor: default;
+        }
+        tbody tr:hover { background: var(--surface-container-highest); }
+        td {
+            padding: 0.625rem 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.8125rem;
+            white-space: nowrap;
+            color: var(--on-surface);
+            font-variant-numeric: tabular-nums;
+        }
+        td:first-child {
+            font-family: var(--font-body);
+            font-weight: 600;
+            color: var(--on-surface);
+        }
+        .prob-bar-bg {
+            width: 80px; height: 6px;
+            background: var(--surface-container-lowest);
+            border-radius: 3px;
+            overflow: hidden;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .prob-bar {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        .prob-bar.high { background: var(--green); box-shadow: 0 0 6px rgba(34,197,94,0.4); }
+        .prob-bar.medium { background: var(--yellow); box-shadow: 0 0 6px rgba(234,179,8,0.3); }
+        .prob-bar.low { background: var(--red); }
+        .prob-text {
+            display: inline-block;
+            width: 40px;
+            text-align: right;
+            margin-right: 0.5rem;
+        }
+        .signal-badge {
+            padding: 0.125rem 0.5rem;
+            border-radius: 100px;
+            font-size: 0.625rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .signal-buy {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--green);
+        }
+        .signal-sell {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--red);
+        }
+        .status-active {
+            color: var(--primary);
+            font-weight: 500;
+        }
+        .status-pending {
+            color: var(--yellow);
+            font-weight: 500;
+        }
+        .confidence-high { color: var(--green); }
+        .confidence-med { color: var(--yellow); }
+        .text-red { color: var(--red); }
+        .text-green { color: var(--green); }
+
+        /* ── SIDEBAR (Scanner Log) ── */
+        .sidebar {
+            width: 320px;
+            background: var(--surface-container-low);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .sidebar-header {
+            padding: 1rem 1.25rem;
+            font-family: var(--font-headline);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .sidebar-header .live-dot {
+            width: 8px; height: 8px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: pulse-dot 1.5s ease-in-out infinite;
+            box-shadow: 0 0 6px rgba(34, 197, 94, 0.5);
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .scanner-log {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 1rem 1rem 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.6875rem;
+            line-height: 1.6;
+            color: var(--on-surface-variant);
+            background: var(--surface-container-lowest);
+            margin: 0 0.75rem 0.75rem;
+            border-radius: var(--radius-sm);
+        }
+        .log-entry {
+            padding: 0.25rem 0.5rem;
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-start;
+        }
+        .log-entry.signal {
+            border-left: 2px solid var(--primary);
+            padding-left: calc(0.5rem - 2px);
+            background: rgba(75, 226, 119, 0.03);
+        }
+        .log-entry.error {
+            border-left: 2px solid var(--red);
+            padding-left: calc(0.5rem - 2px);
+        }
+        .log-time { color: var(--outline); white-space: nowrap; min-width: 65px; }
+        .log-msg { word-break: break-all; }
+        .log-msg .sym { color: var(--primary); font-weight: 500; }
+        .log-msg .prob { color: var(--yellow); }
+        .log-msg .err { color: var(--red); }
+
+        /* ── BOTTOM SECTION ── */
+        .bottom-row { display: grid; grid-template-columns: 1fr 380px; gap: 1.25rem; }
+        .chart-wrap {
+            background: var(--surface-container);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+        }
+        .chart-container { position: relative; height: 220px; }
+
+        /* ── SETTINGS PANEL ── */
+        .settings-panel {
+            background: var(--surface-container);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        .settings-toggle {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            background: none;
+            border: none;
+            color: var(--secondary);
+            font-family: var(--font-headline);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: color var(--transition);
+        }
+        .settings-toggle:hover { color: var(--on-surface); }
+        .settings-toggle .chevron {
+            transition: transform 0.2s ease;
+            font-size: 0.875rem;
+        }
+        .settings-toggle.open .chevron { transform: rotate(180deg); }
+        .settings-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .settings-body.open { max-height: 400px; }
+        .settings-form { padding: 0 1.25rem 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; }
+        .form-group label {
+            display: block;
+            font-size: 0.6875rem;
+            color: var(--secondary);
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            background: var(--surface-container-lowest);
+            border: 1px solid transparent;
+            border-radius: var(--radius-sm);
+            color: var(--on-surface);
+            font-family: var(--font-mono);
+            font-size: 0.8125rem;
+            outline: none;
+            transition: border-color var(--transition), box-shadow var(--transition);
+        }
+        .form-group input:focus {
+            border-color: rgba(75, 226, 119, 0.4);
+            box-shadow: 0 0 0 2px rgba(75, 226, 119, 0.1);
+        }
+        .form-group input::placeholder { color: var(--outline); }
+        .btn-primary {
+            padding: 0.625rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-container));
+            color: var(--on-primary);
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-body);
+            font-size: 0.8125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity var(--transition), box-shadow var(--transition);
+        }
+        .btn-primary:hover {
+            opacity: 0.9;
+            box-shadow: 0 0 16px rgba(75, 226, 119, 0.3);
+        }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .btn-secondary {
+            padding: 0.5rem 1rem;
+            background: var(--surface-container-high);
+            color: var(--primary);
+            border: 1px solid rgba(75, 226, 119, 0.2);
+            border-radius: var(--radius-sm);
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background var(--transition);
+        }
+        .btn-secondary:hover { background: var(--surface-bright); }
+        .form-actions { display: flex; gap: 0.75rem; margin-top: 0.25rem; }
+
+        .toast {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius);
+            font-size: 0.8125rem;
+            font-weight: 500;
+            z-index: 1000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast.success { background: rgba(34, 197, 94, 0.2); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
+        .toast.error { background: rgba(239, 68, 68, 0.2); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--outline);
+            font-size: 0.875rem;
+        }
+        .empty-state .icon { font-size: 2rem; margin-bottom: 0.75rem; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 1280px) {
+            .sidebar { width: 280px; }
+            .stat-cards { grid-template-columns: repeat(2, 1fr); }
+            .bottom-row { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 900px) {
+            .main { flex-direction: column; }
+            .sidebar { width: 100%; max-height: 300px; }
+            .stat-cards { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* ── ANIMATIONS ── */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        @keyframes slideInRow {
+            from { opacity: 0; transform: translateX(-12px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .slide-in { animation: slideInRow 0.25s ease-out forwards; }
+
+        .new-signal-flash {
+            animation: newRowFlash 1.5s ease-out;
+        }
+        @keyframes newRowFlash {
+            0% { background: rgba(75, 226, 119, 0.15); }
+            100% { background: transparent; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- ═══ HEADER ═══ -->
+        <header class="header" id="app-header">
+            <div class="header-left">
+                <div class="logo">
+                    <div class="logo-icon"></div>
+                    TradeSage
+                </div>
+                <div id="market-badge" class="badge badge-closed">● CLOSED</div>
+                <div class="meta-pill">
+                    <span class="dot"></span>
+                    Last Scan: <span id="last-scan">--:--:--</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="meta-pill">Model Version: <span id="model-version">--</span></div>
+                <div class="auc-pill">AUC <span id="model-auc">--.--</span></div>
+            </div>
+        </header>
+
+        <div class="main">
+            <!-- ═══ CONTENT ═══ -->
+            <div class="content">
+                <!-- STAT CARDS -->
+                <div class="stat-cards" id="stat-cards">
+                    <div class="stat-card fade-in">
+                        <div class="stat-card-label">Total Signals Today</div>
+                        <div class="stat-card-value" id="total-signals">0</div>
+                        <div class="stat-card-sub" id="signals-sub">updated --:--</div>
+                    </div>
+                    <div class="stat-card fade-in" style="animation-delay:.05s">
+                        <div class="stat-card-label">High Confidence (&gt;0.75)</div>
+                        <div class="stat-card-value green" id="high-conf">0</div>
+                        <div class="stat-card-sub">probability ≥ 0.75</div>
+                    </div>
+                    <div class="stat-card fade-in" style="animation-delay:.1s">
+                        <div class="stat-card-label">Active Positions</div>
+                        <div class="stat-card-value" id="active-positions">0</div>
+                        <div class="stat-card-sub" id="positions-sub">from ledger</div>
+                    </div>
+                    <div class="stat-card fade-in" style="animation-delay:.15s">
+                        <div class="stat-card-label">Win Rate %</div>
+                        <div class="stat-card-value yellow" id="win-rate">--%</div>
+                        <div class="stat-card-sub">calibrated P(win)</div>
+                    </div>
+                </div>
+
+                <!-- SIGNALS TABLE -->
+                <div>
+                    <div class="section-header">
+                        Probabilistic Signal Feed
+                        <span class="accent-line"></span>
+                        <button class="btn-secondary" onclick="loadSignals()">↻ Refresh</button>
+                    </div>
+                    <div class="table-wrap">
+                        <table id="signals-table">
+                            <thead>
+                                <tr>
+                                    <th>Symbol</th>
+                                    <th>Probability</th>
+                                    <th>Signal</th>
+                                    <th>Levels</th>
+                                    <th>Fundamentals</th>
+                                    <th>R:R</th>
+                                    <th>Time</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="signals-body">
+                                <tr><td colspan="9" class="empty-state"><div class="icon">📡</div>Waiting for signals...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- BOTTOM ROW -->
+                <div class="bottom-row">
+                    <div class="chart-wrap">
+                        <div class="section-header">
+                            Model Training History (AUC)
+                            <span class="accent-line"></span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="auc-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- SETTINGS PANEL -->
+                    <div class="settings-panel">
+                        <button class="settings-toggle" id="settings-toggle" onclick="toggleSettings()">
+                            ⚙ Angel One Config
+                            <span class="chevron">▼</span>
+                        </button>
+                        <div class="settings-body" id="settings-body">
+                            <form class="settings-form" id="angel-form" onsubmit="saveAngelConfig(event)">
+                                <div class="form-group">
+                                    <label for="client-id">Client ID</label>
+                                    <input type="text" id="client-id" placeholder="e.g. M1009845" autocomplete="off">
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Password / MPIN</label>
+                                    <input type="password" id="password" placeholder="••••••" autocomplete="off">
+                                </div>
+                                <div class="form-group">
+                                    <label for="totp-secret">TOTP Secret</label>
+                                    <input type="password" id="totp-secret" placeholder="Base32 encoded secret" autocomplete="off">
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-primary" id="save-btn">Save & Reconnect</button>
+                                    <button type="button" class="btn-secondary" onclick="triggerRetrain()">🔄 Trigger Retrain</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ SIDEBAR — Scanner Log ═══ -->
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <span>Live Scanner</span>
+                    <div class="live-dot" id="sse-dot"></div>
+                </div>
+                <div class="scanner-log" id="scanner-log">
+                    <div class="log-entry">
+                        <span class="log-time">--:--:--</span>
+                        <span class="log-msg">Connecting to signal stream...</span>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+    /* ═══════════════════════════════════════════════════════════
+       TRADESAGE LIVE DASHBOARD — Client Logic
+       ═══════════════════════════════════════════════════════════ */
+    // Dynamic API Base to support live HTTPS VPS while retaining local debugging
+    const API_BASE = window.location.hostname === 'localhost' || window.location.protocol === 'file:' 
+        ? 'http://localhost:8000' 
+        : 'https://tradesagaai.duckdns.org';
+    let allSignals = [];
+    let aucChart = null;
+
+    // ── INIT ──
+    document.addEventListener('DOMContentLoaded', () => {
+        loadStatus();
+        loadSignals();
+        loadTrainingStatus();
+        initAUCChart();
+        initSSE();
+        // Periodic refresh
+        setInterval(loadStatus, 30000);
+        setInterval(loadSignals, 60000);
+    });
+
+    // ── SSE: Live Signal Stream ──
+    function initSSE() {
+        const logEl = document.getElementById('scanner-log');
+        const dot = document.getElementById('sse-dot');
+
+        addLog('SYS', 'Connecting to SSE stream...');
+
+        const evtSource = new EventSource(`${API_BASE}/api/signals/live`);
+
+        evtSource.onopen = () => {
+            addLog('SYS', 'Connected to live signal stream ✓', 'signal');
+            dot.style.background = 'var(--green)';
+        };
+
+        evtSource.onmessage = (e) => {
+            try {
+                const signal = JSON.parse(e.data);
+                // Add to signals table
+                prependSignalRow(signal);
+                allSignals.unshift(signal);
+                updateStatCards();
+                // Log it
+                const probClass = signal.probability >= 0.75 ? 'sym' : 'prob';
+                addLog(signal.timestamp?.split('T')[1]?.substring(0,8) || 'NOW',
+                    `<span class="${probClass}">SIGNAL: ${signal.symbol}</span> P=${signal.probability.toFixed(2)} ${signal.confidence}`,
+                    'signal');
+            } catch(err) {
+                // Might be heartbeat
+                if (e.data !== ':heartbeat') {
+                    addLog('SYS', e.data);
+                }
+            }
+        };
+
+        evtSource.onerror = () => {
+            dot.style.background = 'var(--red)';
+            addLog('ERR', '<span class="err">SSE connection lost — retrying...</span>', 'error');
+        };
+    }
+
+    function addLog(time, msg, cls = '') {
+        const logEl = document.getElementById('scanner-log');
+        const entry = document.createElement('div');
+        entry.className = `log-entry ${cls}`;
+        entry.innerHTML = `<span class="log-time">${time}</span><span class="log-msg">${msg}</span>`;
+        logEl.appendChild(entry);
+        logEl.scrollTop = logEl.scrollHeight;
+        // Keep log manageable
+        if (logEl.children.length > 200) logEl.removeChild(logEl.firstChild);
+    }
+
+    // ── Load Status ──
+    async function loadStatus() {
+        try {
+            const res = await fetch(`${API_BASE}/api/status`);
+            if (!res.ok) return;
+            const data = await res.json();
+
+            // Market badge
+            const badge = document.getElementById('market-badge');
+            if (data.market_open) {
+                badge.className = 'badge badge-open';
+                badge.textContent = '● MARKET OPEN';
+            } else {
+                badge.className = 'badge badge-closed';
+                badge.textContent = '● CLOSED';
+            }
+
+            // Last scan
+            if (data.last_scan) {
+                document.getElementById('last-scan').textContent = data.last_scan;
+            }
+
+            // Model AUC
+            if (data.model_auc) {
+                document.getElementById('model-auc').textContent = data.model_auc.toFixed(4);
+            }
+
+            if (data.model_version) {
+                document.getElementById('model-version').textContent = data.model_version;
+            }
+        } catch(e) {
+            // Silently retry next cycle
+        }
+    }
+
+    // ── Load Signals ──
+    async function loadSignals() {
+        try {
+            const res = await fetch(`${API_BASE}/api/signals?min_prob=0.65`);
+            if (!res.ok) return;
+            allSignals = await res.json();
+            renderSignalsTable(allSignals);
+            updateStatCards();
+        } catch(e) {
+            // Will retry
+        }
+    }
+
+    function renderSignalsTable(signals) {
+        const tbody = document.getElementById('signals-body');
+        if (!signals || signals.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="9" class="empty-state"><div class="icon">📡</div>No signals yet — scanner will populate when market opens</td></tr>';
+            return;
+        }
+        tbody.innerHTML = signals.map(s => buildSignalRow(s)).join('');
+    }
+
+    function buildSignalRow(s) {
+        const prob = s.probability || 0;
+        const probPct = (prob * 100).toFixed(1);
+        const barWidth = Math.min(prob * 100, 100);
+        const barClass = prob >= 0.75 ? 'high' : prob >= 0.65 ? 'medium' : 'low';
+        const confClass = prob >= 0.75 ? 'confidence-high' : 'confidence-med';
+        const time = s.timestamp ? s.timestamp.split('T')[1]?.substring(0, 8) || '--' : '--';
+        const rr = s.r_r_ratio ? s.r_r_ratio.toFixed(2) : '--';
+        const entry = s.entry_price ? `₹${s.entry_price.toFixed(2)}` : '--';
+        const sl = s.stop_loss ? `₹${s.stop_loss.toFixed(2)}` : '--';
+        const tp = s.take_profit ? `₹${s.take_profit.toFixed(2)}` : '--';
+
+        let fundStr = `<span style="color:var(--outline)">--</span>`;
+        if (s.fundamentals) {
+            const sent = s.fundamentals.sentiment || 'N/A';
+            const tv = s.fundamentals.tv_rating || 'N/A';
+            const sentClass = sent === 'POSITIVE' ? 'signal-buy' : (sent === 'NEGATIVE' ? 'signal-sell' : '');
+            const tvClass = tv.includes('BUY') ? 'signal-buy' : (tv.includes('SELL') ? 'signal-sell' : '');
+            fundStr = `<div style="display:flex;gap:0.375rem;align-items:center;">
+                         <span class="signal-badge ${tvClass}">TV ${tv}</span>
+                         <span class="signal-badge ${sentClass}">${sent}</span>
+                       </div>`;
+        }
+
+        return `<tr>
+            <td>${s.symbol || '--'}</td>
+            <td class="${confClass}">
+                <span class="prob-text">${probPct}%</span>
+                <div class="prob-bar-bg"><div class="prob-bar ${barClass}" style="width:${barWidth}%"></div></div>
+            </td>
+            <td><span class="signal-badge signal-buy">${s.signal || 'BUY'}</span></td>
+            <td><span style="font-size:0.75rem">En: ${entry} <span style="color:var(--outline);margin:0 4px">|</span> SL: <span class="text-red">${sl}</span> <span style="color:var(--outline);margin:0 4px">|</span> TP: <span class="text-green">${tp}</span></span></td>
+            <td>${fundStr}</td>
+            <td>${rr}</td>
+            <td>${time}</td>
+            <td class="status-active">${s.confidence || 'ACTIVE'}</td>
+        </tr>`;
+    }
+
+    function prependSignalRow(signal) {
+        const tbody = document.getElementById('signals-body');
+        // Clear empty state
+        if (tbody.querySelector('.empty-state')) tbody.innerHTML = '';
+        const tr = document.createElement('tr');
+        tr.className = 'new-signal-flash slide-in';
+        tr.innerHTML = buildSignalRow(signal).replace('<tr>', '').replace('</tr>', '');
+        // Actually we built the inner, so set innerHTML
+        const temp = document.createElement('tbody');
+        temp.innerHTML = buildSignalRow(signal);
+        const newRow = temp.firstElementChild;
+        newRow.classList.add('new-signal-flash', 'slide-in');
+        tbody.insertBefore(newRow, tbody.firstChild);
+        // Cap at 100 rows
+        while (tbody.children.length > 100) tbody.removeChild(tbody.lastChild);
+    }
+
+    function updateStatCards() {
+        const total = allSignals.length;
+        const highConf = allSignals.filter(s => s.probability >= 0.75).length;
+        document.getElementById('total-signals').textContent = total;
+        document.getElementById('high-conf').textContent = highConf;
+        const now = new Date().toLocaleTimeString('en-IN', { hour12: false });
+        document.getElementById('signals-sub').textContent = `updated ${now}`;
+    }
+
+    // ── Training Status ──
+    async function loadTrainingStatus() {
+        try {
+            const res = await fetch(`${API_BASE}/api/training/status`);
+            if (!res.ok) return;
+            const data = await res.json();
+            // Could update chart here if training history is available
+        } catch(e) {}
+    }
+
+    // ── AUC Chart ──
+    function initAUCChart() {
+        const ctx = document.getElementById('auc-chart').getContext('2d');
+        // Placeholder data — will be updated from API
+        const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const data = [0.62, 0.64, 0.65, 0.66, 0.67, 0.68, 0.69, 0.70, 0.71, 0.68, 0.72, 0.68];
+
+        aucChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels,
+                datasets: [{
+                    label: 'Test AUC',
+                    data,
+                    borderColor: '#4be277',
+                    backgroundColor: 'rgba(75, 226, 119, 0.08)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 3,
+                    pointBackgroundColor: '#4be277',
+                    pointBorderColor: '#0b1326',
+                    pointBorderWidth: 2,
+                    borderWidth: 2,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#222a3d',
+                        titleColor: '#dae2fd',
+                        bodyColor: '#4be277',
+                        borderColor: '#3d4a3d',
+                        borderWidth: 1,
+                        cornerRadius: 4,
+                        bodyFont: { family: "'JetBrains Mono', monospace", size: 12 },
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(61, 74, 61, 0.2)', drawBorder: false },
+                        ticks: { color: '#869585', font: { family: "'Inter', sans-serif", size: 11 } }
+                    },
+                    y: {
+                        min: 0.55, max: 0.85,
+                        grid: { color: 'rgba(61, 74, 61, 0.2)', drawBorder: false },
+                        ticks: {
+                            color: '#869585',
+                            font: { family: "'JetBrains Mono', monospace", size: 11 },
+                            callback: v => v.toFixed(2)
+                        }
+                    }
+                },
+                interaction: { mode: 'index', intersect: false },
+            }
+        });
+    }
+
+    // ── Settings Panel ──
+    function toggleSettings() {
+        const body = document.getElementById('settings-body');
+        const toggle = document.getElementById('settings-toggle');
+        body.classList.toggle('open');
+        toggle.classList.toggle('open');
+    }
+
+    async function saveAngelConfig(e) {
+        e.preventDefault();
+        const btn = document.getElementById('save-btn');
+        btn.disabled = true;
+        btn.textContent = 'Saving...';
+
+        const payload = {
+            client_id: document.getElementById('client-id').value,
+            password: document.getElementById('password').value,
+            totp_secret: document.getElementById('totp-secret').value,
+        };
+
+        try {
+            const res = await fetch(`${API_BASE}/api/config/angelone`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (res.ok) {
+                showToast('Angel One config saved & scanner reconnecting...', 'success');
+                addLog('SYS', 'Angel One config updated — scanner restarting...', 'signal');
+            } else {
+                const err = await res.json();
+                showToast(err.detail || 'Failed to save config', 'error');
+            }
+        } catch(e) {
+            showToast('Network error — check if API is running', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Save & Reconnect';
+        }
+    }
+
+    async function triggerRetrain() {
+        addLog('SYS', 'Triggering manual retrain...');
+        try {
+            const res = await fetch(`${API_BASE}/api/training/trigger`, { method: 'POST' });
+            if (res.ok) {
+                showToast('Retrain triggered — check scanner log for progress', 'success');
+                addLog('SYS', '<span class="sym">Retrain job submitted ✓</span>', 'signal');
+            } else {
+                showToast('Failed to trigger retrain', 'error');
+            }
+        } catch(e) {
+            showToast('Network error', 'error');
+        }
+    }
+
+    // ── Toast ──
+    function showToast(msg, type = 'success') {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.className = `toast ${type} show`;
+        setTimeout(() => { toast.classList.remove('show'); }, 3500);
+    }
+
+    // ── Load portfolio for active positions ──
+    async function loadPortfolio() {
+        try {
+            const res = await fetch(`${API_BASE}/api/portfolio`);
+            if (!res.ok) return;
+            const data = await res.json();
+            document.getElementById('active-positions').textContent = data.active_count || 0;
+            if (data.win_rate !== undefined) {
+                document.getElementById('win-rate').textContent = (data.win_rate * 100).toFixed(1) + '%';
+            }
+        } catch(e) {}
+    }
+    // Load portfolio on start
+    setTimeout(loadPortfolio, 2000);
+    setInterval(loadPortfolio, 120000);
+    </script>
+</body>
+</html>

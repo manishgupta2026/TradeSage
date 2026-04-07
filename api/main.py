@@ -251,8 +251,8 @@ async def get_portfolio():
     closed = []
     total_pnl = 0.0
 
-    # Try positions.json first (live paper trading state)
-    positions_path = PROJECT_ROOT / "positions.json"
+    # Try positions.json first (live paper trading state from persistent data volume)
+    positions_path = PROJECT_ROOT / "data" / "positions.json"
     if positions_path.exists():
         try:
             with open(positions_path) as f:
