@@ -681,8 +681,10 @@
     /* ═══════════════════════════════════════════════════════════
        TRADESAGE LIVE DASHBOARD — Client Logic
        ═══════════════════════════════════════════════════════════ */
-
-    const API_BASE = window.location.origin;
+    // Dynamic API Base to support live HTTPS VPS while retaining local debugging
+    const API_BASE = window.location.hostname === 'localhost' || window.location.protocol === 'file:' 
+        ? 'http://localhost:8000' 
+        : 'https://tradesagaai.duckdns.org';
     let allSignals = [];
     let aucChart = null;
 

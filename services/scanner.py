@@ -483,11 +483,28 @@ def run_scanner():
                 logger.info(f"{'─' * 60}")
 
                 if signal_count > 0:
-                    send_telegram(
-                        f"📊 *Scan Complete*\n"
-                        f"Signals: {signal_count} ({high_conf_count} HIGH)\n"
-                        f"Time: {elapsed:.0f}s | Errors: {errors}"
-                    )
+                    summary_msg = f"📊 *TradeSage Scan Complete*\n"
+                    summary_msg += f"✅ Found {signal_count} signals ({high_conf_count} HIGH)\n\n"
+                    
+                    # Log top 5 signals to Telegram
+                    top_signals = local_signals[:5]
+                    for s in top_signals:
+                        sym = s['symbol']
+                        entry = s['entry_price']
+                        tp = s['take_profit']
+                        sl = s['stop_loss']
+                        tv = s.get('fundamentals', {}).get('tv_rating', 'N/A')
+                        news = s.get('fundamentals', {}).get('sentiment', 'N/A')
+                        prob = s['probability'] * 100
+                        conf = '🔥' if prob >= 75 else '🟢'
+                        
+                        summary_msg += f"{conf} *{sym}* - {s['signal']}\n"
+                        summary_msg += f"▸ Entry: ₹{entry:.2f} | P: {prob:.1f}%\n"
+                        summary_msg += f"▸ TP: ₹{tp:.2f} | SL: ₹{sl:.2f}\n"
+                        summary_msg += f"▸ TV: {tv} | News: {news}\n\n"
+                        
+                    summary_msg += f"⏱ Time: {elapsed:.0f}s | Errors: {errors}"
+                    send_telegram(summary_msg)
 
                 # Wait for next scan interval
                 logger.info(f"Next scan in {SCAN_INTERVAL_MINUTES} minutes...")
