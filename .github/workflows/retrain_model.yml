@@ -1,0 +1,73 @@
+name: Daily Model Retraining MLOps
+
+on:
+  schedule:
+    # Run at 5:00 PM IST (11:30 AM UTC) - 1.5 hours after Indian Market closes
+    - cron: '30 11 * * 1-5'
+  workflow_dispatch:  # Enable manual triggering from GitHub UI
+
+jobs:
+  train-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+        cache: 'pip'
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Cache yfinance Market Data
+      uses: actions/cache@v4
+      with:
+        path: data_cache_yfinance
+        # Key rotates weekly to ensure we don't cache stale data indefinitely, 
+        # but allows extremely fast updates daily instead of scratching a 10 year history.
+        key: yfinance-cache-${{ runner.os }}-week-${{ github.run_id }}
+        restore-keys: |
+          yfinance-cache-${{ runner.os }}-week-
+
+    - name: Execute TradeSage Training Pipeline
+      # Run the exact command you run locally. Using 5000 rows depth.
+      run: |
+        python scripts/train.py \
+          --source yfinance \
+          --model-path models/tradesage_10y.pkl \
+          --threshold 0.02 \
+          --forward-days 5 \
+          --max-drawdown -0.99 \
+          --max-rows-per-stock 5000 \
+          --ensemble
+
+    - name: Deploy Model to VPS
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.VPS_HOST_IP }}
+        username: ${{ secrets.VPS_USERNAME }}
+        password: ${{ secrets.VPS_SSH_PASSWORD }}
+        port: 22
+        source: "models/tradesage_10y.pkl,models/tradesage_10y_report.json"
+        target: "/root/TradeSage"
+        strip_components: 0
+        overwrite: true
+
+    - name: Trigger VPS Bot Reload
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.VPS_HOST_IP }}
+        username: ${{ secrets.VPS_USERNAME }}
+        password: ${{ secrets.VPS_SSH_PASSWORD }}
+        port: 22
+        script: |
+          echo "Model transfer complete. Restarting TradeSage bot..."
+          # Example: If you use screen, pm2, or systemd, restart it here.
+          # pkill -f live_trading_angel.py || true
+          # cd /root/TradeSage && screen -dmS tradebot bash -c "source venv/bin/activate && python scripts/live_trading_angel.py"

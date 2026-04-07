@@ -1,6 +1,8 @@
 {
-  "api_key": "H0boInle ",
+  "api_key": "0MKSm9d2 ",
   "client_id": "M1009845",
   "password": "7071",
-  "totp_token": "C7WRJGOI6NB3HO747F3VHMM36A"
+  "totp_token": "C7WRJGOI6NB3HO747F3VHMM36A",
+  "telegram_token": "8575817943:AAH66-6XqYje2WSOM2DZqtVHmKz1tFF4TpU",
+  "telegram_chat_id": "900041837"
 }

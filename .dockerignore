@@ -1,0 +1,13 @@
+.git
+.github
+__pycache__
+*.pyc
+*.pyo
+venv
+.env
+catboost_info
+*.pkl
+data_cache_angel/*.csv
+logs/*.log
+.gitignore
+README.md

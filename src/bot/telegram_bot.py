@@ -7,12 +7,10 @@ from datetime import time
 import pytz
 
 # Project Imports
-# Ensure src is in path if running from root
 import sys
 sys.path.append(os.getcwd())
 
-from src.engine.scanner import NSEScanner
-from src.engine.data_manager import DataManager
+from src.core.market_scanner import MarketScanner
 
 # Setup Logging
 logging.basicConfig(
@@ -25,11 +23,10 @@ TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
 class TradeSageBot:
-    def __init__(self, mode='scan', trader=None):
+    def __init__(self, mode='scan', trader=None, model_path='models/tradesage_angel.pkl'):
         self.mode = mode
         self.trader = trader
-        self.dm = DataManager()
-        self.scanner = NSEScanner(self.dm)
+        self.scanner = MarketScanner(model_path=model_path)
         print(f"🤖 Bot Initialized. Mode: {self.mode.upper()}")
 
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):

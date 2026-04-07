@@ -24,6 +24,7 @@ class AngelOneAPI:
         self.totp_secret = None
         self.smartApi = None
         self.auth_token = None
+        self.api_config = None
         
         self.load_credentials()
         self.connect()
@@ -35,6 +36,8 @@ class AngelOneAPI:
             
         with open(self.config_path, 'r') as f:
             config = json.load(f)
+            
+        self.api_config = config
             
         self.api_key = config.get('api_key')
         self.client_id = config.get('client_id')

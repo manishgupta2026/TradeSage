@@ -1,0 +1,92 @@
+# ═══════════════════════════════════════════════════════════
+#  TradeSage — Docker Compose (4 services)
+# ═══════════════════════════════════════════════════════════
+
+version: "3.9"
+
+services:
+  # ── Redis ──
+  redis:
+    image: redis:7-alpine
+    container_name: tradesage-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── API (FastAPI + Uvicorn) ──
+  api:
+    build: .
+    container_name: tradesage-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file: .env
+    environment:
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - ./data_cache_angel:/app/data_cache_angel
+      - ./models:/app/models
+      - ./logs:/app/logs
+      - ./data:/app/data
+      - ./config:/app/config
+      - ./frontend:/app/frontend
+    depends_on:
+      redis:
+        condition: service_healthy
+    command: uvicorn api.main:app --host 0.0.0.0 --port 8000 --workers 2 --log-level info
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/status')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ── Scanner Service ──
+  scanner:
+    build: .
+    container_name: tradesage-scanner
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - ./data_cache_angel:/app/data_cache_angel
+      - ./models:/app/models
+      - ./logs:/app/logs
+      - ./data:/app/data
+      - ./config:/app/config
+    depends_on:
+      redis:
+        condition: service_healthy
+      api:
+        condition: service_started
+    command: python services/scanner.py
+
+  # ── Daily Retrainer ──
+  retrainer:
+    build: .
+    container_name: tradesage-retrainer
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - ./data_cache_angel:/app/data_cache_angel
+      - ./models:/app/models
+      - ./logs:/app/logs
+      - ./data:/app/data
+      - ./config:/app/config
+    depends_on:
+      redis:
+        condition: service_healthy
+    command: python services/retrainer.py
+
+volumes:
+  redis_data:

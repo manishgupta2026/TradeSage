@@ -1,189 +1,235 @@
+"""
+TradeSage - GitHub Actions Workflow Runner v2
+Entry point for automated paper trading via GitHub Actions.
+Uses the XGBoost ML model (not the old strategy executor).
+"""
 
 import os
 import sys
-from telegram import Bot
-import asyncio
+import json
+import logging
+from datetime import datetime
+import pytz
+
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, PROJECT_ROOT)
+
 from src.paper.paper_trader import PaperTrader
-from src.engine.data_manager import DataManager
-from src.engine.scanner import NSEScanner
+from src.utils.telegram_bot import TelegramBot
 
-async def main():
+logging.basicConfig(level=logging.INFO, format='%(message)s')
+logger = logging.getLogger(__name__)
+
+IST = pytz.timezone('Asia/Kolkata')
+MARKET_OPEN = 9
+MARKET_CLOSE_HOUR = 15
+MARKET_CLOSE_MIN = 30
+
+
+def is_market_hours():
+    """Check if within NSE trading hours (9:15 AM - 3:30 PM IST)."""
+    now = datetime.now(IST)
+    if now.weekday() >= 5:
+        return False
+    market_open = now.replace(hour=9, minute=15, second=0, microsecond=0)
+    market_close = now.replace(hour=15, minute=30, second=0, microsecond=0)
+    return market_open <= now <= market_close
+
+
+def main():
     try:
-        # Initialize Components
-        print("Initializing Trading Bot Components...")
-        trader = PaperTrader(portfolio_file='data/paper_portfolio.json', initial_capital=50000)
-        dm = DataManager()
-        scanner = NSEScanner(dm)
-        
-        # Get Telegram credentials
-        telegram_token = os.getenv('TELEGRAM_BOT_TOKEN')
-        chat_id = os.getenv('TELEGRAM_CHAT_ID')
-        
-        # Check if Telegram is configured
-        telegram_enabled = bool(telegram_token and telegram_token.strip() and chat_id and chat_id.strip())
-        
-        if telegram_enabled:
-            bot = Bot(token=telegram_token)
-        else:
-            print('⚠️  Telegram bot token not configured. Running without notifications.')
-        
-        # Check for exits on existing positions first
-        # Update Portfolio (Paper Trading)
-        exit_msgs = []
-        if trader:
-            print('Updating portfolio...')
-            current_prices = {}
-            prev_closes = {}
-            
-            # Fetch live data for held stocks
-            for ticker, holding_data in trader.portfolio['holdings'].items():
-                try:
-                    df = dm.fetch_data(ticker, use_cache=False)
-                    if not df.empty:
-                        current_prices[ticker] = df.iloc[-1]['Close']
-                        if len(df) > 1:
-                            prev_closes[ticker] = df.iloc[-2]['Close']
-                        else:
-                            prev_closes[ticker] = holding_data['avg_price']
-                    else:
-                        # Fallback if fetch fails
-                        print(f"WARNING: Could not fetch data for {ticker}, using avg_price.")
-                        current_prices[ticker] = holding_data['avg_price']
-                        prev_closes[ticker] = holding_data['avg_price']
-                except Exception as e:
-                    print(f"Error updating {ticker}: {e}")
-                    current_prices[ticker] = holding_data['avg_price']
-                    prev_closes[ticker] = holding_data['avg_price']
-                    
-            exit_msgs = trader.update_portfolio(current_prices)
-        
-        # Drawdown Protection: Check if daily loss limit exceeded
-        DAILY_LOSS_LIMIT = float(os.getenv("DAILY_LOSS_LIMIT", "2500"))
-        if trader:
-            summary = trader.get_summary(current_prices, prev_closes)
-            todays_pnl = summary.get('todays_pnl', 0)
-            
-            if todays_pnl < -DAILY_LOSS_LIMIT:
-                print(f"🛑 DRAWDOWN PROTECTION ACTIVATED!")
-                print(f"   Today's P&L: Rs.{todays_pnl:.2f}")
-                print(f"   Loss Limit: Rs.{DAILY_LOSS_LIMIT}")
-                print(f"   Trading paused to protect capital.")
-                
-                msg = '🛑 **DRAWDOWN PROTECTION ACTIVATED**\n\n'
-                msg += f'Today P&L: Rs.{todays_pnl:.2f}\n'
-                msg += f'Loss Limit: Rs.{DAILY_LOSS_LIMIT}\n\n'
-                msg += 'Trading paused for today to prevent further losses.\n'
-                
-                if telegram_enabled:
-                    await bot.send_message(chat_id=chat_id, text=msg, parse_mode='Markdown')
-                
-                sys.exit(0)  # Exit gracefully without scanning
-        
-        # Scan market for new opportunities
-        results = scanner.scan_market()
-        
-        msg = '🤖 **GitHub Actions Scan**\n\n'
-        
-        # Report exits first
-        if exit_msgs:
-            msg += '**📈 Position Exits:**\n'
-            for exit_msg in exit_msgs:
-                msg += f'{exit_msg}\n'
-            msg += '\n'
-        
-        # Report new signals
-        if results:
-            msg += '**🔍 New Signals:**\n'
-            for res in results[:3]:
-                ticker = res['ticker']
-                price = res['price']
-                strategies = ', '.join(res['active_strategies'])
-                
-                # Fetch DataFrame to get ATR for dynamic stops
-                try:
-                    df = dm.fetch_data(ticker, use_cache=False)
-                    if not df.empty and 'ATRr_14' in df.columns:
-                        atr = df.iloc[-1]['ATRr_14']
-                        atr_pct = (atr / price) * 100
-                        stop_loss = max(price - (2 * atr), price * 0.95)
-                        target = price + (3 * atr)
-                    else:
-                        atr_pct = 0
-                        stop_loss = price * 0.95
-                        target = price * 1.10
-                except Exception as e:
-                    print(f"Error fetching ATR for {ticker}: {e}")
-                    atr_pct = 0
-                    stop_loss = price * 0.95
-                    target = price * 1.10
-                
-                signal = {
-                    'ticker': ticker,
-                    'price': price,
-                    'action': 'BUY',
-                    'strategies': strategies,
-                    'stop_loss': stop_loss,
-                    'target': target,
-                    'atr_pct': atr_pct
-                }
-                
-                # Risk-Reward Ratio Filter: Skip poor setups
-                MIN_RR_RATIO = float(os.getenv("MIN_RR_RATIO", "2.0"))
-                risk = price - stop_loss
-                reward = target - price
-                
-                if risk > 0:
-                    rr_ratio = reward / risk
-                    if rr_ratio < MIN_RR_RATIO:
-                        print(f"⏭️  {ticker} skipped: Poor RR ratio ({rr_ratio:.2f} < {MIN_RR_RATIO})")
-                        continue
-                
-                trade_msg = trader.execute_trade(signal)
-                if trade_msg:
-                    msg += f'📊 {ticker} @ ₹{price}\n{trade_msg}\n'
-                    # Add Sentiment Info if available
-                    if res.get('sentiment_score'):
-                            s_score = res['sentiment_score']
-                            s_emoji = '🤖' if s_score > 0 else '⚠️'
-                            msg += f'{s_emoji} **Sentiment:** {s_score} ({res["sentiment_reason"]})\n'
-                    msg += '\n'
-        
-        # Portfolio Summary
-        if trader:
-             summary = trader.get_summary(current_prices, prev_closes)
-             total_pnl_emoji = '🟢' if summary['total_pnl'] >= 0 else '🔴'
-             day_pnl_emoji = '🟢' if summary['todays_pnl'] >= 0 else '🔴'
-             
-             msg += '────────────────\n'
-             msg += '💼 **Portfolio Summary**\n'
-             msg += f'💰 **Equity:** ₹{summary["equity"]:,.2f}\n'
-             msg += f'💵 **Cash:** ₹{summary["balance"]:,.2f}\n'
-             msg += f'{day_pnl_emoji} **Today:** ₹{summary["todays_pnl"]:,.2f}\n'
-             msg += f'{total_pnl_emoji} **Total P&L:** ₹{summary["total_pnl"]:,.2f} ({summary["roi"]:.2f}%)\n'
-             msg += f'📊 **Trades:** {summary["open_positions"]} Open | {summary["closed_trades"]} Closed\n'
-             
-             # List Holdings
-             if summary['holdings']:
-                 msg += '\n📂 **Holdings:**\n'
-                 for h in summary['holdings']:
-                     pnl_emoji = '🟢' if h['pnl'] >= 0 else '🔴'
-                     msg += f'🔹 **{h["ticker"]}** ({h["qty"]}):\n'
-                     msg += f'   Avg: ₹{h["avg"]:,.2f} ➝ CMP: ₹{h["cmp"]:,.2f}\n'
-                     msg += f'   {pnl_emoji} P&L: ₹{h["pnl"]:,.2f} ({h["pnl_pct"]:.2f}%)\n'
+        logger.info("=" * 80)
+        logger.info(f"TRADESAGE WORKFLOW - {datetime.now(IST).strftime('%Y-%m-%d %H:%M IST')}")
+        logger.info("=" * 80)
+        logger.info("Mode: 🔵 DRY RUN (Paper Trading)")
 
-        print(msg)
+        # Initialize
+        trader = PaperTrader(
+            portfolio_file=os.path.join(PROJECT_ROOT, 'data', 'paper_portfolio.json'),
+            initial_capital=50000
+        )
+
+        telegram = TelegramBot(
+            token=os.getenv('TELEGRAM_BOT_TOKEN'),
+            chat_id=os.getenv('TELEGRAM_CHAT_ID')
+        )
+
+        # --- Load Angel One API ---
+        try:
+            sys.path.insert(0, os.path.join(PROJECT_ROOT, 'src'))
+            from angel.angel_one_api import AngelOneAPI
+            from angel.angel_data_fetcher import AngelDataFetcher
+            api = AngelOneAPI(os.path.join(PROJECT_ROOT, 'config', 'angel_config.json'))
+            fetcher = AngelDataFetcher(api)
+        except Exception as e:
+            logger.error(f"Cannot initialize Angel One API: {e}")
+            telegram.send_message(f"⚠️ Bot Error: Cannot connect to Angel One: {e}")
+            sys.exit(1)
+
+        # --- Load ML Model ---
+        from core.model_training import TradingModelTrainer
+        from core.feature_engineering import FeatureEngineer
+        from core.fundamental_analyzer import FundamentalAnalyzer
+
+        model_path = os.path.join(PROJECT_ROOT, 'models', 'tradesage_angel.pkl')
+        if not os.path.exists(model_path):
+            logger.error(f"Model not found: {model_path}")
+            telegram.send_message("⚠️ Bot Error: Model file not found.")
+            sys.exit(1)
+
+        trainer_model = TradingModelTrainer()
+        trainer_model.load_model(model_path)
+        engineer = FeatureEngineer()
+
+        # --- Fetch Nifty50 for market context ---
+        nifty_df = None
+        try:
+            nifty_df = fetcher.fetch_historical_data('^NSEI', period_days=365)
+            if nifty_df is not None and len(nifty_df) > 200:
+                logger.info(f"✓ Nifty50 data: {len(nifty_df)} rows")
+            else:
+                nifty_df = None
+        except Exception:
+            nifty_df = None
+
+        # --- Step 1: Check exits on existing positions ---
+        exit_msgs = []
+        current_prices = {}
+        prev_closes = {}
+
+        for ticker, holding in list(trader.portfolio['holdings'].items()):
+            try:
+                df = fetcher.fetch_historical_data(ticker, period_days=30)
+                if df is not None and not df.empty:
+                    current_prices[ticker] = float(df.iloc[-1]['close'])
+                    if len(df) > 1:
+                        prev_closes[ticker] = float(df.iloc[-2]['close'])
+                    else:
+                        prev_closes[ticker] = holding['avg_price']
+                else:
+                    current_prices[ticker] = holding['avg_price']
+                    prev_closes[ticker] = holding['avg_price']
+            except Exception:
+                current_prices[ticker] = holding['avg_price']
+                prev_closes[ticker] = holding['avg_price']
+
+        exit_msgs = trader.update_portfolio(current_prices)
+
+        # --- Drawdown protection ---
+        DAILY_LOSS_LIMIT = float(os.getenv("DAILY_LOSS_LIMIT", "2500"))
+        summary = trader.get_summary(current_prices, prev_closes)
+        todays_pnl = summary.get('todays_pnl', 0)
+
+        if todays_pnl < -DAILY_LOSS_LIMIT:
+            msg = f"🛑 DRAWDOWN PROTECTION - Today P&L: ₹{todays_pnl:.2f}, Limit: ₹{DAILY_LOSS_LIMIT}"
+            logger.info(msg)
+            telegram.send_message(msg)
+            sys.exit(0)
+
+        # --- Step 2: Scan for new ML signals ---
+        watchlist_file = os.path.join(PROJECT_ROOT, 'data', 'nse_top_3000_angel.json')
+        try:
+            with open(watchlist_file, 'r') as f:
+                watchlist = json.load(f)
+        except Exception:
+            watchlist = ['RELIANCE', 'TCS', 'HDFCBANK', 'ICICIBANK', 'INFY', 'ITC',
+                         'SBIN', 'BHARTIARTL', 'BAJFINANCE', 'HINDUNILVR']
+
+        logger.info(f"\n🔍 Scanning {min(500, len(watchlist))} stocks with ML model...")
+
+        import numpy as np
+        from tqdm import tqdm
+
+        buy_signals = []
+        min_prob = 0.65
+
+        for symbol in tqdm(watchlist[:500], desc="Scanning"):
+            if symbol in trader.portfolio['holdings']:
+                continue
+
+            try:
+                df = fetcher.fetch_historical_data(symbol, period_days=365)
+                if df is None or len(df) < 200:
+                    continue
+
+                df = engineer.add_technical_indicators(df, index_df=nifty_df)
+                df.dropna(inplace=True)
+                if df.empty:
+                    continue
+
+                predictions, probabilities = trainer_model.predict(df.iloc[[-1]])
+                confidence = float(probabilities[0])
+
+                if int(predictions[0]) == 1 and confidence >= min_prob:
+                    latest = df.iloc[-1]
+                    price = float(latest['close'])
+                    atr = float(latest.get('atr', price * 0.02))
+
+                    buy_signals.append({
+                        'ticker': symbol,
+                        'price': price,
+                        'action': 'BUY',
+                        'confidence': confidence,
+                        'sl': price - (3.0 * atr),       # Matches training max_drawdown
+                        'target': price + (3.5 * atr),    # Matches backtest TP config
+                        'atr_pct': (atr / price) * 100,
+                    })
+            except Exception:
+                continue
+
+        # Sort by confidence, get candidates for fundamental screening
+        buy_signals.sort(key=lambda x: x['confidence'], reverse=True)
+        candidate_signals = buy_signals[:9]
         
-        if telegram_enabled and (results or exit_msgs or (trader and trader.portfolio['holdings'])):
-             await bot.send_message(chat_id=chat_id, text=msg, parse_mode='Markdown')
-        else:
-             print("No significant updates to send.")
+        final_signals = []
+        if candidate_signals:
+            logger.info(f"\nEvaluating top {len(candidate_signals)} candidates fundamentally...")
+            analyzer = FundamentalAnalyzer()
+            for sig in candidate_signals:
+                sym = sig['ticker']
+                if analyzer.evaluate_candidate(sym):
+                    final_signals.append(sig)
+                if len(final_signals) == 3:
+                    break
+        
+        buy_signals = final_signals
+
+        # --- Build Telegram message ---
+        msg = f"🤖 **TradeSage Scan** ({datetime.now(IST).strftime('%H:%M IST')})\n\n"
+
+        if exit_msgs:
+            msg += '**📈 Exits:**\n'
+            for em in exit_msgs:
+                msg += f'{em}\n'
+            msg += '\n'
+
+        if buy_signals:
+            msg += '**🔍 ML Signals:**\n'
+            for sig in buy_signals[:3]:
+                trade_msg = trader.execute_trade(sig)
+                if trade_msg:
+                    msg += f'📊 {sig["ticker"]} @ ₹{sig["price"]:.0f} ({sig["confidence"]*100:.0f}%)\n'
+                    msg += f'   {trade_msg}\n\n'
+
+        # Portfolio summary
+        summary = trader.get_summary(current_prices, prev_closes)
+        pnl_emoji = '🟢' if summary['total_pnl'] >= 0 else '🔴'
+        msg += f'────────────────\n'
+        msg += f'💼 Equity: ₹{summary["equity"]:,.0f}\n'
+        msg += f'{pnl_emoji} P&L: ₹{summary["total_pnl"]:,.0f} ({summary["roi"]:.1f}%)\n'
+        msg += f'📊 {summary["open_positions"]} Open | {summary["closed_trades"]} Closed\n'
+
+        logger.info(msg)
+
+        if telegram.token and telegram.chat_id:
+            telegram.send_message(msg)
 
     except Exception as e:
-        print(f"Error in execution: {e}")
-        # Notify user of failure
-        if 'bot' in locals() and 'chat_id' in locals() and telegram_enabled:
-            await bot.send_message(chat_id=chat_id, text=f"⚠️ Bot Execution Error: {e}")
+        logger.error(f"Workflow error: {e}")
+        import traceback
+        traceback.print_exc()
         sys.exit(1)
 
+
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()

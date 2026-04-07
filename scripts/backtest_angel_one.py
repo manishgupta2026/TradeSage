@@ -22,20 +22,26 @@ logger = logging.getLogger(__name__)
 # Config
 # Use Angel One API cache (3yr OHLCV CSVs) — same data the model was trained on
 DATA_DIR   = Path(PROJECT_ROOT) / 'data_cache_angel'
-MODEL_PATH = Path(PROJECT_ROOT) / 'models' / 'tradesage_10y_local.pkl'
+MODEL_PATH = Path(PROJECT_ROOT) / 'models' / 'tradesage_angel.pkl'  # Updated to new model
 
 # Simulation Parameters
 # Optimal parameters based on your data:
 
-# Simulation Parameters - OPTIMIZED
-INITIAL_CAPITAL = 1000000.0    # 50k INR
-POSITION_SIZE = 20000.0       # 2k per trade -> 25 concurrent slots
-STOP_LOSS_ATR_MULT = 3.0     # Wider stop (was 2.0)
-TAKE_PROFIT_ATR_MULT = 4.5   # 2:1 R:R (was 3.0)
-MAX_HOLD_DAYS = 10           # More time (was 7)
+# Simulation Parameters - STANDARDIZED (matches training config)
+INITIAL_CAPITAL = 50000.0    # 50k INR
+POSITION_SIZE = 2000.0       # 2k per trade -> 25 concurrent slots
+STOP_LOSS_ATR_MULT = 3.0     # Matches training max_drawdown=-0.03
+TAKE_PROFIT_ATR_MULT = 3.5   # 1.17:1 R:R
+MAX_HOLD_DAYS = 5            # Matches training forward_days=5
 MAX_POSITIONS = int(INITIAL_CAPITAL / POSITION_SIZE)  # 25 positions
-MIN_PROB = 0.56              # Selective but not too strict (was 0.55)
-MIN_ROWS = 200               # need enough history for all indicators
+MIN_PROB = 0.65              # Higher threshold
+MIN_ROWS = 1                 # lowered to 1 for debugging with short data history
+
+# Transaction Costs (realistic Indian market costs)
+BROKERAGE_PCT = 0.0003       # 0.03% brokerage
+STT_GST_PCT = 0.001          # 0.1% STT + GST + stamp duty
+SLIPPAGE_PCT = 0.0005        # 0.05% slippage
+TOTAL_COST_PCT = BROKERAGE_PCT + STT_GST_PCT + SLIPPAGE_PCT  # 0.18% per trade
 
 def run_backtest():
     logger.info("="*60)
@@ -56,13 +62,42 @@ def run_backtest():
 
     engineer = FeatureEngineer()
     
+    # Fetch Nifty50 for market context (if model was trained with it)
+    logger.info("\n Fetching Nifty50 index for market context...")
+    nifty_df = None
+    try:
+        nifty_file = DATA_DIR.parent / 'data_cache_angel' / 'NSEI_daily.csv'
+        if nifty_file.exists():
+            nifty_df = pd.read_csv(nifty_file, index_col='timestamp', parse_dates=True)
+            if nifty_df.index.tz is not None:
+                nifty_df.index = nifty_df.index.tz_localize(None)
+            nifty_df.columns = [c.lower() for c in nifty_df.columns]
+            logger.info(f"  Loaded Nifty50: {len(nifty_df)} rows")
+        else:
+            # Fallback to yfinance
+            import yfinance as yf
+            nifty_df = yf.download('^NSEI', period='3y', progress=False)
+            if len(nifty_df) > 0:
+                nifty_df.index = nifty_df.index.tz_localize(None)
+                # Handle MultiIndex columns from yfinance
+                if isinstance(nifty_df.columns, pd.MultiIndex):
+                    nifty_df.columns = nifty_df.columns.get_level_values(0)
+                nifty_df.columns = [str(c).lower() for c in nifty_df.columns]
+                logger.info(f"  Downloaded Nifty50: {len(nifty_df)} rows")
+    except Exception as e:
+        logger.warning(f"  Could not load Nifty50: {e}")
+    
+    if nifty_df is None or len(nifty_df) < 200:
+        logger.warning("  Market context features disabled (no Nifty50 data)")
+        nifty_df = None
+    
     # Process cached stocks — use Angel One 3yr CSVs (same source as training)
     skip_keywords = ['BEES','IETF','BETA','CASE','ETF','NIFTY','SENSEX',
                      'GOLD','SILVER','LIQUID','GILT','BOND']
 
     data_files = [
         f for f in DATA_DIR.glob('*_daily.csv')
-        if f.stat().st_size > 10000  # skip stub/empty files
+        if f.stat().st_size > 5000  # skip stub/empty files (lowered from 10000)
         and not any(k in f.name.upper() for k in skip_keywords)
     ]
 
@@ -71,6 +106,8 @@ def run_backtest():
         return
 
     logger.info(f"Loaded {len(data_files)} stocks for backtesting...")
+    if nifty_df is not None:
+        logger.info("  Market context: ENABLED")
     processed = 0
     trades = []
 
@@ -85,22 +122,34 @@ def run_backtest():
             if len(df) < MIN_ROWS:
                 continue
 
-            df_features = engineer.add_technical_indicators(df)
+            df_features = engineer.add_technical_indicators(df, index_df=nifty_df)
             df_features = df_features.dropna()
             if len(df_features) < MIN_ROWS:
                 continue
 
-            predictions, probabilities = trainer.predict(df_features)
+            # Use same feature filtering as training (prepare_training_data)
+            X_bt, _, _ = engineer.prepare_training_data(df_features)
+            if len(X_bt) < 1:
+                continue
+
+            predictions, probabilities = trainer.predict(X_bt)
+            
+            # Debug: check why no trades
+            if probabilities.max() >= MIN_PROB:
+                print(f"  {symbol}: Potential Trade! Max Prob = {probabilities.max():.4f}")
+
+            # Align df_features to X_bt index (prepare_training_data may drop rows)
+            df_sim = df_features.loc[X_bt.index]
 
             # --- vectorised trade simulation ---
-            closes = df_features['close'].values
-            highs  = df_features['high'].values
-            lows   = df_features['low'].values
-            atrs   = df_features['atr'].values if 'atr' in df_features.columns else closes * 0.02
-            dates  = df_features.index
+            closes = df_sim['close'].values
+            highs  = df_sim['high'].values
+            lows   = df_sim['low'].values
+            atrs   = df_sim['atr'].values if 'atr' in df_sim.columns else closes * 0.02
+            dates  = df_sim.index
 
             in_trade = False
-            for i in range(len(df_features)):
+            for i in range(len(df_sim)):
                 if in_trade:
                     exit_price, reason = 0.0, ''
                     if lows[i] <= sl:
@@ -111,7 +160,10 @@ def run_backtest():
                         exit_price, reason = closes[i], f'Time Stop ({MAX_HOLD_DAYS}d)'
 
                     if exit_price > 0:
-                        pnl_pct = (exit_price - entry_price) / entry_price - 0.0005
+                        pnl_pct = (exit_price - entry_price) / entry_price
+                        # Apply transaction costs (entry + exit)
+                        pnl_pct = pnl_pct - (2 * TOTAL_COST_PCT)
+                        
                         trades.append({
                             'symbol':     symbol,
                             'entry_date': entry_date,
@@ -124,6 +176,7 @@ def run_backtest():
                             'hold_days':  (dates[i] - entry_date).days,
                         })
                         in_trade = False
+                        print(f"    CLOSED {symbol} PNL: {pnl_pct*100:.2f}%")
 
                 if not in_trade and probabilities[i] >= MIN_PROB:
                     in_trade    = True
@@ -132,11 +185,13 @@ def run_backtest():
                     atr_i = atrs[i] if (not np.isnan(atrs[i]) and atrs[i] > 0) else closes[i] * 0.02
                     sl = entry_price - STOP_LOSS_ATR_MULT   * atr_i
                     tp = entry_price + TAKE_PROFIT_ATR_MULT * atr_i
+                    print(f"    ENTERED {symbol} @ {entry_price:.2f} (Prob: {probabilities[i]:.4f})")
 
-        except Exception:
+        except Exception as e:
+            print(f"  [ERROR] {symbol}: {e}")
             continue
         processed += 1
-        if processed % 500 == 0:
+        if processed % 100 == 0:
             logger.info(f"  Processed {processed} stocks, {len(trades)} trades so far...")
             
     if not trades:
