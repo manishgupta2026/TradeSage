@@ -274,6 +274,23 @@ async def get_status():
 
 
 # ══════════════════════════════════════════════════════════════
+#  POST /api/scan — Trigger manual scan
+# ══════════════════════════════════════════════════════════════
+
+@app.post("/api/scan")
+async def trigger_scan():
+    """Trigger a manual scan immediately."""
+    if redis_pool:
+        try:
+            await redis_pool.set("tradesage:force_scan", "1")
+            return {"status": "success", "message": "Scan triggered"}
+        except Exception as e:
+            return {"status": "error", "message": f"Redis error: {e}"}
+    return {"status": "error", "message": "Redis not available"}
+
+
+
+# ══════════════════════════════════════════════════════════════
 #  GET /api/model/metrics — full model report for dashboard
 # ══════════════════════════════════════════════════════════════
 

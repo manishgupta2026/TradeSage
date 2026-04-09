@@ -485,7 +485,18 @@ def run_scanner():
             # Check for model hot-swap
             model_mgr.check_reload()
 
-            if is_market_open():
+            # Check for manual scan trigger
+            force_scan = False
+            if redis_client:
+                try:
+                    if redis_client.get("tradesage:force_scan") == "1":
+                        force_scan = True
+                        redis_client.delete("tradesage:force_scan")
+                        logger.info("⚡ Force scan triggered via Redis!")
+                except Exception:
+                    pass
+
+            if is_market_open() or force_scan:
                 # ── Pre-scan: ensure Angel One session is fresh ──
                 if not angel_mgr.is_connected:
                     logger.info("🔑 Angel One not connected — attempting connection...")
@@ -693,7 +704,13 @@ def run_scanner():
 
                 # Wait for next scan interval
                 logger.info(f"Next scan in {SCAN_INTERVAL_MINUTES} minutes...")
-                time.sleep(SCAN_INTERVAL_MINUTES * 60)
+                wait_seconds = SCAN_INTERVAL_MINUTES * 60
+                
+                # Sleep in 5-second chunks to allow interruption by force_scan
+                for _ in range(int(wait_seconds / 5)):
+                    if redis_client and redis_client.get("tradesage:force_scan") == "1":
+                        break
+                    time.sleep(5)
 
             else:
                 next_open = next_market_open()
@@ -705,9 +722,13 @@ def run_scanner():
                     f"({wait_hours:.1f}h)"
                 )
 
-                # Sleep in chunks to allow graceful shutdown
+                # Sleep in chunks to allow graceful shutdown and force scans
                 sleep_chunk = min(wait_seconds, 300)  # Max 5 min chunks
-                time.sleep(sleep_chunk)
+                
+                for _ in range(int(sleep_chunk / 5)):
+                    if redis_client and redis_client.get("tradesage:force_scan") == "1":
+                        break
+                    time.sleep(5)
 
         except KeyboardInterrupt:
             logger.info("Scanner stopped by user")
