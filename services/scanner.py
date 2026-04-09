@@ -500,17 +500,21 @@ def run_scanner():
                 # ── Pre-scan: ensure Angel One session is fresh ──
                 if not angel_mgr.is_connected:
                     logger.info("🔑 Angel One not connected — attempting connection...")
+                    if redis_client: redis_client.publish("tradesage:signals", "Attempting Angel One connection...")
                     if not angel_mgr.connect():
                         logger.error("Angel One connection failed — skipping this scan cycle")
+                        if redis_client: redis_client.publish("tradesage:signals", "Angel One connection failed — skipping scan")
                         time.sleep(60)
                         continue
 
                 # Proactive reconnect if session is old
                 angel_mgr.reconnect_if_needed()
 
+                msg = f"SCAN STARTING — {datetime.now(IST).strftime('%Y-%m-%d %H:%M:%S IST')}"
                 logger.info(f"\n{'═' * 60}")
-                logger.info(f"SCAN STARTING — {datetime.now(IST).strftime('%Y-%m-%d %H:%M:%S IST')}")
+                logger.info(msg)
                 logger.info(f"{'═' * 60}")
+                if redis_client: redis_client.publish("tradesage:signals", f"Started scan of {len(watchlist)} stocks...")
 
                 scan_start = time.time()
                 signal_count = 0
@@ -523,7 +527,9 @@ def run_scanner():
 
                 for i, symbol in enumerate(watchlist, 1):
                     if i % 100 == 0:
-                        logger.info(f"  [{i}/{len(watchlist)}] scanning... (signals: {len(local_signals)}, errors: {errors})")
+                        msg = f"[{i}/{len(watchlist)}] scanning... (signals: {len(local_signals)}, errors: {errors})"
+                        logger.info(msg)
+                        if redis_client: redis_client.publish("tradesage:signals", msg)
 
                     df = fetch_stock_data(angel_mgr, symbol, rate_limiter)
                     if df is None:
@@ -536,8 +542,9 @@ def run_scanner():
                         local_signals.append(signal)
 
                     # Check if market closed during scan
-                    if not is_market_open():
+                    if not force_scan and not is_market_open():
                         logger.info("Market closed during scan — stopping early")
+                        if redis_client: redis_client.publish("tradesage:signals", "Market closed during scan — stopping early")
                         break
 
                     # Mid-scan session recovery: if too many consecutive failures, reconnect
@@ -670,11 +677,10 @@ def run_scanner():
                         logger.error(f"Failed to save paper trades: {e}")
 
                 logger.info(f"\n{'─' * 60}")
-                logger.info(
-                    f"SCAN COMPLETE — {signal_count} signals ({high_conf_count} HIGH) | "
-                    f"{errors} errors | {successful_fetches} fetched | {elapsed:.1f}s"
-                )
+                comp_msg = f"SCAN COMPLETE — {signal_count} signals ({high_conf_count} HIGH) | {errors} errors | {elapsed:.1f}s"
+                logger.info(comp_msg)
                 logger.info(f"{'─' * 60}")
+                if redis_client: redis_client.publish("tradesage:signals", comp_msg)
 
                 if signal_count > 0:
                     summary_msg = f"📊 *TradeSage Scan Complete*\n"
