@@ -200,6 +200,11 @@ def main():
         shutil.copy2(str(MODEL_PATH), str(CURRENT_MODEL))
         logger.info(f"  Copied {MODEL_PATH.name} → {CURRENT_MODEL.name}")
 
+        # Copy report to current_report.json so the API/frontend always loads fresh data
+        CURRENT_REPORT = PROJECT_ROOT / 'models' / 'current_report.json'
+        shutil.copy2(str(REPORT_PATH), str(CURRENT_REPORT))
+        logger.info(f"  Copied {REPORT_PATH.name} → {CURRENT_REPORT.name}")
+
         msg = (
             f"✅ *TradeSage Retrain Complete*\n\n"
             f"📊 Test AUC: *{test_auc:.4f}*\n"

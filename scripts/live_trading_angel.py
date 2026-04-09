@@ -30,7 +30,14 @@ logger = logging.getLogger(__name__)
 
 class AngelPaperTrader:
     def __init__(self, model_path=None, positions_file=None):
-        self.model_path = model_path or os.path.join(PROJECT_ROOT, 'models', 'tradesage_angel.pkl')
+        # Auto-discover model file
+        if model_path is None:
+            for candidate in ['tradesage_10y.pkl', 'current.pkl', 'tradesage_v2.pkl', 'tradesage_angel.pkl']:
+                p = os.path.join(PROJECT_ROOT, 'models', candidate)
+                if os.path.exists(p):
+                    model_path = p
+                    break
+        self.model_path = model_path or os.path.join(PROJECT_ROOT, 'models', 'tradesage_10y.pkl')
         self.positions_file = Path(positions_file or os.path.join(PROJECT_ROOT, 'positions.json'))
         
         # OPTIMIZED PARAMETERS (from backtest)

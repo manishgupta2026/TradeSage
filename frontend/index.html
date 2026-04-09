@@ -40,6 +40,8 @@
             --red: #ef4444;
             --yellow: #eab308;
             --green: #22c55e;
+            --cyan: #06b6d4;
+            --purple: #a78bfa;
             --font-headline: 'Manrope', sans-serif;
             --font-body: 'Inter', sans-serif;
             --font-mono: 'JetBrains Mono', 'Consolas', monospace;
@@ -382,12 +384,148 @@
 
         /* ── BOTTOM SECTION ── */
         .bottom-row { display: grid; grid-template-columns: 1fr 380px; gap: 1.25rem; }
-        .chart-wrap {
+
+        /* ── MODEL PERFORMANCE METRICS PANEL ── */
+        .metrics-panel {
             background: var(--surface-container);
             border-radius: var(--radius);
             padding: 1.25rem;
         }
-        .chart-container { position: relative; height: 220px; }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+        .metric-card {
+            background: var(--surface-container-high);
+            border-radius: var(--radius-sm);
+            padding: 0.875rem;
+            text-align: center;
+            transition: background var(--transition), box-shadow var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        .metric-card:hover {
+            background: var(--surface-container-highest);
+            box-shadow: 0 0 12px rgba(75, 226, 119, 0.06);
+        }
+        .metric-card .metric-label {
+            font-size: 0.625rem;
+            color: var(--outline);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 0.375rem;
+            font-weight: 500;
+        }
+        .metric-card .metric-value {
+            font-family: var(--font-headline);
+            font-size: 1.25rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+        .metric-card .metric-sub {
+            font-size: 0.5625rem;
+            color: var(--outline);
+            margin-top: 0.25rem;
+            font-family: var(--font-mono);
+        }
+        .metric-color-green .metric-value { color: var(--green); }
+        .metric-color-yellow .metric-value { color: var(--yellow); }
+        .metric-color-cyan .metric-value { color: var(--cyan); }
+        .metric-color-purple .metric-value { color: var(--purple); }
+        .metric-color-default .metric-value { color: var(--on-surface); }
+
+        /* progress ring for metrics */
+        .metric-ring {
+            width: 52px; height: 52px;
+            margin: 0 auto 0.375rem;
+            position: relative;
+        }
+        .metric-ring svg {
+            width: 52px; height: 52px;
+            transform: rotate(-90deg);
+        }
+        .metric-ring .ring-bg {
+            fill: none;
+            stroke: var(--surface-container-lowest);
+            stroke-width: 4;
+        }
+        .metric-ring .ring-fg {
+            fill: none;
+            stroke-width: 4;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s ease-out;
+        }
+        .metric-ring .ring-text {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: var(--font-mono);
+            font-size: 0.6875rem;
+            font-weight: 600;
+            color: var(--on-surface);
+        }
+
+        /* model info row */
+        .model-info {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--outline-variant);
+        }
+        .model-info-item {
+            font-size: 0.6875rem;
+            color: var(--outline);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        .model-info-item span {
+            color: var(--secondary);
+            font-weight: 500;
+        }
+        .model-info-item .dot-sep {
+            width: 3px; height: 3px;
+            border-radius: 50%;
+            background: var(--outline-variant);
+        }
+
+        /* feature importance bar chart */
+        .feature-bars {
+            margin-top: 0.75rem;
+        }
+        .feature-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+        .feature-bar-name {
+            font-family: var(--font-mono);
+            font-size: 0.625rem;
+            color: var(--secondary);
+            width: 90px;
+            text-align: right;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .feature-bar-track {
+            flex: 1;
+            height: 5px;
+            background: var(--surface-container-lowest);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .feature-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--cyan));
+            transition: width 0.6s ease-out;
+        }
 
         /* ── SETTINGS PANEL ── */
         .settings-panel {
@@ -516,6 +654,7 @@
             .sidebar { width: 280px; }
             .stat-cards { grid-template-columns: repeat(2, 1fr); }
             .bottom-row { grid-template-columns: 1fr; }
+            .metrics-grid { grid-template-columns: repeat(3, 1fr); }
         }
         @media (max-width: 900px) {
             .main { flex-direction: column; }
@@ -528,6 +667,7 @@
             .content { padding: 0.75rem; }
             .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
             .signal-table { min-width: 800px; }
+            .metrics-grid { grid-template-columns: repeat(2, 1fr); }
         }
         @media (max-width: 600px) {
             .header { padding: 0.5rem 0.75rem; }
@@ -538,6 +678,7 @@
             .sidebar { max-height: 250px; }
             .signal-table th, .signal-table td { font-size: 0.6875rem; padding: 0.5rem 0.5rem; }
             .bottom-row { gap: 0.75rem; }
+            .metrics-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
         /* ── ANIMATIONS ── */
@@ -558,6 +699,11 @@
         @keyframes newRowFlash {
             0% { background: rgba(75, 226, 119, 0.15); }
             100% { background: transparent; }
+        }
+
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -609,7 +755,7 @@
                     <div class="stat-card fade-in" style="animation-delay:.15s">
                         <div class="stat-card-label">Win Rate %</div>
                         <div class="stat-card-value yellow" id="win-rate">--%</div>
-                        <div class="stat-card-sub">calibrated P(win)</div>
+                        <div class="stat-card-sub" id="win-rate-sub">model predicted</div>
                     </div>
                 </div>
 
@@ -643,13 +789,80 @@
 
                 <!-- BOTTOM ROW -->
                 <div class="bottom-row">
-                    <div class="chart-wrap">
+                    <!-- MODEL PERFORMANCE METRICS -->
+                    <div class="metrics-panel" id="metrics-panel">
                         <div class="section-header">
-                            Model Training History (AUC)
+                            Model Performance Metrics
                             <span class="accent-line"></span>
                         </div>
-                        <div class="chart-container">
-                            <canvas id="auc-chart"></canvas>
+
+                        <div class="metrics-grid" id="metrics-grid">
+                            <!-- Populated by JS -->
+                            <div class="metric-card metric-color-green">
+                                <div class="metric-ring" id="ring-auc">
+                                    <svg viewBox="0 0 52 52">
+                                        <circle class="ring-bg" cx="26" cy="26" r="22"/>
+                                        <circle class="ring-fg" cx="26" cy="26" r="22" stroke="var(--green)" stroke-dasharray="138.23" stroke-dashoffset="138.23"/>
+                                    </svg>
+                                    <div class="ring-text">--</div>
+                                </div>
+                                <div class="metric-label">Test AUC</div>
+                            </div>
+                            <div class="metric-card metric-color-cyan">
+                                <div class="metric-ring" id="ring-precision">
+                                    <svg viewBox="0 0 52 52">
+                                        <circle class="ring-bg" cx="26" cy="26" r="22"/>
+                                        <circle class="ring-fg" cx="26" cy="26" r="22" stroke="var(--cyan)" stroke-dasharray="138.23" stroke-dashoffset="138.23"/>
+                                    </svg>
+                                    <div class="ring-text">--</div>
+                                </div>
+                                <div class="metric-label">Precision</div>
+                            </div>
+                            <div class="metric-card metric-color-yellow">
+                                <div class="metric-ring" id="ring-winrate">
+                                    <svg viewBox="0 0 52 52">
+                                        <circle class="ring-bg" cx="26" cy="26" r="22"/>
+                                        <circle class="ring-fg" cx="26" cy="26" r="22" stroke="var(--yellow)" stroke-dasharray="138.23" stroke-dashoffset="138.23"/>
+                                    </svg>
+                                    <div class="ring-text">--</div>
+                                </div>
+                                <div class="metric-label">Win Rate</div>
+                            </div>
+                            <div class="metric-card metric-color-purple">
+                                <div class="metric-ring" id="ring-recall">
+                                    <svg viewBox="0 0 52 52">
+                                        <circle class="ring-bg" cx="26" cy="26" r="22"/>
+                                        <circle class="ring-fg" cx="26" cy="26" r="22" stroke="var(--purple)" stroke-dasharray="138.23" stroke-dashoffset="138.23"/>
+                                    </svg>
+                                    <div class="ring-text">--</div>
+                                </div>
+                                <div class="metric-label">Recall</div>
+                            </div>
+                            <div class="metric-card metric-color-default">
+                                <div class="metric-value" id="metric-stocks" style="font-size:1.5rem;margin-top:0.5rem">--</div>
+                                <div class="metric-label" style="margin-top:0.5rem">Stocks Trained</div>
+                                <div class="metric-sub" id="metric-samples">-- samples</div>
+                            </div>
+                            <div class="metric-card metric-color-default">
+                                <div class="metric-value" id="metric-features" style="font-size:1.5rem;margin-top:0.5rem">--</div>
+                                <div class="metric-label" style="margin-top:0.5rem">Features</div>
+                                <div class="metric-sub" id="metric-ensemble">--</div>
+                            </div>
+                        </div>
+
+                        <!-- Top Feature Importance -->
+                        <div class="feature-bars" id="feature-bars" style="display:none">
+                            <div style="font-size:0.625rem;color:var(--outline);text-transform:uppercase;letter-spacing:0.06em;font-weight:500;margin-bottom:0.5rem;">Top Feature Importance</div>
+                            <div id="feature-bars-container"></div>
+                        </div>
+
+                        <!-- Model Info Footer -->
+                        <div class="model-info" id="model-info">
+                            <div class="model-info-item">Trained: <span id="train-date">--</span></div>
+                            <div class="dot-sep"></div>
+                            <div class="model-info-item">Source: <span id="train-source">--</span></div>
+                            <div class="dot-sep"></div>
+                            <div class="model-info-item">Time: <span id="train-time">--</span></div>
                         </div>
                     </div>
 
@@ -703,30 +916,27 @@
 
     <script>
     /* ═══════════════════════════════════════════════════════════
-       TRADESAGE LIVE DASHBOARD — Client Logic
+       TRADESAGE LIVE DASHBOARD — Client Logic v2
        ═══════════════════════════════════════════════════════════ */
-    // Dynamic API Base to support live HTTPS VPS while retaining local debugging
     const API_BASE = window.location.hostname === 'localhost' || window.location.protocol === 'file:' 
         ? 'http://localhost:8000' 
         : 'https://tradesagaai.duckdns.org';
     let allSignals = [];
-    let aucChart = null;
 
     // ── INIT ──
     document.addEventListener('DOMContentLoaded', () => {
         loadStatus();
         loadSignals();
-        loadTrainingStatus();
-        initAUCChart();
+        loadModelMetrics();
         initSSE();
         // Periodic refresh
         setInterval(loadStatus, 30000);
         setInterval(loadSignals, 60000);
+        setInterval(loadModelMetrics, 300000); // every 5 min
     });
 
     // ── SSE: Live Signal Stream ──
     function initSSE() {
-        const logEl = document.getElementById('scanner-log');
         const dot = document.getElementById('sse-dot');
 
         addLog('SYS', 'Connecting to SSE stream...');
@@ -741,17 +951,14 @@
         evtSource.onmessage = (e) => {
             try {
                 const signal = JSON.parse(e.data);
-                // Add to signals table
                 prependSignalRow(signal);
                 allSignals.unshift(signal);
                 updateStatCards();
-                // Log it
                 const probClass = signal.probability >= 0.75 ? 'sym' : 'prob';
                 addLog(signal.timestamp?.split('T')[1]?.substring(0,8) || 'NOW',
                     `<span class="${probClass}">SIGNAL: ${signal.symbol}</span> P=${signal.probability.toFixed(2)} ${signal.confidence}`,
                     'signal');
             } catch(err) {
-                // Might be heartbeat
                 if (e.data !== ':heartbeat') {
                     addLog('SYS', e.data);
                 }
@@ -771,7 +978,6 @@
         entry.innerHTML = `<span class="log-time">${time}</span><span class="log-msg">${msg}</span>`;
         logEl.appendChild(entry);
         logEl.scrollTop = logEl.scrollHeight;
-        // Keep log manageable
         if (logEl.children.length > 200) logEl.removeChild(logEl.firstChild);
     }
 
@@ -873,18 +1079,12 @@
 
     function prependSignalRow(signal) {
         const tbody = document.getElementById('signals-body');
-        // Clear empty state
         if (tbody.querySelector('.empty-state')) tbody.innerHTML = '';
-        const tr = document.createElement('tr');
-        tr.className = 'new-signal-flash slide-in';
-        tr.innerHTML = buildSignalRow(signal).replace('<tr>', '').replace('</tr>', '');
-        // Actually we built the inner, so set innerHTML
         const temp = document.createElement('tbody');
         temp.innerHTML = buildSignalRow(signal);
         const newRow = temp.firstElementChild;
         newRow.classList.add('new-signal-flash', 'slide-in');
         tbody.insertBefore(newRow, tbody.firstChild);
-        // Cap at 100 rows
         while (tbody.children.length > 100) tbody.removeChild(tbody.lastChild);
     }
 
@@ -897,74 +1097,97 @@
         document.getElementById('signals-sub').textContent = `updated ${now}`;
     }
 
-    // ── Training Status ──
-    async function loadTrainingStatus() {
+    // ── MODEL METRICS — replaces the old fake AUC chart ──
+    async function loadModelMetrics() {
         try {
-            const res = await fetch(`${API_BASE}/api/training/status`);
+            const res = await fetch(`${API_BASE}/api/model/metrics`);
             if (!res.ok) return;
-            const data = await res.json();
-            // Could update chart here if training history is available
-        } catch(e) {}
+            const m = await res.json();
+            if (!m.available) return;
+
+            const tm = m.test_metrics || {};
+
+            // Update ring charts
+            updateRing('ring-auc', tm.auc, 'var(--green)');
+            updateRing('ring-precision', tm.precision, 'var(--cyan)');
+            updateRing('ring-winrate', tm.win_rate, 'var(--yellow)');
+            updateRing('ring-recall', tm.recall, 'var(--purple)');
+
+            // Stock count & features
+            const stocksEl = document.getElementById('metric-stocks');
+            const samplesEl = document.getElementById('metric-samples');
+            const featEl = document.getElementById('metric-features');
+            const ensEl = document.getElementById('metric-ensemble');
+
+            if (stocksEl) stocksEl.textContent = m.stocks_trained?.toLocaleString() || '--';
+            if (samplesEl) samplesEl.textContent = `${(m.total_samples || 0).toLocaleString()} samples`;
+            if (featEl) featEl.textContent = m.features || '--';
+            if (ensEl) ensEl.textContent = m.ensemble_mode ? 'Ensemble ON' : 'Single model';
+
+            // Training info footer
+            if (m.training_date) {
+                const td = new Date(m.training_date);
+                document.getElementById('train-date').textContent = td.toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'numeric'});
+            }
+            document.getElementById('train-source').textContent = m.data_source || '--';
+            if (m.elapsed_seconds) {
+                document.getElementById('train-time').textContent = `${(m.elapsed_seconds / 60).toFixed(0)} min`;
+            }
+
+            // Update header AUC pill
+            if (tm.auc) {
+                document.getElementById('model-auc').textContent = tm.auc.toFixed(4);
+            }
+
+            // Update Win Rate stat card with model data
+            if (tm.win_rate) {
+                document.getElementById('win-rate').textContent = (tm.win_rate * 100).toFixed(1) + '%';
+                document.getElementById('win-rate-sub').textContent = 'model predicted';
+            }
+
+            // Top features bar chart
+            if (m.top_features && m.top_features.length > 0) {
+                const container = document.getElementById('feature-bars-container');
+                const wrapper = document.getElementById('feature-bars');
+                wrapper.style.display = 'block';
+                const maxImp = m.top_features[0].importance;
+                container.innerHTML = m.top_features.slice(0, 5).map(f => {
+                    const pct = ((f.importance / maxImp) * 100).toFixed(0);
+                    return `<div class="feature-bar-row">
+                        <div class="feature-bar-name">${f.feature}</div>
+                        <div class="feature-bar-track">
+                            <div class="feature-bar-fill" style="width:${pct}%"></div>
+                        </div>
+                    </div>`;
+                }).join('');
+            }
+
+        } catch(e) {
+            console.warn('Model metrics load failed:', e);
+        }
     }
 
-    // ── AUC Chart ──
-    function initAUCChart() {
-        const ctx = document.getElementById('auc-chart').getContext('2d');
-        // Placeholder data — will be updated from API
-        const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        const data = [0.62, 0.64, 0.65, 0.66, 0.67, 0.68, 0.69, 0.70, 0.71, 0.68, 0.72, 0.68];
+    function updateRing(ringId, value, color) {
+        const ring = document.getElementById(ringId);
+        if (!ring || value === null || value === undefined) return;
 
-        aucChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels,
-                datasets: [{
-                    label: 'Test AUC',
-                    data,
-                    borderColor: '#4be277',
-                    backgroundColor: 'rgba(75, 226, 119, 0.08)',
-                    fill: true,
-                    tension: 0.4,
-                    pointRadius: 3,
-                    pointBackgroundColor: '#4be277',
-                    pointBorderColor: '#0b1326',
-                    pointBorderWidth: 2,
-                    borderWidth: 2,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: '#222a3d',
-                        titleColor: '#dae2fd',
-                        bodyColor: '#4be277',
-                        borderColor: '#3d4a3d',
-                        borderWidth: 1,
-                        cornerRadius: 4,
-                        bodyFont: { family: "'JetBrains Mono', monospace", size: 12 },
-                    }
-                },
-                scales: {
-                    x: {
-                        grid: { color: 'rgba(61, 74, 61, 0.2)', drawBorder: false },
-                        ticks: { color: '#869585', font: { family: "'Inter', sans-serif", size: 11 } }
-                    },
-                    y: {
-                        min: 0.55, max: 0.85,
-                        grid: { color: 'rgba(61, 74, 61, 0.2)', drawBorder: false },
-                        ticks: {
-                            color: '#869585',
-                            font: { family: "'JetBrains Mono', monospace", size: 11 },
-                            callback: v => v.toFixed(2)
-                        }
-                    }
-                },
-                interaction: { mode: 'index', intersect: false },
-            }
-        });
+        const circumference = 2 * Math.PI * 22; // r=22
+        const offset = circumference * (1 - value);
+
+        const fg = ring.querySelector('.ring-fg');
+        const text = ring.querySelector('.ring-text');
+
+        if (fg) {
+            fg.style.stroke = color;
+            fg.setAttribute('stroke-dasharray', circumference.toFixed(2));
+            // Animate with slight delay
+            setTimeout(() => {
+                fg.setAttribute('stroke-dashoffset', offset.toFixed(2));
+            }, 100);
+        }
+        if (text) {
+            text.textContent = (value * 100).toFixed(1) + '%';
+        }
     }
 
     // ── Settings Panel ──
@@ -1038,8 +1261,10 @@
             if (!res.ok) return;
             const data = await res.json();
             document.getElementById('active-positions').textContent = data.active_count || 0;
-            if (data.win_rate !== undefined) {
+            document.getElementById('positions-sub').textContent = `${data.total_trades || 0} total trades`;
+            if (data.win_rate !== undefined && data.win_rate > 0) {
                 document.getElementById('win-rate').textContent = (data.win_rate * 100).toFixed(1) + '%';
+                document.getElementById('win-rate-sub').textContent = data.total_trades > 0 ? `${data.total_trades} trades` : 'model predicted';
             }
         } catch(e) {}
     }

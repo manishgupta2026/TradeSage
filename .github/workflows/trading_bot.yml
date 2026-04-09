@@ -1,4 +1,4 @@
-name: TradeSage Trading Bot
+name: TradeSage Trading Bot Health Check
 
 on:
   schedule:
@@ -9,80 +9,93 @@ on:
   workflow_dispatch:  # Allow manual triggers
 
 jobs:
-  paper-trading:
+  health-check:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
-
-    - name: Set up Python 3.12
-      uses: actions/setup-python@v5
+    - name: Check VPS Scanner Health
+      uses: appleboy/ssh-action@v1.0.3
       with:
-        python-version: '3.12'
-        cache: 'pip'
+        host: ${{ secrets.VPS_HOST_IP }}
+        username: ${{ secrets.VPS_USERNAME }}
+        password: ${{ secrets.VPS_SSH_PASSWORD }}
+        port: 22
+        script: |
+          echo "=========================================="
+          echo "  TRADESAGE VPS HEALTH CHECK"
+          echo "  $(date '+%Y-%m-%d %H:%M:%S')"
+          echo "=========================================="
+          
+          cd /root/TradeSage || exit 1
+          
+          # Check Docker containers
+          echo "--- Docker Containers ---"
+          docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" 2>/dev/null || echo "Docker not available"
+          
+          # Check API health
+          echo ""
+          echo "--- API Health ---"
+          curl -s http://localhost:8000/api/status 2>/dev/null | python3 -m json.tool 2>/dev/null || echo "API not responding"
+          
+          # Check scanner logs (last 20 lines)
+          echo ""
+          echo "--- Scanner Logs (last 20) ---"
+          docker logs tradesage-scanner --tail 20 2>/dev/null || tail -20 /root/TradeSage/logs/scanner.log 2>/dev/null || echo "No scanner logs found"
+          
+          # Check model file exists
+          echo ""
+          echo "--- Model Files ---"
+          ls -la /root/TradeSage/models/*.pkl 2>/dev/null || echo "No model files found!"
+          
+          echo ""
+          echo "--- Disk Usage ---"
+          df -h / | tail -1
+          
+          echo ""
+          echo "Health check complete."
 
-    - name: Configure Git Authentication
-      run: |
-        git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
-
-    - name: Install Dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-
-    - name: Create Config
-      run: |
-        mkdir -p config
-        echo '{
-          "api_key": "${{ secrets.ANGEL_MARKET_KEY }}",
-          "client_id": "${{ secrets.ANGEL_CLIENT_ID }}",
-          "password": "${{ secrets.ANGEL_MPIN }}",
-          "totp_token": "${{ secrets.ANGEL_TOTP_SECRET }}",
-          "telegram_token": "${{ secrets.TELEGRAM_BOT_TOKEN }}",
-          "telegram_chat_id": "${{ secrets.TELEGRAM_CHAT_ID }}"
-        }' > config/angel_config.json
-
-    - name: Restore Paper Portfolio
-      uses: actions/cache@v4
+    - name: Restart Scanner If Needed
+      uses: appleboy/ssh-action@v1.0.3
       with:
-        path: |
-          data/paper_portfolio.json
-          data/angel_scrip_master.json
-        key: paper-portfolio-${{ github.run_id }}
-        restore-keys: |
-          paper-portfolio-
+        host: ${{ secrets.VPS_HOST_IP }}
+        username: ${{ secrets.VPS_USERNAME }}
+        password: ${{ secrets.VPS_SSH_PASSWORD }}
+        port: 22
+        script: |
+          cd /root/TradeSage || exit 1
+          
+          # Check if scanner container is running
+          SCANNER_STATUS=$(docker inspect -f '{{.State.Running}}' tradesage-scanner 2>/dev/null || echo "false")
+          
+          if [ "$SCANNER_STATUS" != "true" ]; then
+            echo "⚠️ Scanner not running — restarting..."
+            docker-compose up -d scanner 2>/dev/null || docker compose up -d scanner 2>/dev/null
+            echo "Scanner restart triggered"
+          else
+            echo "✅ Scanner is running"
+          fi
+          
+          # Check if API is healthy
+          API_CHECK=$(curl -s -o /dev/null -w '%{http_code}' http://localhost:8000/api/status 2>/dev/null || echo "000")
+          
+          if [ "$API_CHECK" != "200" ]; then
+            echo "⚠️ API not healthy (HTTP $API_CHECK) — restarting..."
+            docker-compose up -d api 2>/dev/null || docker compose up -d api 2>/dev/null
+          else
+            echo "✅ API is healthy"
+          fi
 
-    - name: Run Trading Bot (Paper Mode)
-      env:
-        PYTHONPATH: .
-        TRADESAGE_MODE: paper
-        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        DAILY_LOSS_LIMIT: "2500"
-      run: |
-        python src/utils/run_workflow.py
-
-    - name: Save Paper Portfolio
-      if: always()
-      uses: actions/cache@v4
-      with:
-        path: |
-          data/paper_portfolio.json
-          data/angel_scrip_master.json
-        key: paper-portfolio-${{ github.run_id }}
-
-    - name: Health Check Notification
+    - name: Notify on Failure
       if: failure()
       env:
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       run: |
-        python -c "
+        python3 -c "
         import os, requests
         token = os.getenv('TELEGRAM_BOT_TOKEN')
         chat_id = os.getenv('TELEGRAM_CHAT_ID')
         if token and chat_id:
             url = f'https://api.telegram.org/bot{token}/sendMessage'
-            requests.post(url, json={'chat_id': chat_id, 'text': '⚠️ TradeSage workflow FAILED! Check GitHub Actions.'})
-        "
+            requests.post(url, json={'chat_id': chat_id, 'text': '⚠️ TradeSage VPS health check FAILED! Services may be down.'})
+        " 2>/dev/null || true

@@ -41,7 +41,7 @@ REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
 # ── App ──
 app = FastAPI(
     title="TradeSage API",
-    version="1.0.0",
+    version="2.0.0",
     description="AI-powered NSE swing trading dashboard API",
 )
 
@@ -100,6 +100,53 @@ async def serve_index():
 # Serve any other static assets in frontend/
 if FRONTEND_DIR.exists():
     app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="static")
+
+
+# ══════════════════════════════════════════════════════════════
+#  HELPER: Find latest model report
+# ══════════════════════════════════════════════════════════════
+
+def _find_latest_report() -> dict:
+    """Find and load the most recent model report JSON."""
+    models_dir = PROJECT_ROOT / "models"
+
+    # Try specific known report files first (in priority order)
+    # current_report.json is always updated by the retrainer after daily training
+    # tradesage_10y_report.json is the primary report (also updated by retrainer)
+    priority_reports = [
+        models_dir / "current_report.json",
+        models_dir / "tradesage_10y_report.json",
+        models_dir / "tradesage_v2_report.json",
+        models_dir / "tradesage_angel_report.json",
+        models_dir / "tradesage_model_report.json",
+    ]
+
+    for rp in priority_reports:
+        if rp.exists():
+            try:
+                with open(rp) as f:
+                    report = json.load(f)
+                report["_source_file"] = rp.name
+                return report
+            except Exception:
+                continue
+
+    # Fallback: pick the most recently modified *_report.json
+    try:
+        all_reports = sorted(
+            models_dir.glob("*_report.json"),
+            key=os.path.getmtime,
+            reverse=True,
+        )
+        if all_reports:
+            with open(all_reports[0]) as f:
+                report = json.load(f)
+            report["_source_file"] = all_reports[0].name
+            return report
+    except Exception:
+        pass
+
+    return {}
 
 
 # ══════════════════════════════════════════════════════════════
@@ -201,24 +248,10 @@ async def get_status():
         and 9 * 60 + 15 <= market_minutes <= 15 * 60 + 30
     )
 
-    # Read model report for AUC
-    model_auc = None
-    model_version = None
-    report_paths = [
-        PROJECT_ROOT / "models" / "tradesage_v2_report.json",
-        PROJECT_ROOT / "models" / "tradesage_angel_report.json",
-        PROJECT_ROOT / "models" / "tradesage_model_report.json",
-    ]
-    for rp in report_paths:
-        if rp.exists():
-            try:
-                with open(rp) as f:
-                    report = json.load(f)
-                model_auc = report.get("test_metrics", {}).get("auc_score")
-                model_version = report.get("version", rp.stem)
-                break
-            except Exception:
-                continue
+    # Read model report for AUC + version
+    report = _find_latest_report()
+    model_auc = report.get("test_metrics", {}).get("auc_score")
+    model_version = report.get("version", report.get("_source_file", "").replace("_report.json", ""))
 
     # Last scan timestamp from Redis
     last_scan = None
@@ -234,9 +267,62 @@ async def get_status():
         "market_open": market_open,
         "last_scan": last_scan or now.strftime("%H:%M:%S"),
         "model_auc": model_auc,
-        "model_version": model_version,
+        "model_version": model_version or "tradesage_10y",
         "scanner_healthy": scanner_healthy,
         "server_time": now.isoformat(),
+    }
+
+
+# ══════════════════════════════════════════════════════════════
+#  GET /api/model/metrics — full model report for dashboard
+# ══════════════════════════════════════════════════════════════
+
+@app.get("/api/model/metrics")
+async def get_model_metrics():
+    """Return comprehensive model metrics from the latest training report."""
+    report = _find_latest_report()
+
+    if not report:
+        return {
+            "available": False,
+            "message": "No training report found",
+        }
+
+    test_metrics = report.get("test_metrics", {})
+    val_metrics = report.get("val_metrics", {})
+    params = report.get("parameters", {})
+
+    return {
+        "available": True,
+        "training_date": report.get("training_date"),
+        "version": report.get("version"),
+        "data_source": report.get("data_source"),
+        "stocks_trained": report.get("stocks_trained"),
+        "total_samples": report.get("total_samples"),
+        "features": report.get("features"),
+        "ensemble_mode": report.get("ensemble_mode"),
+        "market_context": report.get("market_context"),
+        "elapsed_seconds": report.get("elapsed_seconds"),
+        "parameters": {
+            "forward_days": params.get("forward_days"),
+            "gain_threshold": params.get("gain_threshold"),
+            "max_drawdown": params.get("max_drawdown"),
+        },
+        "test_metrics": {
+            "auc": test_metrics.get("auc_score"),
+            "precision": test_metrics.get("precision"),
+            "recall": test_metrics.get("recall"),
+            "f1": test_metrics.get("f1"),
+            "win_rate": test_metrics.get("predicted_win_rate"),
+        },
+        "val_metrics": {
+            "auc": val_metrics.get("auc_score"),
+            "precision": val_metrics.get("precision"),
+            "recall": val_metrics.get("recall"),
+            "f1": val_metrics.get("f1"),
+            "win_rate": val_metrics.get("predicted_win_rate"),
+        },
+        "top_features": report.get("top_features", [])[:10],
     }
 
 
@@ -289,12 +375,16 @@ async def get_portfolio():
         except Exception:
             pass
 
+    # Use model report win rate as fallback (more accurate than backtest ledger)
     win_rate = wins / total_trades if total_trades > 0 else 0
+    report = _find_latest_report()
+    model_win_rate = report.get("test_metrics", {}).get("predicted_win_rate")
 
     return {
         "active_count": len(active),
         "active_positions": active,
-        "win_rate": round(win_rate, 4),
+        "win_rate": round(win_rate, 4) if total_trades > 0 else round(model_win_rate or 0, 4),
+        "model_win_rate": round(model_win_rate, 4) if model_win_rate else None,
         "total_trades": total_trades,
         "total_pnl": round(total_pnl, 2),
     }
@@ -371,19 +461,11 @@ async def training_status():
         "samples_trained_on": None,
     }
 
-    # Scan for the most recent report
-    models_dir = PROJECT_ROOT / "models"
-    reports = sorted(models_dir.glob("*_report.json"), key=os.path.getmtime, reverse=True)
-
-    if reports:
-        try:
-            with open(reports[0]) as f:
-                report = json.load(f)
-            result["last_retrain"] = report.get("training_date")
-            result["current_auc"] = report.get("test_metrics", {}).get("auc_score")
-            result["samples_trained_on"] = report.get("total_samples")
-        except Exception:
-            pass
+    report = _find_latest_report()
+    if report:
+        result["last_retrain"] = report.get("training_date")
+        result["current_auc"] = report.get("test_metrics", {}).get("auc_score")
+        result["samples_trained_on"] = report.get("total_samples")
 
     # Estimate next retrain: 16:30 IST today or tomorrow
     ist = timezone(timedelta(hours=5, minutes=30))

@@ -23,11 +23,30 @@ TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
 class TradeSageBot:
-    def __init__(self, mode='scan', trader=None, model_path='models/tradesage_angel.pkl'):
+    def __init__(self, mode='scan', trader=None, model_path=None):
         self.mode = mode
         self.trader = trader
+
+        # Auto-discover model file
+        if model_path is None:
+            import os
+            search_paths = [
+                'models/tradesage_10y.pkl',
+                'models/current.pkl',
+                'models/tradesage_v2.pkl',
+                'models/tradesage_angel.pkl',
+                'models/tradesage_model.pkl',
+            ]
+            for p in search_paths:
+                if os.path.exists(p):
+                    model_path = p
+                    break
+            if model_path is None:
+                print("❌ No model file found! Checked:", search_paths)
+                raise FileNotFoundError("No model file found in models/ directory")
+
         self.scanner = MarketScanner(model_path=model_path)
-        print(f"🤖 Bot Initialized. Mode: {self.mode.upper()}")
+        print(f"🤖 Bot Initialized. Mode: {self.mode.upper()} | Model: {model_path}")
 
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         mode_text = f" ({self.mode.upper()} MODE)" if self.mode != 'scan' else ""

@@ -7,59 +7,51 @@ on:
   workflow_dispatch:  # Enable manual triggering from GitHub UI
 
 jobs:
-  train-and-deploy:
+  retrain-on-vps:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
-
-    - name: Set up Python 3.12
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.12'
-        cache: 'pip'
-
-    - name: Install Dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-
-    - name: Cache yfinance Market Data
-      uses: actions/cache@v4
-      with:
-        path: data_cache_yfinance
-        # Key rotates weekly to ensure we don't cache stale data indefinitely, 
-        # but allows extremely fast updates daily instead of scratching a 10 year history.
-        key: yfinance-cache-${{ runner.os }}-week-${{ github.run_id }}
-        restore-keys: |
-          yfinance-cache-${{ runner.os }}-week-
-
-    - name: Execute TradeSage Training Pipeline
-      # Run the exact command you run locally. Using 5000 rows depth.
-      run: |
-        python scripts/train.py \
-          --source yfinance \
-          --model-path models/tradesage_10y.pkl \
-          --threshold 0.02 \
-          --forward-days 5 \
-          --max-drawdown -0.99 \
-          --max-rows-per-stock 5000 \
-          --ensemble
-
-    - name: Deploy Model to VPS
-      uses: appleboy/scp-action@v0.1.7
+    - name: Trigger VPS Retrain Pipeline
+      uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.VPS_HOST_IP }}
         username: ${{ secrets.VPS_USERNAME }}
         password: ${{ secrets.VPS_SSH_PASSWORD }}
         port: 22
-        source: "models/tradesage_10y.pkl,models/tradesage_10y_report.json"
-        target: "/root/TradeSage"
-        strip_components: 0
-        overwrite: true
+        timeout: 90m
+        command_timeout: 90m
+        script: |
+          echo "=========================================="
+          echo "  TRADESAGE VPS RETRAIN — Triggered by GitHub Actions"
+          echo "  $(date '+%Y-%m-%d %H:%M:%S IST')"
+          echo "=========================================="
+          
+          cd /root/TradeSage || exit 1
+          
+          # Activate virtual environment if available
+          if [ -f "venv/bin/activate" ]; then
+            source venv/bin/activate
+          fi
+          
+          # Run the VPS retrain pipeline
+          # This fetches data via yfinance (cached on VPS), trains model,
+          # evaluates AUC gate, and hot-swaps if it passes
+          python scripts/train_vps.py 2>&1 | tail -100
+          
+          # Check exit code
+          if [ $? -eq 0 ]; then
+            echo "✅ Retrain pipeline completed successfully"
+          else
+            echo "❌ Retrain pipeline failed"
+            exit 1
+          fi
+          
+          # Restart the scanner service to pick up new model
+          echo "Restarting scanner service..."
+          docker restart tradesage-scanner 2>/dev/null || echo "Scanner container not found — using direct process"
 
-    - name: Trigger VPS Bot Reload
+    - name: Notify on Failure
+      if: failure()
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.VPS_HOST_IP }}
@@ -67,7 +59,28 @@ jobs:
         password: ${{ secrets.VPS_SSH_PASSWORD }}
         port: 22
         script: |
-          echo "Model transfer complete. Restarting TradeSage bot..."
-          # Example: If you use screen, pm2, or systemd, restart it here.
-          # pkill -f live_trading_angel.py || true
-          # cd /root/TradeSage && screen -dmS tradebot bash -c "source venv/bin/activate && python scripts/live_trading_angel.py"
+          cd /root/TradeSage || exit 0
+          
+          # Activate venv
+          if [ -f "venv/bin/activate" ]; then
+            source venv/bin/activate
+          fi
+          
+          # Send Telegram alert about failure
+          python -c "
+          import json, os, requests
+          cfg_path = 'config/angel_config.json'
+          token, chat_id = None, None
+          if os.path.exists(cfg_path):
+              with open(cfg_path) as f:
+                  cfg = json.load(f)
+              token = cfg.get('telegram_token')
+              chat_id = cfg.get('telegram_chat_id')
+          token = token or os.getenv('TELEGRAM_BOT_TOKEN')
+          chat_id = chat_id or os.getenv('TELEGRAM_CHAT_ID')
+          if token and chat_id:
+              requests.post(
+                  f'https://api.telegram.org/bot{token}/sendMessage',
+                  json={'chat_id': chat_id, 'text': '🚨 GitHub Actions retrain pipeline FAILED! Check logs.'}
+              )
+          " 2>/dev/null || true

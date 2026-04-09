@@ -263,12 +263,15 @@ def hot_swap_model(new_model_path: str):
             current_link.symlink_to(Path(new_model_path).resolve())
             logger.info(f"Symlink updated: {current_link} → {new_model_path}")
 
-        # Also copy the report
+        # Also copy the report to all standard locations
         report_src = new_model_path.replace(".pkl", "_report.json")
-        report_dst = str(PROJECT_ROOT / "models" / "current_report.json")
         if os.path.exists(report_src):
             import shutil
-            shutil.copy2(report_src, report_dst)
+            # Copy to current_report.json (hot-swap target)
+            shutil.copy2(report_src, str(PROJECT_ROOT / "models" / "current_report.json"))
+            # Copy to tradesage_10y_report.json (primary report the API + frontend read)
+            shutil.copy2(report_src, str(PROJECT_ROOT / "models" / "tradesage_10y_report.json"))
+            logger.info(f"Reports updated: current_report.json + tradesage_10y_report.json")
 
     except Exception as e:
         logger.error(f"Hot-swap failed: {e}")

@@ -71,9 +71,14 @@ def main():
         from core.feature_engineering import FeatureEngineer
         from core.fundamental_analyzer import FundamentalAnalyzer
 
-        model_path = os.path.join(PROJECT_ROOT, 'models', 'tradesage_angel.pkl')
-        if not os.path.exists(model_path):
-            logger.error(f"Model not found: {model_path}")
+        model_path = None
+        for candidate in ['tradesage_10y.pkl', 'current.pkl', 'tradesage_v2.pkl', 'tradesage_angel.pkl']:
+            p = os.path.join(PROJECT_ROOT, 'models', candidate)
+            if os.path.exists(p):
+                model_path = p
+                break
+        if not model_path:
+            logger.error("No model file found in models/ directory")
             telegram.send_message("⚠️ Bot Error: Model file not found.")
             sys.exit(1)
 

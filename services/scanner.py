@@ -7,6 +7,7 @@ Publishes signals to Redis for SSE streaming to the dashboard.
 Features:
 - NSE market hours check (9:15–15:30 IST, Mon–Fri)
 - Angel One API with 3 req/sec rate limiter (token bucket)
+- AUTO SESSION RECONNECT — re-authenticates on token expiry
 - Redis pub/sub for live signal streaming
 - Circuit filter: skip stocks where price=0 or volume=0
 - Model hot-swap via symlink — reloads without restart
@@ -149,6 +150,88 @@ def next_market_open() -> datetime:
 
 
 # ══════════════════════════════════════════════════════════════
+#  ANGEL ONE API MANAGER — Auto-reconnect on session expiry
+# ══════════════════════════════════════════════════════════════
+
+class AngelSessionManager:
+    """
+    Wraps AngelOneAPI + AngelDataFetcher with automatic session 
+    reconnection when token expires. Angel One sessions expire daily.
+    """
+
+    def __init__(self):
+        self.api = None
+        self.fetcher = None
+        self._last_connect = None
+        self._connect_lock = threading.Lock()
+        self._consecutive_failures = 0
+        self._MAX_FAILURES_BEFORE_RECONNECT = 5
+
+    def connect(self) -> bool:
+        """Establish or re-establish Angel One connection."""
+        with self._connect_lock:
+            try:
+                from src.angel.angel_one_api import AngelOneAPI
+                from src.angel.angel_data_fetcher import AngelDataFetcher
+
+                config_path = PROJECT_ROOT / "config" / "angel_config.json"
+                alt_config = PROJECT_ROOT / "config" / "angel_one_config.json"
+                cfg = str(alt_config if alt_config.exists() else config_path)
+
+                logger.info(f"🔑 Connecting to Angel One... (config: {Path(cfg).name})")
+                self.api = AngelOneAPI(cfg)
+                self.fetcher = AngelDataFetcher(self.api)
+                self._last_connect = datetime.now(IST)
+                self._consecutive_failures = 0
+                logger.info("✅ Angel One API connected successfully")
+                return True
+
+            except Exception as e:
+                logger.error(f"❌ Angel One connection failed: {e}")
+                send_telegram(f"🚨 Scanner: Angel One connection failed — {e}")
+                return False
+
+    def reconnect_if_needed(self) -> bool:
+        """
+        Check if we need to reconnect:
+        1. Too many consecutive fetch failures (session likely expired)
+        2. Session is older than 8 hours (proactive refresh)
+        """
+        needs_reconnect = False
+
+        if self._consecutive_failures >= self._MAX_FAILURES_BEFORE_RECONNECT:
+            logger.warning(
+                f"⚠️ {self._consecutive_failures} consecutive failures — "
+                f"session likely expired. Reconnecting..."
+            )
+            needs_reconnect = True
+
+        if self._last_connect:
+            age_hours = (datetime.now(IST) - self._last_connect).total_seconds() / 3600
+            if age_hours >= 8:
+                logger.info(f"🔄 Session is {age_hours:.1f}h old — proactive reconnect")
+                needs_reconnect = True
+
+        if needs_reconnect:
+            send_telegram("🔄 Scanner: Reconnecting Angel One session...")
+            return self.connect()
+
+        return True
+
+    def record_success(self):
+        """Record a successful API call."""
+        self._consecutive_failures = 0
+
+    def record_failure(self):
+        """Record a failed API call."""
+        self._consecutive_failures += 1
+
+    @property
+    def is_connected(self) -> bool:
+        return self.api is not None and self.fetcher is not None
+
+
+# ══════════════════════════════════════════════════════════════
 #  MODEL LOADER (supports hot-swap via symlink)
 # ══════════════════════════════════════════════════════════════
 
@@ -173,15 +256,17 @@ class ModelManager:
         if model_path:
             search_paths.insert(0, Path(model_path))
 
+        logger.info("🔍 Searching for model file...")
         for p in search_paths:
+            logger.info(f"  Checking: {p} — {'EXISTS' if p.exists() else 'not found'}")
             if p.exists():
                 self.model_path = p
                 self.trainer.load_model(str(p))
                 self._last_mtime = os.path.getmtime(p)
-                logger.info(f"Model loaded: {p}")
+                logger.info(f"✅ Model loaded: {p} ({p.stat().st_size / 1024 / 1024:.1f} MB)")
                 return True
 
-        logger.error("No model file found!")
+        logger.error("❌ No model file found in any search path!")
         return False
 
     def check_reload(self) -> bool:
@@ -265,22 +350,39 @@ def generate_signal(symbol: str, df: pd.DataFrame, model_mgr: ModelManager) -> d
 
 
 # ══════════════════════════════════════════════════════════════
-#  FETCH DATA WITH RATE LIMITING & RETRY
+#  FETCH DATA WITH RATE LIMITING, RETRY & SESSION RECOVERY
 # ══════════════════════════════════════════════════════════════
 
-def fetch_stock_data(fetcher, symbol: str, rate_limiter: TokenBucketRateLimiter, period_days: int = 365) -> pd.DataFrame:
-    """Fetch OHLCV with rate limiting and exponential backoff retry."""
+def fetch_stock_data(
+    angel_mgr: AngelSessionManager,
+    symbol: str,
+    rate_limiter: TokenBucketRateLimiter,
+    period_days: int = 365,
+) -> pd.DataFrame:
+    """Fetch OHLCV with rate limiting, retry, and session recovery."""
     max_retries = 3
 
     for attempt in range(max_retries):
         rate_limiter.acquire()
         try:
-            df = fetcher.fetch_historical_data(symbol, period_days=period_days)
+            df = angel_mgr.fetcher.fetch_historical_data(symbol, period_days=period_days)
             if df is not None and len(df) >= 200:
+                angel_mgr.record_success()
                 return df
             return None
         except Exception as e:
             err_str = str(e).lower()
+            angel_mgr.record_failure()
+
+            # Check for session expiry indicators
+            if any(kw in err_str for kw in [
+                "invalid token", "session expired", "unauthorized",
+                "jwt", "token", "login", "auth"
+            ]):
+                logger.warning(f"🔑 Session likely expired during {symbol} fetch. Will reconnect...")
+                if angel_mgr.reconnect_if_needed():
+                    continue  # Retry with new session
+
             if attempt < max_retries - 1:
                 wait = (2 ** attempt) + 0.5
                 if "exceeding" in err_str or "429" in err_str:
@@ -323,7 +425,7 @@ def run_scanner():
     import redis as sync_redis
 
     logger.info("=" * 70)
-    logger.info("  TRADESAGE SCANNER SERVICE")
+    logger.info("  TRADESAGE SCANNER SERVICE v2")
     logger.info("=" * 70)
 
     # ── Connect to Redis ──
@@ -344,22 +446,12 @@ def run_scanner():
         send_telegram("🚨 Scanner failed to start: no model file found")
         sys.exit(1)
 
-    # ── Connect to Angel One ──
-    try:
-        from src.angel.angel_one_api import AngelOneAPI
-        from src.angel.angel_data_fetcher import AngelDataFetcher
-
-        config_path = PROJECT_ROOT / "config" / "angel_config.json"
-        alt_config = PROJECT_ROOT / "config" / "angel_one_config.json"
-        cfg = str(alt_config if alt_config.exists() else config_path)
-
-        api = AngelOneAPI(cfg)
-        fetcher = AngelDataFetcher(api)
-        logger.info("✅ Angel One API connected")
-    except Exception as e:
-        logger.error(f"Angel One connection failed: {e}")
-        send_telegram(f"🚨 Scanner: Angel One connection failed — {e}")
-        sys.exit(1)
+    # ── Connect to Angel One (with auto-reconnect) ──
+    angel_mgr = AngelSessionManager()
+    if not angel_mgr.connect():
+        # Don't exit — we'll retry on the next scan cycle
+        logger.error("⚠️ Initial Angel One connection failed — will retry on next scan cycle")
+        send_telegram("⚠️ Scanner: Initial Angel One connection failed — will retry")
 
     # ── Load watchlist ──
     watchlist_paths = [
@@ -385,7 +477,7 @@ def run_scanner():
 
     # ── Scan interval ──
     SCAN_INTERVAL_MINUTES = 15
-    send_telegram(f"🟢 TradeSage Scanner started | {len(watchlist)} stocks | {SCAN_INTERVAL_MINUTES}min interval")
+    send_telegram(f"🟢 TradeSage Scanner v2 started | {len(watchlist)} stocks | {SCAN_INTERVAL_MINUTES}min interval")
 
     # ── Main loop ──
     while True:
@@ -394,6 +486,17 @@ def run_scanner():
             model_mgr.check_reload()
 
             if is_market_open():
+                # ── Pre-scan: ensure Angel One session is fresh ──
+                if not angel_mgr.is_connected:
+                    logger.info("🔑 Angel One not connected — attempting connection...")
+                    if not angel_mgr.connect():
+                        logger.error("Angel One connection failed — skipping this scan cycle")
+                        time.sleep(60)
+                        continue
+
+                # Proactive reconnect if session is old
+                angel_mgr.reconnect_if_needed()
+
                 logger.info(f"\n{'═' * 60}")
                 logger.info(f"SCAN STARTING — {datetime.now(IST).strftime('%Y-%m-%d %H:%M:%S IST')}")
                 logger.info(f"{'═' * 60}")
@@ -402,19 +505,21 @@ def run_scanner():
                 signal_count = 0
                 high_conf_count = 0
                 errors = 0
+                successful_fetches = 0
 
                 # Save local signals for fallback
                 local_signals = []
 
                 for i, symbol in enumerate(watchlist, 1):
                     if i % 100 == 0:
-                        logger.info(f"  [{i}/{len(watchlist)}] scanning...")
+                        logger.info(f"  [{i}/{len(watchlist)}] scanning... (signals: {len(local_signals)}, errors: {errors})")
 
-                    df = fetch_stock_data(fetcher, symbol, rate_limiter)
+                    df = fetch_stock_data(angel_mgr, symbol, rate_limiter)
                     if df is None:
                         errors += 1
                         continue
 
+                    successful_fetches += 1
                     signal = generate_signal(symbol, df, model_mgr)
                     if signal:
                         local_signals.append(signal)
@@ -424,7 +529,24 @@ def run_scanner():
                         logger.info("Market closed during scan — stopping early")
                         break
 
+                    # Mid-scan session recovery: if too many consecutive failures, reconnect
+                    if angel_mgr._consecutive_failures >= angel_mgr._MAX_FAILURES_BEFORE_RECONNECT:
+                        logger.warning("🔄 Too many failures mid-scan — reconnecting session...")
+                        angel_mgr.connect()
+
                 elapsed = time.time() - scan_start
+
+                # Log fetch success rate
+                total_attempted = successful_fetches + errors
+                if total_attempted > 0:
+                    success_rate = (successful_fetches / total_attempted) * 100
+                    logger.info(f"📊 Fetch success rate: {success_rate:.1f}% ({successful_fetches}/{total_attempted})")
+
+                    # If success rate is very low, the session is probably dead
+                    if success_rate < 10 and total_attempted > 50:
+                        logger.error("🚨 Fetch success rate critically low — forcing reconnection")
+                        angel_mgr.connect()
+                        send_telegram(f"⚠️ Scanner: Low fetch success rate ({success_rate:.0f}%). Reconnected session.")
 
                 # --- FUNDAMENTAL FILTERING ---
                 if local_signals:
@@ -433,14 +555,23 @@ def run_scanner():
                     candidate_pool = local_signals[:10]  # Only top 10 tradable stocks
                     
                     finals = []
-                    from src.core.fundamental_analyzer import FundamentalAnalyzer
-                    analyzer = FundamentalAnalyzer()
-                    
-                    for sig in candidate_pool:
-                        flags = analyzer.evaluate_candidate(sig['symbol'])
-                        if flags:  # Dictionary returned on success
-                            sig['fundamentals'] = flags
-                            finals.append(sig)
+                    try:
+                        from src.core.fundamental_analyzer import FundamentalAnalyzer
+                        analyzer = FundamentalAnalyzer()
+                        
+                        for sig in candidate_pool:
+                            try:
+                                flags = analyzer.evaluate_candidate(sig['symbol'])
+                                if flags:  # Dictionary returned on success
+                                    sig['fundamentals'] = flags
+                                    finals.append(sig)
+                            except Exception as e:
+                                # Don't block signal on fundamental analysis failure
+                                logger.debug(f"Fundamental analysis failed for {sig['symbol']}: {e}")
+                                finals.append(sig)
+                    except ImportError:
+                        logger.warning("FundamentalAnalyzer not available — skipping fundamental filter")
+                        finals = candidate_pool
                     
                     # Overwrite local_signals with the finalized batch
                     local_signals = finals
@@ -457,13 +588,22 @@ def run_scanner():
                             f"SL=₹{sig['stop_loss']:,.2f}  "
                             f"TP=₹{sig['take_profit']:,.2f}  "
                             f"R:R={sig['r_r_ratio']}  "
-                            f"[TV:{sig['fundamentals'].get('tv_rating', 'N/A')} | News:{sig['fundamentals'].get('sentiment', 'N/A')}]"
+                            f"[TV:{sig.get('fundamentals', {}).get('tv_rating', 'N/A')} | "
+                            f"News:{sig.get('fundamentals', {}).get('sentiment', 'N/A')}]"
                         )
 
                 # Update last scan timestamp
                 if redis_client:
                     try:
                         redis_client.set("tradesage:last_scan", datetime.now(IST).strftime("%H:%M:%S"))
+                        redis_client.set("tradesage:scan_stats", json.dumps({
+                            "timestamp": datetime.now(IST).isoformat(),
+                            "signals": signal_count,
+                            "high_conf": high_conf_count,
+                            "errors": errors,
+                            "fetched": successful_fetches,
+                            "elapsed": round(elapsed, 1),
+                        }))
                     except Exception:
                         pass
 
@@ -476,7 +616,6 @@ def run_scanner():
                     pass
 
                 # --- AUTONOMOUS PAPER TRADING ---
-                # Initial capital setup: 50k INR | Max alloc per trade: 10k INR
                 positions_path = PROJECT_ROOT / "data" / "positions.json"
                 if not positions_path.exists():
                     try:
@@ -522,7 +661,7 @@ def run_scanner():
                 logger.info(f"\n{'─' * 60}")
                 logger.info(
                     f"SCAN COMPLETE — {signal_count} signals ({high_conf_count} HIGH) | "
-                    f"{errors} errors | {elapsed:.1f}s"
+                    f"{errors} errors | {successful_fetches} fetched | {elapsed:.1f}s"
                 )
                 logger.info(f"{'─' * 60}")
 
@@ -530,7 +669,6 @@ def run_scanner():
                     summary_msg = f"📊 *TradeSage Scan Complete*\n"
                     summary_msg += f"✅ Found {signal_count} signals ({high_conf_count} HIGH)\n\n"
                     
-                    # Log top 5 signals to Telegram
                     top_signals = local_signals[:5]
                     for s in top_signals:
                         sym = s['symbol']
@@ -549,6 +687,9 @@ def run_scanner():
                         
                     summary_msg += f"⏱ Time: {elapsed:.0f}s | Errors: {errors}"
                     send_telegram(summary_msg)
+                else:
+                    # Still notify that scan completed with no signals
+                    logger.info("No qualifying signals this scan cycle")
 
                 # Wait for next scan interval
                 logger.info(f"Next scan in {SCAN_INTERVAL_MINUTES} minutes...")
