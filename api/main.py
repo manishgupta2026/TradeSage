@@ -375,15 +375,17 @@ async def get_portfolio():
         except Exception:
             pass
 
-    # Use model report win rate as fallback (more accurate than backtest ledger)
-    win_rate = wins / total_trades if total_trades > 0 else 0
+    # Use model report win rate as primary (more representative of current model)
+    # Backtest ledger win rate is secondary (historical trades, may be stale)
+    ledger_win_rate = wins / total_trades if total_trades > 0 else 0
     report = _find_latest_report()
     model_win_rate = report.get("test_metrics", {}).get("predicted_win_rate")
 
     return {
         "active_count": len(active),
         "active_positions": active,
-        "win_rate": round(win_rate, 4) if total_trades > 0 else round(model_win_rate or 0, 4),
+        "win_rate": round(model_win_rate, 4) if model_win_rate else round(ledger_win_rate, 4),
+        "ledger_win_rate": round(ledger_win_rate, 4) if total_trades > 0 else None,
         "model_win_rate": round(model_win_rate, 4) if model_win_rate else None,
         "total_trades": total_trades,
         "total_pnl": round(total_pnl, 2),
