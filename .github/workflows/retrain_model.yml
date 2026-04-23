@@ -33,10 +33,10 @@ jobs:
             source venv/bin/activate
           fi
           
-          # Run the VPS retrain pipeline
+          # Run the VPS retrain pipeline inside the retrainer container
           # This fetches data via yfinance (cached on VPS), trains model,
           # evaluates AUC gate, and hot-swaps if it passes
-          python scripts/train_vps.py 2>&1 | tail -100
+          docker exec tradesage-retrainer python /app/scripts/train_vps.py 2>&1 | tail -100
           
           # Check exit code
           if [ $? -eq 0 ]; then
