@@ -297,7 +297,7 @@ def generate_signal(symbol: str, df: pd.DataFrame, model_mgr: ModelManager) -> d
         df = model_mgr.engineer.add_technical_indicators(df)
         df.dropna(inplace=True)
 
-        if df.empty or len(df) < 50:
+        if df.empty or len(df) < 10:
             return None
 
         latest = df.iloc[-1]
