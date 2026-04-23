@@ -140,8 +140,8 @@ def main():
     # ── Step 1: Fetch data ──
     if not args.skip_fetch:
         ok = run_step(
-            [python, str(PROJECT_ROOT / 'scripts' / 'fetch_yfinance_10y.py'), '--update', '--years', '20'],
-            "STEP 1: Fetch 20yr yfinance data (update mode)"
+            [python, str(PROJECT_ROOT / 'scripts' / 'fetch_yfinance_10y.py'), '--years', '10'],
+            "STEP 1: Fetch/Update 10yr yfinance data (Rolling Window)"
         )
         if not ok:
             send_telegram("🚨 *TradeSage Retrain FAILED* — yfinance fetch error")
@@ -161,7 +161,7 @@ def main():
         '--ensemble',
     ]
 
-    ok = run_step(train_cmd, "STEP 2: Train model on 20yr yfinance data")
+    ok = run_step(train_cmd, "STEP 2: Train model on 10yr yfinance data")
     if not ok:
         send_telegram("🚨 *TradeSage Retrain FAILED* — Training error")
         sys.exit(1)

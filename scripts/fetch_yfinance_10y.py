@@ -60,37 +60,42 @@ def get_symbols_from_angel_cache():
     return symbols
 
 
-def should_skip(symbol, cache_dir, days_threshold=7):
-    """Return True if cached file exists and last row is within threshold days."""
-    cache_file = cache_dir / f"{symbol}_daily.csv"
-    if not cache_file.exists():
-        return False
-
-    try:
-        # Read only last few rows for speed
-        df = pd.read_csv(cache_file, index_col='timestamp', parse_dates=True)
-        if len(df) < 200:
-            return False  # Too short, re-fetch
-        last_date = df.index[-1]
-        if pd.Timestamp.now() - last_date < timedelta(days=days_threshold):
-            return True
-    except Exception:
-        return False
-
-    return False
 
 
-def fetch_single_stock(symbol, years=20, cache_dir=YF_CACHE):
-    """Fetch one stock from yfinance and save to CSV."""
+def fetch_single_stock(symbol, years=10, cache_dir=YF_CACHE):
+    """Fetch one stock from yfinance, append to cache, and truncate to 10 years."""
     yf_symbol = f"{symbol}.NS"
     cache_file = cache_dir / f"{symbol}_daily.csv"
 
+    # Calculate exactly 10 years ago from today
+    cutoff_date = pd.Timestamp.now().normalize() - pd.DateOffset(years=years)
+
+    # Load existing cache if available
+    existing_df = None
+    fetch_period = f"{years}y"
+    
+    if cache_file.exists():
+        try:
+            existing_df = pd.read_csv(cache_file, index_col='timestamp', parse_dates=True)
+            if existing_df.index.tz is not None:
+                existing_df.index = existing_df.index.tz_localize(None)
+            # If we have existing data, we only need the recent data (e.g., 1mo) to append
+            if len(existing_df) > 100:
+                fetch_period = "1mo"
+        except Exception:
+            existing_df = None
+
     try:
         ticker = yf.Ticker(yf_symbol)
-        df = ticker.history(period=f"{years}y")
+        df = ticker.history(period=fetch_period)
 
-        if df is None or df.empty or len(df) < 100:
-            return symbol, 'failed', f"Only {len(df) if df is not None else 0} rows"
+        if df is None or df.empty:
+            if existing_df is not None:
+                # Truncate existing and resave if no new data
+                existing_df = existing_df[existing_df.index >= cutoff_date]
+                existing_df.to_csv(cache_file)
+                return symbol, 'updated_from_cache', f"{len(existing_df)} rows"
+            return symbol, 'failed', "No data returned"
 
         # Normalize columns to match Angel One schema
         df = df.reset_index()
@@ -116,6 +121,16 @@ def fetch_single_stock(symbol, years=20, cache_dir=YF_CACHE):
         # Drop zero-volume rows (partial days / bad data)
         df = df[df['volume'] > 0]
 
+        # Combine with existing if present
+        if existing_df is not None and not existing_df.empty:
+            df = pd.concat([existing_df, df])
+            # Keep the newest data for duplicate dates
+            df = df[~df.index.duplicated(keep='last')]
+            df = df.sort_index()
+
+        # Truncate to rolling 10-year window
+        df = df[df.index >= cutoff_date]
+
         if len(df) < 100:
             return symbol, 'failed', f"Only {len(df)} valid rows after cleaning"
 
@@ -128,13 +143,11 @@ def fetch_single_stock(symbol, years=20, cache_dir=YF_CACHE):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Fetch 20yr NSE data from yfinance')
-    parser.add_argument('--update', action='store_true',
-                        help='Skip symbols cached within last 7 days')
+    parser = argparse.ArgumentParser(description='Fetch 10yr NSE data from yfinance')
     parser.add_argument('--max', type=int, default=None,
                         help='Limit to N stocks')
-    parser.add_argument('--years', type=int, default=20,
-                        help='Years of history to fetch (default: 20)')
+    parser.add_argument('--years', type=int, default=10,
+                        help='Years of history to fetch/keep (default: 10)')
     parser.add_argument('--delay', type=float, default=1.0,
                         help='Delay between requests in seconds (default: 1.0)')
     args = parser.parse_args()
@@ -155,7 +168,6 @@ def main():
     print(f"  History:        {args.years} years")
     print(f"  Cache dir:      {YF_CACHE}")
     print(f"  Rate limit:     {args.delay}s between requests")
-    print(f"  Update mode:    {'ON' if args.update else 'OFF'}")
 
     downloaded = 0
     skipped = 0
@@ -165,10 +177,6 @@ def main():
     start_time = time.time()
 
     for symbol in tqdm(symbols, desc="Fetching", unit="stock"):
-        # Skip check
-        if args.update and should_skip(symbol, YF_CACHE, days_threshold=7):
-            skipped += 1
-            continue
 
         sym, status, detail = fetch_single_stock(symbol, years=args.years, cache_dir=YF_CACHE)
 
