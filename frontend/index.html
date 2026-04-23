@@ -789,7 +789,7 @@
                                 </tr>
                             </thead>
                             <tbody id="signals-body">
-                                <tr><td colspan="9" class="empty-state"><div class="icon">📡</div>Waiting for signals...</td></tr>
+                                <tr><td colspan="8" class="empty-state"><div class="icon">📡</div>Waiting for signals...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -894,6 +894,10 @@
                                     <label for="totp-secret">TOTP Secret</label>
                                     <input type="password" id="totp-secret" placeholder="Base32 encoded secret" autocomplete="off">
                                 </div>
+                                <div class="form-group">
+                                    <label for="api-key">Angel API Key</label>
+                                    <input type="password" id="api-key" placeholder="From Angel app (required if not in config/.env)" autocomplete="off">
+                                </div>
                                 <div class="form-actions">
                                     <button type="submit" class="btn-primary" id="save-btn">Save & Reconnect</button>
                                     <button type="button" class="btn-secondary" onclick="triggerRetrain()">🔄 Trigger Retrain</button>
@@ -926,9 +930,10 @@
     /* ═══════════════════════════════════════════════════════════
        TRADESAGE LIVE DASHBOARD — Client Logic v2
        ═══════════════════════════════════════════════════════════ */
-    const API_BASE = window.location.hostname === 'localhost' || window.location.protocol === 'file:' 
-        ? 'http://localhost:8000' 
-        : 'https://tradesagaai.duckdns.org';
+    const API_BASE = (() => {
+        if (window.location.protocol === 'file:') return 'http://localhost:8000';
+        return window.location.origin;
+    })();
     let allSignals = [];
 
     // ── INIT ──
@@ -1040,7 +1045,7 @@
     function renderSignalsTable(signals) {
         const tbody = document.getElementById('signals-body');
         if (!signals || signals.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="9" class="empty-state"><div class="icon">📡</div>No signals yet — scanner will populate when market opens</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8" class="empty-state"><div class="icon">📡</div>No signals yet — scanner will populate when market opens</td></tr>';
             return;
         }
         tbody.innerHTML = signals.map(s => buildSignalRow(s)).join('');
@@ -1113,7 +1118,7 @@
         btn.innerHTML = `<i class="feather-refresh-cw" style="width:12px;height:12px;display:flex;align-items:center;animation:spin 1s linear infinite;"></i> SCANNING...`;
         
         try {
-            const res = await fetch('/api/scan', { method: 'POST' });
+            const res = await fetch(`${API_BASE}/api/scan`, { method: 'POST' });
             const json = await res.json();
             if(json.status === 'success') {
                 btn.innerHTML = `<i class="feather-check" style="width:12px;height:12px;display:flex;align-items:center;"></i> SENT`;
@@ -1243,6 +1248,8 @@
             password: document.getElementById('password').value,
             totp_secret: document.getElementById('totp-secret').value,
         };
+        const apiKey = document.getElementById('api-key').value.trim();
+        if (apiKey) payload.api_key = apiKey;
 
         try {
             const res = await fetch(`${API_BASE}/api/config/angelone`, {

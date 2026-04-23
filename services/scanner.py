@@ -317,7 +317,7 @@ def generate_signal(symbol: str, df: pd.DataFrame, model_mgr: ModelManager) -> d
         prob = float(probs[0])
         pred = int(preds[0])
 
-        if pred != 1 or prob < 0.65:
+        if pred != 1 or prob < 0.55:
             return None
 
         # Calculate trade levels

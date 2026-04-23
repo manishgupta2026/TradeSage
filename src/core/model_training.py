@@ -20,6 +20,14 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
+def _xgb_device():
+    try:
+        import torch
+        return "cuda" if torch.cuda.is_available() else "cpu"
+    except ImportError:
+        return "cpu"
+
+
 class PurgedTimeSeriesSplit:
     """
     TimeSeriesSplit with a gap between train and validation to prevent leakage.
@@ -112,7 +120,7 @@ class TradingModelTrainer:
             eval_metric='auc',
             random_state=42,
             n_jobs=-1,
-            device='cuda',
+            device=_xgb_device(),
             tree_method='hist',
             verbosity=0,
         )
@@ -178,7 +186,7 @@ class TradingModelTrainer:
                     eval_metric='auc',
                     random_state=42,
                     n_jobs=-1,
-                    device='cuda',
+                    device=_xgb_device(),
                     tree_method='hist',
                     verbosity=0,
                 )
@@ -196,7 +204,7 @@ class TradingModelTrainer:
 
             return np.mean(cv_scores)
 
-        N_TRIALS = 60  # Reduced from 50 for faster turnaround; can increase
+        N_TRIALS = 25  # Reduced for VPS compatibility (3.8GB RAM)
         study = optuna.create_study(direction='maximize')
         study.optimize(objective, n_trials=N_TRIALS, show_progress_bar=False)
 

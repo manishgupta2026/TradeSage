@@ -32,7 +32,7 @@ TradeSage is a production-ready machine learning trading system optimized for th
    ```
 3. **Train Model**:
    ```bash
-   python scripts/train_colab.py --cache data_cache_yfinance --model models/tradesage_10y.pkl
+   python scripts/train.py --source yfinance --model-path models/tradesage_10y.pkl
    ```
 4. **Run Backtest**:
    ```bash

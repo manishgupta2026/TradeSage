@@ -149,6 +149,40 @@ def _find_latest_report() -> dict:
     return {}
 
 
+def _fin_scalar(field: str, raw) -> Optional[float]:
+    """Parse one financial value; invalid/missing → None. Logs rejections (no silent bad data)."""
+    if raw is None or raw == "":
+        return None
+    if isinstance(raw, bool):
+        logger.warning("portfolio: %s rejected (boolean)", field)
+        return None
+    if isinstance(raw, (int, float)):
+        v = float(raw)
+        if v != v or v in (float("inf"), float("-inf")):
+            logger.warning("portfolio: %s rejected (non-finite)", field)
+            return None
+        return v
+    if isinstance(raw, str):
+        try:
+            v = float(raw.strip())
+            if v != v or v in (float("inf"), float("-inf")):
+                logger.warning("portfolio: %s rejected (non-finite string)", field)
+                return None
+            return v
+        except ValueError:
+            logger.warning("portfolio: %s rejected (not numeric): %r", field, raw)
+            return None
+    logger.warning("portfolio: %s rejected (bad type %s)", field, type(raw).__name__)
+    return None
+
+
+def _ledger_field(row: dict, key: str) -> Optional[float]:
+    raw = row.get(key)
+    if raw is None or raw == "":
+        return None
+    return _fin_scalar(key, raw)
+
+
 # ══════════════════════════════════════════════════════════════
 #  GET /api/signals — latest signals from Redis
 # ══════════════════════════════════════════════════════════════
@@ -352,7 +386,7 @@ async def get_portfolio():
     """Read active positions from backtest_ledger.csv or positions.json."""
     active = []
     closed = []
-    total_pnl = 0.0
+    ledger_pnl = 0.0
 
     # Try positions.json first (live paper trading state from persistent data volume)
     positions_path = PROJECT_ROOT / "data" / "positions.json"
@@ -372,25 +406,67 @@ async def get_portfolio():
                         "confidence": pos.get("confidence"),
                     })
                 else:
-                    closed.append(pos)
-        except Exception:
-            pass
+                    c = dict(pos)
+                    c["symbol"] = sym
+                    closed.append(c)
+        except Exception as e:
+            logger.warning("portfolio: failed to read positions.json: %s", e)
 
-    # Also read backtest_ledger.csv for historical win rate
+    # Authoritative total_pnl (Option A): ONLY validated backtest_ledger.csv — never positions.json (no mixing).
     ledger_path = PROJECT_ROOT / "data" / "backtest_ledger.csv"
     wins, total_trades = 0, 0
+    ledger_rows_excluded_invalid = 0
     if ledger_path.exists():
         try:
             with open(ledger_path, newline="") as f:
                 reader = csv.DictReader(f)
                 for row in reader:
+                    rupees = _ledger_field(row, "pnl_rupees")
+                    pnl_pct = _ledger_field(row, "pnl_pct")
+                    if rupees is None or pnl_pct is None:
+                        ledger_rows_excluded_invalid += 1
+                        logger.warning(
+                            "portfolio: skipping ledger row (invalid numbers) symbol=%s",
+                            row.get("symbol"),
+                        )
+                        continue
                     total_trades += 1
-                    pnl = float(row.get("pnl_pct", 0) or 0)
-                    total_pnl += pnl
-                    if pnl > 0:
+                    ledger_pnl += rupees
+                    if pnl_pct > 0:
                         wins += 1
-        except Exception:
-            pass
+        except Exception as e:
+            logger.warning("portfolio: ledger read failed: %s", e)
+
+    total_pnl = round(ledger_pnl, 2)
+    total_pnl_source = "backtest_ledger"
+
+    # Enrich closed rows (positions.json): informational only — not used for total_pnl.
+    live_closed_pnl = 0.0
+    for c in closed:
+        ep = _fin_scalar("entry_price", c.get("entry_price"))
+        xp = _fin_scalar("exit_price", c.get("exit_price"))
+        sh = _fin_scalar("shares", c.get("shares"))
+        if ep is None or xp is None or sh is None:
+            c["pnl_error"] = "invalid or missing entry_price, exit_price, or shares"
+            logger.warning(
+                "portfolio: closed row %s excluded from live_closed_total_pnl (missing/invalid fields)",
+                c.get("symbol"),
+            )
+            continue
+        if ep < 0 or xp < 0 or sh <= 0:
+            c["pnl_error"] = "entry_price, exit_price, and shares must be positive for P&L"
+            logger.warning(
+                "portfolio: closed row %s excluded from live_closed_total_pnl (non-positive values)",
+                c.get("symbol"),
+            )
+            continue
+        realized = (xp - ep) * sh
+        c["realized_pnl_rupees"] = round(realized, 2)
+        c["pnl_pct_realized"] = round(((xp - ep) / ep) * 100.0, 4) if ep > 0 else None
+        live_closed_pnl += realized
+
+    invalid_trades_count = sum(1 for c in closed if c.get("pnl_error"))
+    excluded_trades_count = ledger_rows_excluded_invalid + invalid_trades_count
 
     # Use model report win rate as primary (more representative of current model)
     # Backtest ledger win rate is secondary (historical trades, may be stale)
@@ -401,11 +477,24 @@ async def get_portfolio():
     return {
         "active_count": len(active),
         "active_positions": active,
+        "closed_count": len(closed),
+        "closed_positions": closed,
+        "ledger_total_pnl": round(ledger_pnl, 2),
+        "live_closed_total_pnl": round(live_closed_pnl, 2),
+        "total_pnl": total_pnl,
+        "total_pnl_source": total_pnl_source,
+        "total_pnl_definition": (
+            "total_pnl is the sum of pnl_rupees for validated rows only in "
+            "data/backtest_ledger.csv. Live closed trades (positions.json) appear in "
+            "live_closed_total_pnl and closed_positions, not in total_pnl."
+        ),
+        "ledger_rows_excluded_invalid": ledger_rows_excluded_invalid,
+        "invalid_trades_count": invalid_trades_count,
+        "excluded_trades_count": excluded_trades_count,
         "win_rate": round(model_win_rate, 4) if model_win_rate else round(ledger_win_rate, 4),
         "ledger_win_rate": round(ledger_win_rate, 4) if total_trades > 0 else None,
         "model_win_rate": round(model_win_rate, 4) if model_win_rate else None,
         "total_trades": total_trades,
-        "total_pnl": round(total_pnl, 2),
     }
 
 
@@ -417,6 +506,7 @@ class AngelOneConfig(BaseModel):
     client_id: str
     password: str
     totp_secret: str
+    api_key: Optional[str] = None
 
 
 @app.post("/api/config/angelone")
@@ -429,12 +519,49 @@ async def save_angel_config(config: AngelOneConfig):
     config_dir = PROJECT_ROOT / "config"
     config_dir.mkdir(exist_ok=True)
     config_path = config_dir / "angel_one_config.json"
+    main_cfg = config_dir / "angel_config.json"
+
+    existing: dict = {}
+    if config_path.exists():
+        try:
+            with open(config_path) as f:
+                existing = json.load(f)
+        except Exception as e:
+            logger.warning("angel config: could not read existing %s: %s", config_path, e)
+
+    new_key = (config.api_key or "").strip() or None
+    api_key = new_key
+    if not api_key and isinstance(existing.get("api_key"), str) and existing["api_key"].strip():
+        api_key = existing["api_key"].strip()
+    if not api_key and main_cfg.exists():
+        try:
+            with open(main_cfg) as f:
+                mk = json.load(f).get("api_key")
+            if isinstance(mk, str) and mk.strip():
+                api_key = mk.strip()
+        except Exception as e:
+            logger.warning("angel config: could not read angel_config.json: %s", e)
+    if not api_key:
+        api_key = os.environ.get("ANGEL_API_KEY")
+        if api_key:
+            api_key = api_key.strip() or None
+
+    if not api_key:
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                "api_key is required and was not found: send api_key in the request body, "
+                "or set it in config/angel_config.json, an existing angel_one_config.json, "
+                "or environment variable ANGEL_API_KEY"
+            ),
+        )
 
     config_data = {
         "client_id": config.client_id,
         "password": config.password,
         "totp_token": config.totp_secret,
         "updated_at": datetime.now().isoformat(),
+        "api_key": api_key,
     }
 
     try:

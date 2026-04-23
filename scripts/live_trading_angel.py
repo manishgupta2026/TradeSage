@@ -38,7 +38,7 @@ class AngelPaperTrader:
                     model_path = p
                     break
         self.model_path = model_path or os.path.join(PROJECT_ROOT, 'models', 'tradesage_10y.pkl')
-        self.positions_file = Path(positions_file or os.path.join(PROJECT_ROOT, 'positions.json'))
+        self.positions_file = Path(positions_file or os.path.join(PROJECT_ROOT, 'data', 'positions.json'))
         
         # OPTIMIZED PARAMETERS (from backtest)
         self.default_capital = 50000  # Rs.50k

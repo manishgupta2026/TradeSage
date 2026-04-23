@@ -197,8 +197,8 @@ def run_training() -> dict:
         "--source", "cache",
         "--model-path", model_path,
         "--forward-days", "5",
-        "--threshold", "0.04",
-        "--max-drawdown", "-0.03",
+        "--threshold", "0.02",
+        "--max-drawdown", "-0.99",
         "--ensemble",
     ]
 
@@ -208,7 +208,7 @@ def run_training() -> dict:
             cwd=str(PROJECT_ROOT),
             capture_output=True,
             text=True,
-            timeout=3600,  # 1 hour max
+            timeout=7200,  # 2 hours max
         )
 
         if result.returncode != 0:
@@ -231,8 +231,8 @@ def run_training() -> dict:
             return None
 
     except subprocess.TimeoutExpired:
-        logger.error("Training timed out (1 hour)")
-        send_telegram("🚨 Retrain timed out after 1 hour")
+        logger.error("Training timed out (2 hours)")
+        send_telegram("🚨 Retrain timed out after 2 hours")
         return None
     except Exception as e:
         logger.error(f"Training error: {e}")
@@ -245,28 +245,23 @@ def run_training() -> dict:
 # ══════════════════════════════════════════════════════════════
 
 def hot_swap_model(new_model_path: str):
-    """Update the models/current.pkl symlink to point to the new model."""
+    """Update the models/current.pkl to point to the new model (copy, not symlink)."""
     current_link = PROJECT_ROOT / "models" / "current.pkl"
 
     try:
-        # Remove existing symlink/file
+        import shutil
+
+        # Remove existing file/symlink
         if current_link.exists() or current_link.is_symlink():
             current_link.unlink()
 
-        # On Windows, copy instead of symlink (symlinks require admin)
-        if sys.platform == "win32":
-            import shutil
-            shutil.copy2(new_model_path, str(current_link))
-            logger.info(f"Model copied to {current_link}")
-        else:
-            # Unix: create symlink
-            current_link.symlink_to(Path(new_model_path).resolve())
-            logger.info(f"Symlink updated: {current_link} → {new_model_path}")
+        # Always copy — symlinks break inside Docker containers
+        shutil.copy2(new_model_path, str(current_link))
+        logger.info(f"Model copied to {current_link}")
 
         # Also copy the report to all standard locations
         report_src = new_model_path.replace(".pkl", "_report.json")
         if os.path.exists(report_src):
-            import shutil
             # Copy to current_report.json (hot-swap target)
             shutil.copy2(report_src, str(PROJECT_ROOT / "models" / "current_report.json"))
             # Copy to tradesage_10y_report.json (primary report the API + frontend read)

@@ -365,6 +365,7 @@
             <div class="capital-card">
                 <div class="label">Total P&L</div>
                 <div class="value" id="total-pnl">₹0.00</div>
+                <div class="sub" id="total-pnl-source" style="font-size:0.625rem;color:var(--outline);"></div>
                 <div class="sub" id="win-rate">Win Rate: --%</div>
             </div>
         </div>
@@ -436,9 +437,10 @@
 </div>
 
 <script>
-    const API_BASE = window.location.hostname === 'localhost' || window.location.protocol === 'file:'
-        ? 'http://localhost:8000'
-        : 'https://tradesagaai.duckdns.org';
+    const API_BASE = (() => {
+        if (window.location.protocol === 'file:') return 'http://localhost:8000';
+        return window.location.origin;
+    })();
 
     const INITIAL_CAPITAL = 50000;
 
@@ -451,7 +453,7 @@
             const positions = data.active_positions || [];
             const activeCount = data.active_count || 0;
             const winRate = data.win_rate || 0;
-            const totalPnl = data.total_pnl || 0;
+            const totalPnl = typeof data.total_pnl === 'number' ? data.total_pnl : 0;
 
             // ── Update capital cards ──
             let deployed = 0;
@@ -470,6 +472,15 @@
             const pnlEl = document.getElementById('total-pnl');
             pnlEl.textContent = `₹${totalPnl.toFixed(2)}`;
             pnlEl.className = `value ${totalPnl >= 0 ? 'text-green' : 'text-red'}`;
+            const pnlSrcEl = document.getElementById('total-pnl-source');
+            if (pnlSrcEl) {
+                let t = 'total P&L = backtest ledger CSV only; live closed (JSON): ₹' +
+                    (typeof data.live_closed_total_pnl === 'number' ? data.live_closed_total_pnl.toFixed(2) : '0.00');
+                if (typeof data.excluded_trades_count === 'number' && data.excluded_trades_count > 0) {
+                    t += ' · excluded from sums: ' + data.excluded_trades_count;
+                }
+                pnlSrcEl.textContent = t;
+            }
 
             document.getElementById('win-rate').textContent = `Win Rate: ${(winRate * 100).toFixed(1)}%`;
 
@@ -515,12 +526,69 @@
                 tbody.innerHTML = rows;
             }
 
+            // ── Closed trades ──
+            const closed = data.closed_positions || [];
+            document.getElementById('closed-badge').textContent = `${closed.length} Closed`;
+            const closedBody = document.getElementById('closed-tbody');
+            if (closed.length === 0) {
+                closedBody.innerHTML = `<tr><td colspan="8" class="empty-state">
+                    <div class="icon">📭</div>
+                    No closed trades yet
+                </td></tr>`;
+            } else {
+                let crows = '';
+                closed.forEach(c => {
+                    const sym = c.symbol || '--';
+                    const err = c.pnl_error || '';
+                    const reason = c.exit_reason || '--';
+                    let dur = '--';
+                    if (c.entry_date && c.exit_date) {
+                        const d0 = new Date(c.entry_date);
+                        const d1 = new Date(c.exit_date);
+                        if (!isNaN(d0) && !isNaN(d1)) dur = Math.max(0, Math.round((d1 - d0) / 86400000)) + 'd';
+                    }
+                    const epN = Number(c.entry_price);
+                    const xpN = Number(c.exit_price);
+                    const shN = Number(c.shares);
+                    const epDisp = (c.entry_price != null && c.entry_price !== '' && !isNaN(epN)) ? `₹${epN.toFixed(2)}` : 'ERR';
+                    const xpDisp = (c.exit_price != null && c.exit_price !== '' && !isNaN(xpN)) ? `₹${xpN.toFixed(2)}` : 'ERR';
+                    const shDisp = (c.shares != null && c.shares !== '' && !isNaN(shN)) ? String(c.shares) : 'ERR';
+                    let pnlRsStr, pnlPctStr, pnlClass;
+                    if (err) {
+                        const esc = String(err).replace(/</g, '&lt;').replace(/"/g, '&quot;');
+                        pnlRsStr = `<span class="text-red" title="${esc}">ERROR</span>`;
+                        pnlPctStr = `<span class="text-red" title="${esc}">ERROR</span>`;
+                        pnlClass = '';
+                    } else if (typeof c.realized_pnl_rupees === 'number') {
+                        const pr = c.realized_pnl_rupees;
+                        pnlRsStr = `₹${pr.toFixed(2)}`;
+                        pnlPctStr = c.pnl_pct_realized != null ? `${Number(c.pnl_pct_realized).toFixed(2)}%` : '—';
+                        pnlClass = pr >= 0 ? 'text-green' : 'text-red';
+                    } else {
+                        pnlRsStr = '<span class="text-red">ERROR</span>';
+                        pnlPctStr = '<span class="text-red">ERROR</span>';
+                        pnlClass = '';
+                    }
+                    crows += `<tr>
+                        <td><span class="symbol-name">${sym}</span></td>
+                        <td>${epDisp}</td>
+                        <td>${xpDisp}</td>
+                        <td>${shDisp}</td>
+                        <td class="${pnlClass || ''}">${pnlRsStr}</td>
+                        <td class="${pnlClass || ''}">${pnlPctStr}</td>
+                        <td>${reason}</td>
+                        <td>${dur}</td>
+                    </tr>`;
+                });
+                closedBody.innerHTML = crows;
+            }
+
             // ── Timestamp ──
             const now = new Date();
             document.getElementById('last-update').textContent = now.toLocaleTimeString('en-IN', {hour12: false});
 
         } catch(e) {
-            console.warn('Portfolio load error:', e);
+            console.error('Portfolio load error:', e);
         }
     }
 
