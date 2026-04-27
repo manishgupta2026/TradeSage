@@ -294,7 +294,7 @@ class ModelManager:
 def generate_signal(symbol: str, df: pd.DataFrame, model_mgr: ModelManager) -> dict:
     """Run feature engineering + model prediction for a single stock."""
     try:
-        df = model_mgr.engineer.add_technical_indicators(df)
+        df = model_mgr.engineer.add_technical_indicators(df, symbol=symbol)
         df.dropna(inplace=True)
 
         if df.empty or len(df) < 10:
@@ -684,28 +684,55 @@ def run_scanner():
 
                 if signal_count > 0:
                     summary_msg = f"📊 *TradeSage Scan Complete*\n"
-                    summary_msg += f"✅ Found {signal_count} signals ({high_conf_count} HIGH)\n\n"
+                    summary_msg += f"🕐 {datetime.now(IST).strftime('%d %b %Y, %I:%M %p IST')}\n"
+                    summary_msg += f"✅ Found *{signal_count} signals* ({high_conf_count} HIGH)\n"
+                    summary_msg += f"━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
                     
                     top_signals = local_signals[:5]
-                    for s in top_signals:
+                    for idx, s in enumerate(top_signals, 1):
                         sym = s['symbol']
                         entry = s['entry_price']
                         tp = s['take_profit']
                         sl = s['stop_loss']
-                        tv = s.get('fundamentals', {}).get('tv_rating', 'N/A')
-                        news = s.get('fundamentals', {}).get('sentiment', 'N/A')
+                        rr = s.get('r_r_ratio', 0)
                         prob = s['probability'] * 100
                         conf = '🔥' if prob >= 75 else '🟢'
                         
-                        summary_msg += f"{conf} *{sym}* - {s['signal']}\n"
-                        summary_msg += f"▸ Entry: ₹{entry:.2f} | P: {prob:.1f}%\n"
-                        summary_msg += f"▸ TP: ₹{tp:.2f} | SL: ₹{sl:.2f}\n"
-                        summary_msg += f"▸ TV: {tv} | News: {news}\n\n"
+                        # Fundamental data
+                        fund = s.get('fundamentals', {})
+                        tv = fund.get('tv_rating', 'N/A')
+                        news = fund.get('sentiment', 'N/A')
+                        pe = fund.get('pe_ratio', 'N/A')
                         
-                    summary_msg += f"⏱ Time: {elapsed:.0f}s | Errors: {errors}"
+                        summary_msg += f"{conf} *#{idx} {sym}* — {s['signal']}\n"
+                        summary_msg += f"   📈 Entry: ₹{entry:,.2f} | Prob: {prob:.0f}%\n"
+                        summary_msg += f"   🎯 TP: ₹{tp:,.2f} | 🛑 SL: ₹{sl:,.2f}\n"
+                        summary_msg += f"   ⚖️ R:R = {rr} | P/E: {pe}\n"
+                        summary_msg += f"   📊 TV: {tv} | 📰 News: {news}\n\n"
+                    
+                    if new_trades_count > 0:
+                        summary_msg += f"━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                        summary_msg += f"🤖 *Auto Paper Trades: {new_trades_count} new positions opened*\n\n"
+                        for sig in local_signals:
+                            if sig['probability'] >= 0.75:
+                                sym = sig['symbol']
+                                if sym in positions and positions[sym].get('status') == 'open':
+                                    shares = positions[sym].get('shares', 0)
+                                    cost = shares * sig['entry_price']
+                                    summary_msg += f"   💰 {sym}: {shares} shares @ ₹{sig['entry_price']:,.2f} (₹{cost:,.0f})\n"
+                    
+                    summary_msg += f"\n⏱ Scan time: {elapsed:.0f}s | Stocks scanned: {successful_fetches} | Errors: {errors}"
                     send_telegram(summary_msg)
                 else:
-                    # Still notify that scan completed with no signals
+                    # Notify that scan completed with no signals
+                    no_sig_msg = (
+                        f"📊 *TradeSage Scan Complete*\n"
+                        f"🕐 {datetime.now(IST).strftime('%d %b %Y, %I:%M %p IST')}\n\n"
+                        f"⚪ No qualifying signals this cycle\n"
+                        f"📉 Scanned {successful_fetches} stocks in {elapsed:.0f}s\n"
+                        f"🔄 Next scan in {SCAN_INTERVAL_MINUTES} min"
+                    )
+                    send_telegram(no_sig_msg)
                     logger.info("No qualifying signals this scan cycle")
 
                 # Wait for next scan interval

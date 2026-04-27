@@ -1,6 +1,7 @@
 import yfinance as yf
 import logging
 from tradingview_ta import TA_Handler, Interval, Exchange
+from src.core.screener_scraper import ScreenerScraper
 
 # NLP dependencies
 import os
@@ -28,25 +29,36 @@ class FundamentalAnalyzer:
                 self.nlp = pipeline("text-classification", model="ProsusAI/finbert")
             except Exception as e:
                 logger.warning(f"Could not load FinBERT: {e}")
-                HAS_NLP = False
+                
+        self.screener = ScreenerScraper()
 
-    def fetch_yfinance_fundamentals(self, symbol: str):
-        """Fetch strict fundamental ratios"""
+    def fetch_fundamentals(self, symbol: str):
+        """Fetch strict fundamental ratios using Screener.in with yfinance fallback"""
+        # Try Screener first
+        try:
+            scr_data = self.screener.fetch_fundamentals(symbol)
+            if scr_data and len(scr_data) > 0:
+                logger.debug(f"Fetched fundamentals from Screener for {symbol}")
+                return scr_data
+        except Exception as e:
+            logger.debug(f"Screener fetch failed for {symbol}: {e}")
+            
+        # Fallback to yfinance
         try:
             yf_symbol = f"{symbol}.NS"
             stock = yf.Ticker(yf_symbol)
             info = stock.info
             
+            logger.debug(f"Fetched fundamentals from yfinance fallback for {symbol}")
             return {
-                'forwardPE': info.get('forwardPE'),
-                'trailingPE': info.get('trailingPE'),
+                'pe_ratio': info.get('trailingPE') or info.get('forwardPE'),
                 'priceToBook': info.get('priceToBook'),
-                'returnOnEquity': info.get('returnOnEquity'),
-                'debtToEquity': info.get('debtToEquity'),
-                'profitMargins': info.get('profitMargins'),
+                'roe': info.get('returnOnEquity') * 100 if info.get('returnOnEquity') else None,
+                'debt_to_equity': info.get('debtToEquity'),
+                'profit_margins': info.get('profitMargins'),
             }
         except Exception as e:
-            logger.debug(f"Failed to fetch fundamentals for {symbol}: {e}")
+            logger.debug(f"Failed to fetch fundamentals for {symbol} on fallback: {e}")
             return {}
 
     def fetch_tradingview_rating(self, symbol: str):
@@ -112,7 +124,7 @@ class FundamentalAnalyzer:
         """
         logger.info(f"   [Fundamental Scan] evaluating {symbol}...")
         
-        fundamentals = self.fetch_yfinance_fundamentals(symbol)
+        fundamentals = self.fetch_fundamentals(symbol)
         tv_rating = self.fetch_tradingview_rating(symbol)
         sentiment = self.analyze_news_sentiment(symbol)
         
@@ -129,19 +141,29 @@ class FundamentalAnalyzer:
             logger.info("      ❌ Rejected: Extremely negative news cycle.")
             return False
             
-        # 3. Reject severely overvalued or unprofitable fundamental garbage
-        trailing_pe = fundamentals.get('trailingPE')
-        profit_margin = fundamentals.get('profitMargins')
+        # 3. Reject based on stringent fundamental rules
+        pe_ratio = fundamentals.get('pe_ratio')
+        debt_to_equity = fundamentals.get('debt_to_equity')
+        promoter_holding = fundamentals.get('promoter_holding')
+        profit_margins = fundamentals.get('profit_margins')
         
-        if trailing_pe is not None and trailing_pe < 0:
+        if pe_ratio is not None and pe_ratio < 0:
             logger.info("      ❌ Rejected: Company has negative P/E (Loss making).")
             return False
             
-        if trailing_pe is not None and trailing_pe > 150:
-             logger.info("      ❌ Rejected: Company is severely overvalued (P/E > 150).")
+        if pe_ratio is not None and pe_ratio > 150:
+             logger.info(f"      ❌ Rejected: Company is severely overvalued (P/E {pe_ratio} > 150).")
              return False
              
-        if profit_margin is not None and profit_margin < -0.05:
+        if debt_to_equity is not None and debt_to_equity > 2.0:
+            logger.info(f"      ❌ Rejected: High debt to equity ratio ({debt_to_equity:.2f} > 2.0).")
+            return False
+            
+        if promoter_holding is not None and promoter_holding < 25.0:
+            logger.info(f"      ❌ Rejected: Low promoter holding ({promoter_holding}% < 25%). Poor skin in the game.")
+            return False
+            
+        if profit_margins is not None and profit_margins < -0.05:
             logger.info("      ❌ Rejected: Negative profit margins.")
             return False
             
@@ -149,5 +171,5 @@ class FundamentalAnalyzer:
         return {
             "tv_rating": tv_rating if tv_rating else "N/A",
             "sentiment": sentiment['label'],
-            "pe_ratio": round(trailing_pe, 1) if trailing_pe is not None else "N/A"
+            "pe_ratio": round(pe_ratio, 1) if pe_ratio is not None else "N/A"
         }

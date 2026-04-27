@@ -1,27 +1,47 @@
 """
-TradeSage - Feature Engineering v4
-~95-100 ML-ready features: raw indicators → normalized derivations → regime flags → market context
+TradeSage - Feature Engineering v5
+~105+ ML-ready features: raw indicators → normalized derivations → regime flags → market context → fundamentals
 Fixes SMA_200 mismatch (now true 200-bar), 52-week window (now 252 bars).
+v5: Adds fundamental features (P/E, ROE, ROCE, Debt/Equity, Shareholding) via Obscura+Screener.
 """
 
 import pandas as pd
 import numpy as np
+import logging
 from ta import trend, momentum, volatility, volume
 import warnings
 warnings.filterwarnings('ignore')
+
+logger = logging.getLogger(__name__)
 
 
 class FeatureEngineer:
     """Generate technical indicators and ML-ready features."""
 
     def __init__(self):
-        pass
+        self._scraper = None  # Lazy-loaded ScreenerScraper
+        self._fund_cache = {}  # {symbol: {metric: value}}
 
-    def add_technical_indicators(self, df, index_df=None):
+    def _get_scraper(self):
+        """Lazy-load ScreenerScraper to avoid import errors when Obscura isn't installed."""
+        if self._scraper is None:
+            try:
+                from src.core.screener_scraper import ScreenerScraper
+                self._scraper = ScreenerScraper()
+            except Exception as e:
+                logger.warning(f"Could not load ScreenerScraper: {e}")
+        return self._scraper
+
+    def set_fundamentals_cache(self, cache: dict):
+        """Pre-load fundamentals cache from batch fetch (used by training pipeline)."""
+        self._fund_cache = cache
+
+    def add_technical_indicators(self, df, index_df=None, symbol=None):
         """
-        Full feature pipeline: raw indicators -> normalized derived features -> regime flags.
-        Returns DataFrame with ~95-100 ML-ready features.
+        Full feature pipeline: raw indicators -> normalized derived features -> regime flags -> fundamentals.
+        Returns DataFrame with ~105+ ML-ready features.
         Optionally accepts index_df (e.g. Nifty50) for market context features.
+        If symbol is provided, injects fundamental features from Screener.in.
         """
         df = self._clean_df(df)
         df = self._add_moving_averages(df)
@@ -36,6 +56,8 @@ class FeatureEngineer:
         df = self._add_feature_interactions(df)
         if index_df is not None:
             df = self._add_market_context(df, index_df)
+        if symbol is not None:
+            df = self._add_fundamental_features(df, symbol)
         return df
 
     # ------------------------------------------------------------------ #
@@ -422,6 +444,54 @@ class FeatureEngineer:
             return df
         except Exception:
             return df
+
+    def _add_fundamental_features(self, df, symbol):
+        """
+        Inject fundamental metrics as constant features across all rows for a stock.
+        These are slow-changing values (updated quarterly) so a constant column is correct.
+        Features: fund_pe, fund_roe, fund_roce, fund_debt_equity, fund_promoter,
+                  fund_fii, fund_dii, fund_div_yield
+        """
+        # Default all to 0 (neutral)
+        fund_features = {
+            'fund_pe': 0.0,
+            'fund_roe': 0.0,
+            'fund_roce': 0.0,
+            'fund_debt_equity': 0.0,
+            'fund_promoter': 0.0,
+            'fund_fii': 0.0,
+            'fund_dii': 0.0,
+            'fund_div_yield': 0.0,
+        }
+
+        # Try to get fundamentals from pre-loaded cache first
+        data = self._fund_cache.get(symbol)
+
+        # Only fall back to live scraper if NO bulk cache was pre-loaded
+        # (i.e., during live scanning, not during training)
+        if data is None and not self._fund_cache:
+            scraper = self._get_scraper()
+            if scraper:
+                try:
+                    data = scraper.fetch_fundamentals(symbol, use_cache=True)
+                except Exception as e:
+                    logger.debug(f"Failed to fetch fundamentals for {symbol}: {e}")
+                    data = {}
+
+        if data:
+            fund_features['fund_pe'] = float(data.get('pe_ratio', 0) or 0)
+            fund_features['fund_roe'] = float(data.get('roe', 0) or 0)
+            fund_features['fund_roce'] = float(data.get('roce', 0) or 0)
+            fund_features['fund_debt_equity'] = float(data.get('debt_to_equity', 0) or 0)
+            fund_features['fund_promoter'] = float(data.get('promoter_holding', 0) or 0)
+            fund_features['fund_fii'] = float(data.get('fii_holding', 0) or 0)
+            fund_features['fund_dii'] = float(data.get('dii_holding', 0) or 0)
+            fund_features['fund_div_yield'] = float(data.get('dividend_yield', 0) or 0)
+
+        for col, val in fund_features.items():
+            df[col] = val
+
+        return df
 
     # ------------------------------------------------------------------ #
     #  TARGET + TRAINING DATA                                              #

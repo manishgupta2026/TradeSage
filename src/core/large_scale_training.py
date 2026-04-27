@@ -99,10 +99,26 @@ class LargeScaleTrainer:
         """
         Prepare training data from multiple stocks.
         Now passes index_df through for market context features.
+        v5: Also injects fundamental features via Obscura+Screener batch fetch.
         """
         print(f"\n🔧 Engineering features for {len(stock_data_dict)} stocks...")
         if max_rows_per_stock:
             print(f"   (capped at {max_rows_per_stock} most-recent rows per stock)")
+
+        # ── Batch-fetch fundamentals for all symbols (uses disk cache) ──
+        fund_cache = {}
+        try:
+            from src.core.screener_scraper import ScreenerScraper
+            scraper = ScreenerScraper()
+            symbols_list = list(stock_data_dict.keys())
+            print(f"\n📊 Fetching fundamentals for {len(symbols_list)} stocks (cached where possible)...")
+            fund_cache = scraper.fetch_fundamentals_batch(symbols_list, delay=1.0)
+            print(f"   ✓ Got fundamentals for {len(fund_cache)}/{len(symbols_list)} stocks")
+        except Exception as e:
+            print(f"   ⚠ Fundamental fetch failed: {e} — training continues with technical features only")
+
+        # Pre-load the cache into the FeatureEngineer
+        self.engineer.set_fundamentals_cache(fund_cache)
 
         all_data = []
         failed_stocks = []
@@ -113,7 +129,9 @@ class LargeScaleTrainer:
                     if max_rows_per_stock and len(df) > max_rows_per_stock:
                         df = df.iloc[-max_rows_per_stock:]
 
-                    df_features = self.engineer.add_technical_indicators(df, index_df=index_df)
+                    df_features = self.engineer.add_technical_indicators(
+                        df, index_df=index_df, symbol=symbol
+                    )
 
                     df_final = self.engineer.create_target_variable(
                         df_features,
@@ -144,9 +162,11 @@ class LargeScaleTrainer:
 
         X, y, feature_names = self.engineer.prepare_training_data(combined_df)
 
+        # Count how many fundamental features made it in
+        fund_feats = [f for f in feature_names if f.startswith('fund_')]
         print(f"\n✓ Successfully processed: {len(all_data)}/{len(stock_data_dict)} stocks")
         print(f"✓ Total training samples: {len(X):,}")
-        print(f"✓ Features: {len(feature_names)}")
+        print(f"✓ Features: {len(feature_names)} ({len(fund_feats)} fundamental)")
         print(f"✓ Positive samples: {y.sum():,} ({y.mean()*100:.1f}%)")
         print(f"✓ Date range: {combined_df.index.min()} to {combined_df.index.max()}")
 

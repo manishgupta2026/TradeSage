@@ -282,10 +282,14 @@ class TradingModelTrainer:
             print("  Training meta-learner...")
             meta_features = self._get_ensemble_features(X_val)
             self.meta_learner = LogisticRegression(max_iter=1000, random_state=42)
-            self.meta_learner.fit(meta_features, y_val)
-            meta_probs = self.meta_learner.predict_proba(meta_features)[:, 1]
-            meta_auc = roc_auc_score(y_val, meta_probs)
-            print(f"    Meta-learner val AUC: {meta_auc:.4f}")
+            try:
+                self.meta_learner.fit(meta_features, y_val)
+                meta_probs = self.meta_learner.predict_proba(meta_features)[:, 1]
+                meta_auc = roc_auc_score(y_val, meta_probs)
+                print(f"    Meta-learner val AUC: {meta_auc:.4f}")
+            except ValueError as e:
+                print(f"    Meta-learner training skipped (likely single class in y_val): {e}")
+                self.meta_learner = None
         else:
             self.meta_learner = None
 

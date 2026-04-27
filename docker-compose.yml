@@ -33,10 +33,14 @@ services:
       - REDIS_URL=redis://redis:6379
     volumes:
       - ./data_cache_angel:/app/data_cache_angel
+      - ./data_cache_yfinance:/app/data_cache_yfinance
       - ./models:/app/models
       - ./logs:/app/logs
       - ./data:/app/data
       - ./config:/app/config
+      - ./scripts:/app/scripts
+      - ./src:/app/src
+      - ./services:/app/services
       - ./frontend:/app/frontend
     depends_on:
       redis:
@@ -58,10 +62,14 @@ services:
       - REDIS_URL=redis://redis:6379
     volumes:
       - ./data_cache_angel:/app/data_cache_angel
+      - ./data_cache_yfinance:/app/data_cache_yfinance
       - ./models:/app/models
       - ./logs:/app/logs
       - ./data:/app/data
       - ./config:/app/config
+      - ./scripts:/app/scripts
+      - ./src:/app/src
+      - ./services:/app/services
     depends_on:
       redis:
         condition: service_healthy
@@ -79,10 +87,14 @@ services:
       - REDIS_URL=redis://redis:6379
     volumes:
       - ./data_cache_angel:/app/data_cache_angel
+      - ./data_cache_yfinance:/app/data_cache_yfinance
       - ./models:/app/models
       - ./logs:/app/logs
       - ./data:/app/data
       - ./config:/app/config
+      - ./scripts:/app/scripts
+      - ./src:/app/src
+      - ./services:/app/services
     depends_on:
       redis:
         condition: service_healthy

@@ -124,8 +124,10 @@ def main():
                         help='Forward days (default: 5)')
     parser.add_argument('--max-drawdown', type=float, default=-0.99,
                         help='Max drawdown filter (default: -0.99 = disabled)')
-    parser.add_argument('--max-rows-per-stock', type=int, default=5000,
-                        help='Max rows per stock (default: 5000 for 20yr data)')
+    parser.add_argument('--max-rows-per-stock', type=int, default=2500,
+                        help='Max rows per stock (default: 2500 for 10yr data)')
+    parser.add_argument('--max-stocks', type=int, default=500,
+                        help='Max stocks to train on (default: 500, prevents OOM on 4GB VPS)')
     args = parser.parse_args()
 
     start_time = datetime.now()
@@ -158,6 +160,7 @@ def main():
         '--forward-days', str(args.forward_days),
         '--max-drawdown', str(args.max_drawdown),
         '--max-rows-per-stock', str(args.max_rows_per_stock),
+        '--max-stocks', str(args.max_stocks),
         '--ensemble',
     ]
 
@@ -181,6 +184,9 @@ def main():
     win_rate = report.get('test_metrics', {}).get('predicted_win_rate', 0)
     stocks = report.get('stocks_trained', 0)
     elapsed = report.get('elapsed_seconds', 0)
+    n_features = report.get('features', 0)
+    top_feats = report.get('top_features', [])
+    fund_feat_count = sum(1 for f in top_feats if f.get('feature', '').startswith('fund_'))
 
     logger.info(f"\n{'='*70}")
     logger.info(f"  AUC GATE EVALUATION")
@@ -190,6 +196,16 @@ def main():
     logger.info(f"  Precision:  {precision:.4f}")
     logger.info(f"  Win Rate:   {win_rate*100:.1f}%")
     logger.info(f"  Stocks:     {stocks}")
+    logger.info(f"  Features:   {n_features}")
+
+    # Format top features for Telegram
+    top_feats_str = ""
+    if top_feats:
+        for i, f in enumerate(top_feats[:5], 1):
+            name = f.get('feature', '?')
+            imp = f.get('importance', 0)
+            icon = '🔬' if name.startswith('fund_') else '📊'
+            top_feats_str += f"   {icon} {i}. {name} ({imp:.4f})\n"
 
     # ── Step 4: AUC Gate ──
     if test_auc >= 0.70:
@@ -206,14 +222,18 @@ def main():
         logger.info(f"  Copied {REPORT_PATH.name} → {CURRENT_REPORT.name}")
 
         msg = (
-            f"✅ *TradeSage Retrain Complete*\n\n"
+            f"✅ *TradeSage Retrain Complete*\n"
+            f"🕐 {datetime.now().strftime('%d %b %Y, %I:%M %p')}\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
             f"📊 Test AUC: *{test_auc:.4f}*\n"
             f"🎯 Precision: {precision:.4f}\n"
             f"💰 Win Rate: {win_rate*100:.1f}%\n"
-            f"📈 Stocks: {stocks}\n"
+            f"📈 Stocks: {stocks} | Features: {n_features}\n"
             f"⏱️ Time: {elapsed/60:.0f} min\n\n"
-            f"✅ *Deployed: YES* → `current.pkl`"
         )
+        if top_feats_str:
+            msg += f"🏆 *Top 5 Features:*\n{top_feats_str}\n"
+        msg += f"✅ *Deployed: YES* → `current.pkl`"
         send_telegram(msg)
 
     elif test_auc >= 0.65:
@@ -221,10 +241,16 @@ def main():
         logger.info(f"\n  ⚠️ AUC {test_auc:.4f} >= 0.65 but < 0.70 — NOT DEPLOYING")
 
         msg = (
-            f"⚠️ *TradeSage Retrain*\n\n"
+            f"⚠️ *TradeSage Retrain*\n"
+            f"🕐 {datetime.now().strftime('%d %b %Y, %I:%M %p')}\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
             f"📊 Test AUC: *{test_auc:.4f}*\n"
             f"🎯 Precision: {precision:.4f}\n"
-            f"📈 Stocks: {stocks}\n\n"
+            f"📈 Stocks: {stocks} | Features: {n_features}\n\n"
+        )
+        if top_feats_str:
+            msg += f"🏆 *Top 5 Features:*\n{top_feats_str}\n"
+        msg += (
             f"⚠️ *Below 0.70 gate — Not deployed*\n"
             f"Old model remains active."
         )
@@ -235,9 +261,11 @@ def main():
         logger.info(f"\n  🚨 AUC {test_auc:.4f} < 0.65 — INVESTIGATE LABELS")
 
         msg = (
-            f"🚨 *TradeSage Retrain — LOW AUC*\n\n"
+            f"🚨 *TradeSage Retrain — LOW AUC*\n"
+            f"🕐 {datetime.now().strftime('%d %b %Y, %I:%M %p')}\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
             f"📊 Test AUC: *{test_auc:.4f}*\n"
-            f"📈 Stocks: {stocks}\n\n"
+            f"📈 Stocks: {stocks} | Features: {n_features}\n\n"
             f"🚨 *Investigate label quality*\n"
             f"Possible issues: threshold, forward\\_days, data quality"
         )
