@@ -1,61 +1,57 @@
-# TradeSage AI: 10-Year Indian Stock Market Trading System 📈🤖
+# TradeSage AI: Autonomous 24/7 Live Trading Engine 📈🤖
 
-TradeSage is a production-ready machine learning trading system optimized for the Indian Stock Market (NSE). It evaluates 10 years of historical data to predict high-probability swing trades.
-
-## 🚀 Recent Performance (Verified)
-- **Net Profit**: +28.77% (Rs. 2.87L on 10L capital)
-- **Win Rate**: 45.47%
-- **Dataset**: 10 years of OHLCV data (~3.2 million rows)
-- **Model**: Memory-optimized XGBoost
+TradeSage is a professional-grade, autonomous machine learning trading system optimized for the Indian Stock Market (NSE). It combines 10 years of historical intelligence with real-time Angel One API execution, AI-driven news sentiment, and TradingView conviction filtering.
 
 ---
 
-## 🛠️ Quick Start
+## 🔥 V3 Production Features
+The system is now fully stabilized for live paper-trading on a production VPS:
 
-### Option 1: Google Colab (Recommended)
-1. Open [TradeSage_Colab.ipynb](TradeSage_Colab.ipynb) directly in VS Code or upload it to Google Colab.
-2. Run the cells to:
-   - Install dependencies.
-   - Fetch 10 years of data for 2000+ stocks.
-   - Train the memory-optimized model.
-
-### Option 2: Local Setup
-1. **Initialize Virtual Env**:
-   ```bash
-   python -m venv venv
-   venv\Scripts\activate
-   pip install -r requirements.txt
-   ```
-2. **Fetch 10y Dataset**:
-   ```bash
-   python scripts/fetch_yfinance_10y.py
-   ```
-3. **Train Model**:
-   ```bash
-   python scripts/train.py --source yfinance --model-path models/tradesage_10y.pkl
-   ```
-4. **Run Backtest**:
-   ```bash
-   python scripts/backtest_angel_one.py
-   ```
+- **Live Angel One P&L Tracking**: Integrates directly with the Angel One ticker for millisecond-accurate Mark-to-Market (MTM) P&L updates.
+- **AI Conviction Engine**:
+  - **FinBERT News Sentiment**: Real-time news scraping and AI-driven sentiment analysis (±0.1 strict bullish/bearish classification).
+  - **TradingView Consensus**: Aggregated "Strong Buy" signals from 26 technical indicators.
+- **Penny Stock Protection**: Strict algorithmic filters ignore any asset under **₹50** or with low liquidity (**<1L volume**).
+- **Accurate Entry Sync**: Fetches real-time LTP at the exact second of entry to eliminate stale "yesterday-close" pricing errors.
+- **24/7 Autonomous Operation**: Containerized Docker stack running a background scanner, real-time FastAPI backend, and daily auto-training.
 
 ---
 
-## 📂 Project Structure
-- `src/core/`: Contains the "Brains" (Feature Engineering & Model Training).
-- `scripts/`: Operational scripts for fetching, training, and backtesting.
-- `models/`: Pre-trained models and performance reports.
-- `data/`: Watchlists and symbols (e.g., `nse_top_3000_angel.json`).
+## 🚀 Performance & Architecture
+- **Verified Strategy**: +28.77% Net Profit (Rs. 2.87L on 10L simulated capital).
+- **Big Data**: Trained on **3.2 million+ rows** of 10-year OHLCV data.
+- **Model**: Optimized XGBoost with daily rolling-window retraining.
+- **Infrastructure**: Hosted on DigitalOcean VPS with DuckDNS (SSL) and Nginx reverse proxy.
 
 ---
 
-## 🔧 Memory Optimization
-This system is uniquely designed to handle **3 million+ rows** on consumer hardware (8-16GB RAM) by:
-- Automatically downcasting `float64` to `float32`.
-- Aggressive garbage collection (`gc.collect`) during data stitching.
-- Multi-threaded fetching to bypass API rate limits.
+## 📂 System Components
+- **`services/scanner.py`**: The "Heart" — scans 3000+ stocks every 15 mins.
+- **`api/main.py`**: The "Bridge" — streams real-time signals via SSE and calculates live P&L.
+- **`src/core/fundamental_analyzer.py`**: The "Brain" — computes AI sentiment and conviction scores.
+- **`frontend/`**: The "Face" — High-fidelity, dark-themed dashboard for real-time portfolio monitoring.
+
+---
+
+## 🛠️ Operational Commands (VPS)
+
+### Start Everything
+```bash
+docker-compose up -d --build
+```
+
+### Manual Market Scan
+```bash
+# Triggers an immediate technical and fundamental scan
+python scripts/manual_scan.py
+```
+
+### View Live Logs
+```bash
+docker logs -f tradesage-scanner
+```
 
 ---
 
 ## ⚠️ Disclaimer
-Educational purposes only. This system uses paper trading simulations. Do not trade real capital without extensive testing and clinical risk management.
+Educational purposes only. This system uses paper trading simulations. Do not trade real capital without extensive testing and clinical risk management. TradeSage is not a financial advisor.
