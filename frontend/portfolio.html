@@ -389,6 +389,8 @@
                         <th>Symbol</th>
                         <th>Shares</th>
                         <th>Entry Price</th>
+                        <th>Live Price</th>
+                        <th>Live P&L</th>
                         <th>Stop Loss</th>
                         <th>Take Profit</th>
                         <th>TV Rating</th>
@@ -461,10 +463,15 @@
 
             // ── Update capital cards ──
             let deployed = 0;
+            let activeLivePnl = 0;
             positions.forEach(p => {
                 deployed += (p.entry_price || 0) * (p.shares || 0);
+                activeLivePnl += (p.live_pnl_rs || 0);
             });
-            const available = INITIAL_CAPITAL - deployed;
+            // Total portfolio value = Initial + Combined Realized PNL + Active Live PNL
+            // Available cash = Initial + Realized - Deployed
+            const realizedPnl = typeof data.live_closed_total_pnl === 'number' ? data.live_closed_total_pnl : 0;
+            const available = INITIAL_CAPITAL + realizedPnl - deployed;
 
             document.getElementById('deployed-capital').textContent = `₹${deployed.toLocaleString('en-IN', {maximumFractionDigits: 0})}`;
             document.getElementById('deployed-pct').textContent = `${((deployed / INITIAL_CAPITAL) * 100).toFixed(1)}% allocated`;
@@ -473,17 +480,14 @@
             document.getElementById('active-sub').textContent = activeCount > 0 ? `${activeCount} live trade${activeCount > 1 ? 's' : ''}` : 'No open trades';
             document.getElementById('active-badge').textContent = `${activeCount} Open`;
 
+            // Total P&L now comes pre-calculated from API (realized + unrealized MTM)
             const pnlEl = document.getElementById('total-pnl');
             pnlEl.textContent = `₹${totalPnl.toFixed(2)}`;
             pnlEl.className = `value ${totalPnl >= 0 ? 'text-green' : 'text-red'}`;
             const pnlSrcEl = document.getElementById('total-pnl-source');
             if (pnlSrcEl) {
-                let t = 'total P&L = backtest ledger CSV only; live closed (JSON): ₹' +
-                    (typeof data.live_closed_total_pnl === 'number' ? data.live_closed_total_pnl.toFixed(2) : '0.00');
-                if (typeof data.excluded_trades_count === 'number' && data.excluded_trades_count > 0) {
-                    t += ' · excluded from sums: ' + data.excluded_trades_count;
-                }
-                pnlSrcEl.textContent = t;
+                const unrealizedPnl = typeof data.unrealized_pnl === 'number' ? data.unrealized_pnl : activeLivePnl;
+                pnlSrcEl.textContent = `MTM: ₹${unrealizedPnl.toFixed(2)} | Realized: ₹${realizedPnl.toFixed(2)}`;
             }
 
             document.getElementById('win-rate').textContent = `Win Rate: ${(winRate * 100).toFixed(1)}%`;
@@ -511,11 +515,17 @@
                     const confColor = confPct >= 75 ? 'var(--green)' : (confPct >= 50 ? 'var(--yellow)' : 'var(--red)');
 
                     const entryDate = p.entry_date ? p.entry_date.split('T')[0] : '--';
+                    const cp = p.current_price || p.entry_price || 0;
+                    const livePnlRs = p.live_pnl_rs || 0;
+                    const livePnlPct = p.live_pnl_pct || 0;
+                    const pnlClass = livePnlRs >= 0 ? 'text-green' : 'text-red';
 
                     rows += `<tr>
                         <td><span class="symbol-name">${p.symbol}</span></td>
                         <td>${p.shares}</td>
                         <td>₹${(p.entry_price || 0).toFixed(2)}</td>
+                        <td>₹${cp.toFixed(2)}</td>
+                        <td class="${pnlClass}">₹${livePnlRs.toFixed(2)} (${livePnlPct.toFixed(2)}%)</td>
                         <td class="text-red">₹${(p.stop_loss || 0).toFixed(2)}</td>
                         <td class="text-green">₹${(p.take_profit || 0).toFixed(2)}</td>
                         <td><span class="fund-badge ${tvClass}">${tv}</span></td>

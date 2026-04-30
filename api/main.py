@@ -404,6 +404,7 @@ async def get_portfolio():
                         "take_profit": pos.get("take_profit"),
                         "entry_date": pos.get("entry_date"),
                         "confidence": pos.get("confidence"),
+                        "fundamentals": pos.get("fundamentals", {}),
                     })
                 else:
                     c = dict(pos)
@@ -412,7 +413,63 @@ async def get_portfolio():
         except Exception as e:
             logger.warning("portfolio: failed to read positions.json: %s", e)
 
-    # Authoritative total_pnl (Option A): ONLY validated backtest_ledger.csv — never positions.json (no mixing).
+    # Fetch real-time prices via Angel One LTP API (primary) with yfinance fallback
+    if active:
+        symbols_needed = [p['symbol'] for p in active]
+        live_prices = {}  # {symbol: ltp}
+
+        # PRIMARY: Angel One ltpData — true real-time LTP
+        try:
+            from src.angel.angel_one_api import AngelOneAPI
+            config_path = PROJECT_ROOT / "config" / "angel_config.json"
+            alt_config = PROJECT_ROOT / "config" / "angel_one_config.json"
+            cfg = str(alt_config if alt_config.exists() else config_path)
+            
+            angel_api = AngelOneAPI(cfg)
+            live_prices = angel_api.get_ltp_batch(symbols_needed)
+            logger.info(f"Angel One LTP: fetched {len(live_prices)}/{len(symbols_needed)} prices")
+            angel_api.logout()
+        except Exception as e:
+            logger.warning(f"Angel One LTP failed, falling back to yfinance: {e}")
+
+        # FALLBACK: yfinance for any symbols Angel One couldn't fetch
+        missing = [s for s in symbols_needed if s not in live_prices]
+        if missing:
+            try:
+                import yfinance as yf
+                yf_symbols = [f"{s}.NS" for s in missing]
+                data = yf.download(yf_symbols, period="1d", progress=False)
+                if len(missing) == 1:
+                    cp = float(data['Close'].iloc[-1])
+                    if cp > 0:
+                        live_prices[missing[0]] = cp
+                else:
+                    for sym, yf_sym in zip(missing, yf_symbols):
+                        try:
+                            cp = float(data['Close'][yf_sym].iloc[-1])
+                            if cp > 0:
+                                live_prices[sym] = cp
+                        except Exception:
+                            pass
+                logger.info(f"yfinance fallback: fetched {len(live_prices) - len([s for s in symbols_needed if s not in live_prices])} additional prices")
+            except Exception as e:
+                logger.error(f"yfinance fallback also failed: {e}")
+
+        # Apply live prices to positions
+        for p in active:
+            sym = p['symbol']
+            cp = live_prices.get(sym)
+            if cp is not None and cp > 0:
+                p["current_price"] = round(cp, 2)
+                p["live_pnl_rs"] = round((cp - p["entry_price"]) * p["shares"], 2)
+                p["live_pnl_pct"] = round(((cp - p["entry_price"]) / p["entry_price"]) * 100, 2)
+            else:
+                p["current_price"] = p["entry_price"]  # fallback
+                p["live_pnl_rs"] = 0
+                p["live_pnl_pct"] = 0
+
+    # We no longer mix backtest_ledger.csv into the LIVE paper trading P&L.
+    # The Live P&L should start from ₹0.00 and only reflect actual paper trades.
     ledger_path = PROJECT_ROOT / "data" / "backtest_ledger.csv"
     wins, total_trades = 0, 0
     ledger_rows_excluded_invalid = 0
@@ -421,24 +478,18 @@ async def get_portfolio():
             with open(ledger_path, newline="") as f:
                 reader = csv.DictReader(f)
                 for row in reader:
-                    rupees = _ledger_field(row, "pnl_rupees")
                     pnl_pct = _ledger_field(row, "pnl_pct")
-                    if rupees is None or pnl_pct is None:
+                    if pnl_pct is None:
                         ledger_rows_excluded_invalid += 1
-                        logger.warning(
-                            "portfolio: skipping ledger row (invalid numbers) symbol=%s",
-                            row.get("symbol"),
-                        )
                         continue
                     total_trades += 1
-                    ledger_pnl += rupees
                     if pnl_pct > 0:
                         wins += 1
         except Exception as e:
             logger.warning("portfolio: ledger read failed: %s", e)
 
-    total_pnl = round(ledger_pnl, 2)
-    total_pnl_source = "backtest_ledger"
+    total_pnl = 0.0 # Force 0 for live paper portfolio base
+    total_pnl_source = "live_paper_only"
 
     # Enrich closed rows (positions.json): informational only — not used for total_pnl.
     live_closed_pnl = 0.0
@@ -468,6 +519,13 @@ async def get_portfolio():
     invalid_trades_count = sum(1 for c in closed if c.get("pnl_error"))
     excluded_trades_count = ledger_rows_excluded_invalid + invalid_trades_count
 
+    # Calculate unrealized P&L from active positions
+    unrealized_pnl = sum(p.get("live_pnl_rs", 0) for p in active)
+
+    # Total P&L = Realized (closed trades) + Unrealized (active MTM)
+    total_pnl = round(live_closed_pnl + unrealized_pnl, 2)
+    total_pnl_source = "realized_plus_mtm"
+
     # Use model report win rate as primary (more representative of current model)
     # Backtest ledger win rate is secondary (historical trades, may be stale)
     ledger_win_rate = wins / total_trades if total_trades > 0 else 0
@@ -479,14 +537,14 @@ async def get_portfolio():
         "active_positions": active,
         "closed_count": len(closed),
         "closed_positions": closed,
-        "ledger_total_pnl": round(ledger_pnl, 2),
+        "realized_pnl": round(live_closed_pnl, 2),
+        "unrealized_pnl": round(unrealized_pnl, 2),
         "live_closed_total_pnl": round(live_closed_pnl, 2),
         "total_pnl": total_pnl,
         "total_pnl_source": total_pnl_source,
         "total_pnl_definition": (
-            "total_pnl is the sum of pnl_rupees for validated rows only in "
-            "data/backtest_ledger.csv. Live closed trades (positions.json) appear in "
-            "live_closed_total_pnl and closed_positions, not in total_pnl."
+            "total_pnl = realized (closed trades P&L) + unrealized (active positions MTM). "
+            "Prices sourced from Angel One LTP API."
         ),
         "ledger_rows_excluded_invalid": ledger_rows_excluded_invalid,
         "invalid_trades_count": invalid_trades_count,

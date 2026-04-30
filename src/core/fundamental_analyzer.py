@@ -62,7 +62,10 @@ class FundamentalAnalyzer:
             return {}
 
     def fetch_tradingview_rating(self, symbol: str):
-        """Hit TradingView API for 26-indicator consensus rating"""
+        """
+        Hit TradingView API for 26-indicator consensus rating.
+        Returns a dict with recommendation, buy/sell/neutral counts, and a weighted score.
+        """
         try:
             handler = TA_Handler(
                 symbol=symbol,
@@ -71,16 +74,39 @@ class FundamentalAnalyzer:
                 interval=Interval.INTERVAL_1_DAY
             )
             analysis = handler.get_analysis()
-            # Returns 'STRONG_BUY', 'BUY', 'NEUTRAL', 'SELL', 'STRONG_SELL'
-            return analysis.summary.get('RECOMMENDATION')
+            summary = analysis.summary
+            
+            recommendation = summary.get('RECOMMENDATION', 'UNKNOWN')
+            buy_count = summary.get('BUY', 0)
+            sell_count = summary.get('SELL', 0)
+            neutral_count = summary.get('NEUTRAL', 0)
+            total = buy_count + sell_count + neutral_count
+            
+            # Weighted score: -1.0 (strong sell) to +1.0 (strong buy)
+            if total > 0:
+                weighted_score = round((buy_count - sell_count) / total, 3)
+            else:
+                weighted_score = 0.0
+            
+            return {
+                'recommendation': recommendation,
+                'buy': buy_count,
+                'sell': sell_count,
+                'neutral': neutral_count,
+                'score': weighted_score,  # -1.0 to +1.0
+            }
         except Exception as e:
             logger.debug(f"TradingView fetch failed for {symbol}: {e}")
-            return "UNKNOWN"
+            return {
+                'recommendation': 'UNKNOWN',
+                'buy': 0, 'sell': 0, 'neutral': 0,
+                'score': 0.0,
+            }
 
     def analyze_news_sentiment(self, symbol: str):
         """Scrape latest 5 news headlines from Yahoo and pass through FinBERT"""
         if not self.nlp:
-            return {'score': 0, 'label': 'NEUTRAL', 'confidence': 0}
+            return {'score': 0, 'label': 'NO_NLP', 'confidence': 0, 'headlines_found': 0}
             
         try:
             yf_symbol = f"{symbol}.NS"
@@ -88,9 +114,16 @@ class FundamentalAnalyzer:
             news = stock.news
             
             if not news:
-                return {'score': 0, 'label': 'NEUTRAL', 'confidence': 0}
+                # No news = NO_DATA, NOT neutral (important distinction)
+                return {'score': 0, 'label': 'NO_DATA', 'confidence': 0, 'headlines_found': 0}
                 
-            headlines = [article['title'] for article in news[:5]]
+            headlines = [article.get('content', {}).get('title', article.get('title', '')) for article in news[:5]]
+            headlines = [h for h in headlines if h]  # Filter out empty ones
+            
+            if not headlines:
+                return {'score': 0, 'label': 'NO_DATA', 'confidence': 0, 'headlines_found': 0}
+            
+            logger.debug(f"Sentiment headlines for {symbol}: {headlines}")
             results = self.nlp(headlines)
             
             # Map FinBERT labels to scores
@@ -101,35 +134,97 @@ class FundamentalAnalyzer:
                 total_score += score_map.get(res['label'], 0) * res['score']
                 
             avg_score = total_score / len(headlines)
+            avg_confidence = sum([r['score'] for r in results]) / len(results)
             
-            if avg_score > 0.2:
+            # Tighter thresholds: ±0.1 instead of ±0.2 (anti-neutral bias)
+            if avg_score > 0.1:
                 final_label = 'POSITIVE'
-            elif avg_score < -0.2:
+            elif avg_score < -0.1:
                 final_label = 'NEGATIVE'
             else:
                 final_label = 'NEUTRAL'
                 
             return {
-                'score': avg_score,
+                'score': round(avg_score, 4),
                 'label': final_label,
-                'confidence': sum([r['score'] for r in results]) / len(results)
+                'confidence': round(avg_confidence, 4),
+                'headlines_found': len(headlines),
             }
         except Exception as e:
             logger.debug(f"Sentiment analysis failed for {symbol}: {e}")
-            return {'score': 0, 'label': 'NEUTRAL', 'confidence': 0}
+            return {'score': 0, 'label': 'NO_DATA', 'confidence': 0, 'headlines_found': 0}
 
-    def evaluate_candidate(self, symbol: str) -> bool:
+    def compute_composite_score(self, tv_data: dict, sentiment_data: dict, fundamentals: dict) -> dict:
         """
-        The Master Filter. Returns True if the stock survives Fundamental scraping.
+        Produce a single 0-100 conviction score combining:
+        - TradingView Rating (40%)
+        - News Sentiment (30%)
+        - Fundamental Health (30%)
+        """
+        # TV Score: convert -1..+1 to 0..100
+        tv_score = (tv_data.get('score', 0) + 1) * 50  # 0 to 100
+        
+        # Sentiment Score: convert -1..+1 to 0..100
+        sent_raw = sentiment_data.get('score', 0)
+        if sentiment_data.get('label') in ('NO_DATA', 'NO_NLP'):
+            sent_score = 50  # Neutral default when no data
+        else:
+            sent_score = (sent_raw + 1) * 50
+        
+        # Fundamental Score (basic health check)
+        fund_score = 50  # Default neutral
+        pe = fundamentals.get('pe_ratio')
+        roe = fundamentals.get('roe')
+        debt = fundamentals.get('debt_to_equity')
+        
+        if pe is not None:
+            if 0 < pe <= 25:
+                fund_score += 15
+            elif 25 < pe <= 50:
+                fund_score += 5
+            elif pe > 100:
+                fund_score -= 15
+        
+        if roe is not None:
+            if roe > 15:
+                fund_score += 15
+            elif roe > 10:
+                fund_score += 5
+        
+        if debt is not None:
+            if debt < 0.5:
+                fund_score += 10
+            elif debt > 2.0:
+                fund_score -= 15
+        
+        fund_score = max(0, min(100, fund_score))
+        
+        # Weighted composite
+        composite = round(tv_score * 0.4 + sent_score * 0.3 + fund_score * 0.3, 1)
+        composite = max(0, min(100, composite))
+        
+        return {
+            'composite_score': composite,
+            'tv_component': round(tv_score, 1),
+            'sentiment_component': round(sent_score, 1),
+            'fundamental_component': round(fund_score, 1),
+        }
+
+    def evaluate_candidate(self, symbol: str):
+        """
+        The Master Filter. Returns a dict with enriched data if the stock survives,
+        or False if it should be rejected.
         """
         logger.info(f"   [Fundamental Scan] evaluating {symbol}...")
         
         fundamentals = self.fetch_fundamentals(symbol)
-        tv_rating = self.fetch_tradingview_rating(symbol)
+        tv_data = self.fetch_tradingview_rating(symbol)
         sentiment = self.analyze_news_sentiment(symbol)
         
-        logger.info(f"      TV Rating: {tv_rating}")
-        logger.info(f"      Sentiment: {sentiment['label']} ({sentiment['score']:.2f})")
+        tv_rating = tv_data.get('recommendation', 'UNKNOWN')
+        
+        logger.info(f"      TV Rating: {tv_rating} (B:{tv_data.get('buy',0)} S:{tv_data.get('sell',0)} N:{tv_data.get('neutral',0)} score:{tv_data.get('score',0)})")
+        logger.info(f"      Sentiment: {sentiment['label']} (score:{sentiment['score']:.3f}, headlines:{sentiment.get('headlines_found',0)})")
         
         # 1. Reject if TradingView consensus is bearish
         if tv_rating in ['SELL', 'STRONG_SELL']:
@@ -166,10 +261,19 @@ class FundamentalAnalyzer:
         if profit_margins is not None and profit_margins < -0.05:
             logger.info("      ❌ Rejected: Negative profit margins.")
             return False
+        
+        # Compute composite conviction score
+        composite = self.compute_composite_score(tv_data, sentiment, fundamentals)
             
-        logger.info("      ✅ Passed Fundamental Screen!")
+        logger.info(f"      ✅ Passed Fundamental Screen! Conviction: {composite['composite_score']}/100")
         return {
             "tv_rating": tv_rating if tv_rating else "N/A",
+            "tv_score": tv_data.get('score', 0),
+            "tv_buy": tv_data.get('buy', 0),
+            "tv_sell": tv_data.get('sell', 0),
             "sentiment": sentiment['label'],
-            "pe_ratio": round(pe_ratio, 1) if pe_ratio is not None else "N/A"
+            "sentiment_score": sentiment.get('score', 0),
+            "sentiment_confidence": sentiment.get('confidence', 0),
+            "pe_ratio": round(pe_ratio, 1) if pe_ratio is not None else "N/A",
+            "conviction_score": composite['composite_score'],
         }

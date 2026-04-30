@@ -308,6 +308,14 @@ def generate_signal(symbol: str, df: pd.DataFrame, model_mgr: ModelManager) -> d
         if current_price <= 0 or current_volume <= 0:
             return None
 
+        # Quality filter: skip penny stocks and illiquid instruments
+        MIN_STOCK_PRICE = 50   # ₹50 minimum to avoid penny stock manipulation
+        MIN_VOLUME = 100000    # 1 lakh minimum daily volume for liquidity
+        if current_price < MIN_STOCK_PRICE:
+            return None
+        if current_volume < MIN_VOLUME:
+            return None
+
         atr = float(latest.get("atr", current_price * 0.02))
         if atr <= 0:
             atr = current_price * 0.02
@@ -537,6 +545,16 @@ def run_scanner():
                         continue
 
                     successful_fetches += 1
+                    
+                    # INJECT LIVE LTP: Replace the stale 'close' of the latest daily candle with TRUE real-time price
+                    try:
+                        live_ltp = angel_mgr.api.get_ltp(symbol)
+                        if live_ltp and live_ltp > 0:
+                            df.iloc[-1, df.columns.get_loc('close')] = live_ltp
+                            logger.debug(f"Updated {symbol} with live LTP: {live_ltp}")
+                    except Exception as e:
+                        logger.warning(f"Could not fetch live LTP for {symbol}: {e}")
+
                     signal = generate_signal(symbol, df, model_mgr)
                     if signal:
                         local_signals.append(signal)
@@ -647,15 +665,44 @@ def run_scanner():
                         positions = json.load(f)
                 except Exception:
                     positions = {}
+                # Calculate deployed capital
+                deployed_capital = 0
+                for p in positions.values():
+                    if p.get('status') == 'open':
+                        deployed_capital += p.get('entry_price', 0) * p.get('shares', 0)
+                available_cash = 50000 - deployed_capital
                 
                 new_trades_count = 0
                 for sig in local_signals:
                     if sig['probability'] >= 0.75:
+                        if available_cash <= 2000:
+                            logger.info(f"Skipping {sig['symbol']} - Insufficient capital (₹{available_cash:,.2f})")
+                            continue
+                            
                         sym = sig['symbol']
                         if sym not in positions or positions[sym].get('status') != 'open':
                             entry = sig['entry_price']
-                            shares = int(10000 // entry) if entry > 0 else 0
+                            sl = sig['stop_loss']
+                            
+                            # ATR-Based Risk Allocation (Target exactly ₹1000 risk per trade)
+                            risk_per_trade = 1000
+                            distance = entry - sl
+                            if distance <= 0:
+                                distance = entry * 0.05  # Fallback to 5% SL distance
+                                
+                            target_shares = int(risk_per_trade // distance)
+                            required_capital = target_shares * entry
+                            
+                            # Cap allocation to ₹10,000 max per trade AND available cash
+                            max_capital = min(10000, available_cash)
+                            if required_capital > max_capital:
+                                required_capital = max_capital
+                                target_shares = int(required_capital // entry)
+                                
+                            shares = target_shares if entry > 0 else 0
+                            
                             if shares > 0:
+                                available_cash -= (shares * entry) # Deduct for next iterations
                                 positions[sym] = {
                                     "status": "open",
                                     "entry_price": entry,

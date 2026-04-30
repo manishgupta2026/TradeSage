@@ -64,9 +64,13 @@ desktop.ini
 
 # Trading Bot Specific
 cache/
+data_cache/
 data_cache_angel/
 data_cache_yfinance/
 catboost_info/
+bin/
+data/*.csv
+data/strategies/*_strategies.json
 
 # Temporary Files
 *.tmp

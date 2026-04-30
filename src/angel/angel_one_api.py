@@ -1,12 +1,16 @@
 """
 Angel One API Wrapper Module
-Handles authentication, TOTP generation, and session management.
+Handles authentication, TOTP generation, session management,
+and real-time LTP (Last Traded Price) fetching.
 """
 
 import json
 import os
 import pyotp
 import logging
+import requests
+from pathlib import Path
+from datetime import datetime, timedelta
 from SmartApi import SmartConnect
 
 # Setup logging
@@ -25,6 +29,8 @@ class AngelOneAPI:
         self.smartApi = None
         self.auth_token = None
         self.api_config = None
+        self._symbol_to_token = {}   # Cached instrument token map
+        self._token_map_loaded = False
         
         self.load_credentials()
         self.connect()
@@ -77,7 +83,88 @@ class AngelOneAPI:
         if self.smartApi is None:
             self.connect()
         return self.smartApi
+
+    # ──────────────────────────────────────────────
+    #  INSTRUMENT TOKEN MAP (for LTP lookups)
+    # ──────────────────────────────────────────────
+
+    def _ensure_token_map(self):
+        """Load instrument master and build symbol→token map (cached)."""
+        if self._token_map_loaded:
+            return
+
+        # Try loading from a local cache file first
+        cache_dir = Path(self.config_path).resolve().parent.parent / "data_cache_angel"
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        cache_file = cache_dir / "instruments.json"
+
+        instruments = []
+        if cache_file.exists():
+            file_age = datetime.now() - datetime.fromtimestamp(cache_file.stat().st_mtime)
+            if file_age < timedelta(days=1):
+                try:
+                    with open(cache_file, "r", encoding="utf-8") as f:
+                        instruments = json.load(f)
+                except Exception:
+                    pass
+
+        if not instruments:
+            try:
+                url = "https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json"
+                resp = requests.get(url, timeout=30)
+                if resp.status_code == 200:
+                    instruments = resp.json()
+                    with open(cache_file, "w", encoding="utf-8") as f:
+                        json.dump(instruments, f)
+                    logger.info(f"Downloaded {len(instruments)} instruments from Angel One")
+            except Exception as e:
+                logger.warning(f"Failed to download instrument master: {e}")
+
+        for instr in instruments:
+            if instr.get("exch_seg") == "NSE" and instr.get("symbol", "").endswith("-EQ"):
+                base = instr["symbol"].replace("-EQ", "")
+                self._symbol_to_token[base] = instr.get("token")
+
+        self._token_map_loaded = True
+        logger.info(f"Instrument token map: {len(self._symbol_to_token)} NSE equities")
+
+    def get_ltp(self, symbol: str) -> float:
+        """
+        Fetch real-time Last Traded Price for a single NSE equity symbol.
+        Returns the LTP as a float, or None on failure.
         
+        Example: get_ltp("RELIANCE") → 2854.50
+        """
+        self._ensure_token_map()
+        token = self._symbol_to_token.get(symbol)
+        if not token:
+            logger.debug(f"LTP: symbol {symbol} not found in instrument map")
+            return None
+
+        try:
+            data = self.smartApi.ltpData("NSE", f"{symbol}-EQ", token)
+            if data and data.get("status") and data.get("data"):
+                ltp = data["data"].get("ltp")
+                if ltp is not None:
+                    return float(ltp)
+            logger.debug(f"LTP response for {symbol}: {data}")
+            return None
+        except Exception as e:
+            logger.warning(f"LTP fetch failed for {symbol}: {e}")
+            return None
+
+    def get_ltp_batch(self, symbols: list) -> dict:
+        """
+        Fetch LTP for multiple symbols. Returns {symbol: ltp_float}.
+        Symbols that fail are excluded from the result.
+        """
+        result = {}
+        for sym in symbols:
+            ltp = self.get_ltp(sym)
+            if ltp is not None:
+                result[sym] = ltp
+        return result
+
     def logout(self):
         """Terminate the session securely"""
         if self.smartApi:
@@ -96,6 +183,14 @@ if __name__ == "__main__":
     try:
         api = AngelOneAPI(config_file)
         print("\nAPI connection test successful!")
+        
+        # Test LTP
+        test_symbols = ["RELIANCE", "TCS", "INFY"]
+        ltps = api.get_ltp_batch(test_symbols)
+        print(f"\nLTP results:")
+        for sym, price in ltps.items():
+            print(f"  {sym}: ₹{price:.2f}")
+            
     except FileNotFoundError:
         print(f"\n❌ Error: '{config_file}' not found.")
         print("Please copy 'angel_config_template.json' to 'angel_config.json' and fill in your details.")
