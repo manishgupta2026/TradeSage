@@ -171,6 +171,18 @@
         .text-green { color: var(--green); }
         .text-red { color: var(--red); }
         .text-yellow { color: var(--yellow); }
+        .symbol-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            cursor: pointer;
+            transition: color var(--transition), text-shadow var(--transition);
+        }
+        .symbol-link:hover {
+            color: var(--secondary);
+            text-shadow: 0 0 8px rgba(74, 248, 227, 0.3);
+        }
 
         /* ── SECTION ── */
         .section {
@@ -311,12 +323,22 @@
         }
 
         /* ── RESPONSIVE ── */
+        .hamburger { display:none;background:none;border:none;color:var(--on-surface);font-size:1.5rem;cursor:pointer;padding:0.25rem;line-height:1; }
         @media (max-width: 900px) {
             .capital-grid { grid-template-columns: repeat(2, 1fr); }
+            .hamburger { display: block; }
+            .header-left { width: 100%; justify-content: space-between; }
+            .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--surface-container-low); padding: 0.75rem 1rem; flex-direction: column; gap: 0.75rem; z-index: 99; border-bottom: 1px solid var(--outline-variant); margin-left: 0 !important; }
+            .nav-links.open { display: flex; }
+            .section { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            .data-table { min-width: 700px; }
         }
         @media (max-width: 600px) {
-            .capital-grid { grid-template-columns: 1fr; }
-            .main { padding: 1rem; }
+            .capital-grid { grid-template-columns: 1fr 1fr; gap: 0.625rem; }
+            .capital-card .value { font-size: 1.25rem; }
+            .main { padding: 0.75rem; }
+            .header { padding: 0.5rem 0.75rem; }
+            .logo { font-size: 1.125rem; }
         }
     </style>
 </head>
@@ -330,9 +352,10 @@
                 <div class="logo-icon"></div>
                 TradeSage
             </div>
+            <button class="hamburger" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle menu">☰</button>
             <nav class="nav-links">
                 <a href="/">Dashboard</a>
-                <a href="/static/portfolio.html" class="active">Paper Portfolio</a>
+                <a href="/portfolio" class="active">Paper Portfolio</a>
             </nav>
         </div>
         <div class="header-right">
@@ -521,7 +544,7 @@
                     const pnlClass = livePnlRs >= 0 ? 'text-green' : 'text-red';
 
                     rows += `<tr>
-                        <td><span class="symbol-name">${p.symbol}</span></td>
+                        <td><a href="/stock?symbol=${p.symbol}" class="symbol-link">${p.symbol}</a></td>
                         <td>${p.shares}</td>
                         <td>₹${(p.entry_price || 0).toFixed(2)}</td>
                         <td>₹${cp.toFixed(2)}</td>
@@ -584,7 +607,7 @@
                         pnlClass = '';
                     }
                     crows += `<tr>
-                        <td><span class="symbol-name">${sym}</span></td>
+                        <td><a href="/stock?symbol=${sym}" class="symbol-link">${sym}</a></td>
                         <td>${epDisp}</td>
                         <td>${xpDisp}</td>
                         <td>${shDisp}</td>
@@ -608,7 +631,7 @@
 
     // Initial load + auto-refresh every 30s
     loadPortfolio();
-    setInterval(loadPortfolio, 30000);
+    setInterval(loadPortfolio, 60000);
 </script>
 </body>
 </html>

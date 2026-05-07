@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 """
-TradeSage Daily Retrainer
+TradeSage Daily Data Fetcher
 Runs daily at 16:30 IST (after market close), Mon–Fri.
 1. Fetches today's OHLCV for all stocks via Angel One
 2. Appends to existing data_cache_angel/ CSVs
-3. Runs training pipeline
-4. Compares new AUC vs current — hot-swaps model via symlink if improved
-5. Sends Telegram notification on success/degradation
+3. Sends Telegram notification on success
 
 Usage:
     python services/retrainer.py                # Runs on schedule (16:30 IST)
@@ -274,84 +272,34 @@ def hot_swap_model(new_model_path: str):
 
 
 # ══════════════════════════════════════════════════════════════
-#  RETRAIN PIPELINE
+#  DATA FETCH PIPELINE
 # ══════════════════════════════════════════════════════════════
 
 def retrain_pipeline():
-    """Full retrain pipeline: fetch → train → compare → swap."""
+    """Daily pipeline: fetch data only."""
     logger.info("=" * 70)
-    logger.info("  TRADESAGE DAILY RETRAINER")
+    logger.info("  TRADESAGE DAILY DATA FETCHER")
     logger.info(f"  {datetime.now(IST).strftime('%Y-%m-%d %H:%M:%S IST')}")
     logger.info("=" * 70)
 
     start_time = time.time()
 
-    # 1. Get current AUC baseline
-    current_auc = get_current_auc()
-
-    # 2. Fetch today's data
+    # 1. Fetch today's data
     updated_count = fetch_todays_data()
-    if updated_count == 0:
-        logger.warning("No data updated — skipping retrain")
-        send_telegram("⚠️ Retrainer: No new data to train on — skipping")
-        return
-
-    # 3. Run training
-    report = run_training()
-    if report is None:
-        return
-
-    new_auc = report.get("test_metrics", {}).get("auc_score", 0)
-    new_model_path = report.get("model_path", "")
-    total_samples = report.get("total_samples", 0)
     elapsed = time.time() - start_time
 
-    logger.info(f"\n{'─' * 60}")
-    logger.info(f"  Current AUC: {current_auc:.4f}")
-    logger.info(f"  New AUC:     {new_auc:.4f}")
-    logger.info(f"  Samples:     {total_samples:,}")
-    logger.info(f"  Time:        {elapsed / 60:.1f} minutes")
-    logger.info(f"{'─' * 60}")
+    if updated_count == 0:
+        logger.warning("No data updated — stopping")
+        send_telegram("⚠️ Data Fetcher: No new data fetched today")
+        return
 
-    # 4. Compare and decide
-    DEGRADATION_THRESHOLD = 0.02
-
-    if new_auc >= current_auc - DEGRADATION_THRESHOLD:
-        # Accept new model
-        logger.info("✅ New model accepted — hot-swapping...")
-        hot_swap_model(new_model_path)
-
-        deployed = "YES" if new_auc >= current_auc - DEGRADATION_THRESHOLD else "MARGINAL"
-        send_telegram(
-            f"✅ *Retrained Successfully*\n"
-            f"AUC: {new_auc:.4f} (was {current_auc:.4f})\n"
-            f"Samples: {total_samples:,}\n"
-            f"Deployed: {deployed}\n"
-            f"Time: {elapsed / 60:.1f}m"
-        )
-    else:
-        # Model degraded — keep old
-        logger.warning(
-            f"⚠️ Model degraded: {current_auc:.4f} → {new_auc:.4f} "
-            f"(drop > {DEGRADATION_THRESHOLD}). Keeping previous model."
-        )
-        send_telegram(
-            f"⚠️ *Retrain Degraded*\n"
-            f"Old AUC: {current_auc:.4f} → New: {new_auc:.4f}\n"
-            f"Keeping previous model.\n"
-            f"Investigate data quality or label drift."
-        )
-
-        # Clean up the rejected model to save space
-        try:
-            if os.path.exists(new_model_path):
-                os.remove(new_model_path)
-                report_path = new_model_path.replace(".pkl", "_report.json")
-                if os.path.exists(report_path):
-                    os.remove(report_path)
-                logger.info("Rejected model files cleaned up")
-        except Exception:
-            pass
+    logger.info(f"✅ Data fetch complete in {elapsed / 60:.1f} minutes")
+    send_telegram(
+        f"✅ *Daily Data Fetched Successfully*\n"
+        f"Updated: {updated_count} stocks\n"
+        f"Time: {elapsed / 60:.1f}m\n"
+        f"Ready for local training!"
+    )
 
 
 # ══════════════════════════════════════════════════════════════

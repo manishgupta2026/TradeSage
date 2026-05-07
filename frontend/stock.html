@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeSage | Stock Details</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Manrope:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#000;--surface:#0a0a0a;--surface-low:#0f0f0f;--surface-mid:#141414;--surface-high:#1a1a1a;--surface-highest:#242424;--surface-bright:#2d2d2d;--primary:#c799ff;--primary-ctr:#440080;--secondary:#4af8e3;--tertiary:#f7bf1e;--error:#ff6e84;--on-surface:#fff;--on-surface-var:#a3a3a3;--outline:#404040;--outline-var:rgba(72,72,71,.15);--red:#ff4d4d;--yellow:#facc15;--green:#4ade80;--cyan:#22d3ee;--purple:#c084fc;--font-h:'Space Grotesk',sans-serif;--font-b:'Manrope',sans-serif;--font-m:'JetBrains Mono','Consolas',monospace;--r:16px;--rs:8px;--t:200ms cubic-bezier(.4,0,.2,1)}
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:var(--font-b);background:var(--bg);color:var(--on-surface);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+        ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--surface-bright);border-radius:3px}
+        a{color:var(--primary);text-decoration:none}
+        .header{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.5rem;background:var(--surface-low);position:sticky;top:0;z-index:100;border-bottom:1px solid var(--surface-high)}
+        .header-left{display:flex;align-items:center;gap:1.5rem}
+        .logo{font-family:var(--font-h);font-weight:800;font-size:1.5rem;display:flex;align-items:center;gap:.5rem}
+        .logo-icon{width:28px;height:28px;background:linear-gradient(135deg,var(--primary),var(--primary-ctr));border-radius:6px}
+        .nav-links{display:flex;gap:1.5rem}
+        .nav-links a{font-size:.875rem;font-weight:500;color:var(--on-surface-var);transition:color var(--t)}
+        .nav-links a:hover{color:var(--on-surface)}
+        .back-btn{display:flex;align-items:center;gap:.375rem;background:var(--surface-high);border:1px solid var(--outline-var);color:var(--on-surface);padding:.375rem .75rem;border-radius:var(--rs);cursor:pointer;font-size:.75rem;font-weight:500;transition:all var(--t)}
+        .back-btn:hover{background:var(--surface-bright);border-color:var(--primary)}
+        .main{max-width:1400px;margin:0 auto;padding:1.5rem;display:flex;flex-direction:column;gap:1.25rem}
+        .stock-hero{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+        .stock-id h1{font-family:var(--font-h);font-size:2rem;font-weight:700;line-height:1.1}
+        .stock-id .sub{color:var(--on-surface-var);font-size:.8125rem;margin-top:.25rem}
+        .stock-id .sector-tag{display:inline-block;background:rgba(199,153,255,.1);color:var(--primary);padding:.125rem .5rem;border-radius:100px;font-size:.6875rem;font-weight:600;margin-top:.375rem}
+        .price-block{text-align:right}
+        .price-block .price{font-family:var(--font-m);font-size:2.25rem;font-weight:700}
+        .price-block .change{font-size:.875rem;font-weight:600}
+        .status-badge{display:inline-block;padding:.25rem .75rem;border-radius:100px;font-size:.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+        .status-open{background:rgba(74,222,128,.15);color:var(--green)}
+        .status-closed{background:rgba(255,77,77,.15);color:var(--red)}
+        .status-none{background:rgba(163,163,163,.15);color:var(--on-surface-var)}
+        .grid{display:grid;gap:1.25rem}
+        .grid-2{grid-template-columns:1fr 1fr}
+        .grid-3{grid-template-columns:1fr 1fr 1fr}
+        .card{background:rgba(20,20,20,.6);backdrop-filter:blur(20px);border:1px solid var(--outline-var);border-radius:var(--r);padding:1.25rem;transition:border-color var(--t),box-shadow var(--t)}
+        .card:hover{border-color:rgba(199,153,255,.2);box-shadow:0 4px 24px rgba(199,153,255,.06)}
+        .card-title{font-family:var(--font-h);font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--secondary);margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem}
+        .metric-row{display:flex;justify-content:space-between;align-items:center;padding:.375rem 0;border-bottom:1px solid var(--outline-var)}
+        .metric-row:last-child{border-bottom:none}
+        .metric-label{font-size:.75rem;color:var(--on-surface-var)}
+        .metric-value{font-family:var(--font-m);font-size:.8125rem;font-weight:600}
+        .text-green{color:var(--green)}.text-red{color:var(--red)}.text-yellow{color:var(--yellow)}.text-cyan{color:var(--cyan)}.text-purple{color:var(--purple)}
+        .conviction-bar{width:100%;height:8px;background:var(--surface-highest);border-radius:4px;overflow:hidden;margin-top:.5rem}
+        .conviction-fill{height:100%;border-radius:4px;transition:width .6s ease}
+        .tv-chart-wrap{border-radius:var(--r);overflow:hidden;background:var(--surface-mid);min-height:400px}
+        .data-table{width:100%;border-collapse:collapse;font-size:.8125rem}
+        .data-table thead th{text-align:left;padding:.625rem 1rem;font-size:.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--outline);background:var(--bg);border-bottom:1px solid var(--surface-high);white-space:nowrap}
+        .data-table tbody td{padding:.625rem 1rem;border-bottom:1px solid var(--outline-var);font-family:var(--font-m);font-size:.8125rem}
+        .data-table tbody tr:hover{background:var(--surface-high)}
+        .skeleton{background:linear-gradient(90deg,var(--surface-high) 25%,var(--surface-highest) 50%,var(--surface-high) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--rs);height:1rem;width:60%}
+        .skeleton.lg{height:2rem;width:40%}
+        @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+        .fade-in{animation:fadeIn .3s ease-out forwards}
+        .tv-badge{display:inline-flex;align-items:center;gap:.375rem;padding:.25rem .625rem;border-radius:100px;font-size:.6875rem;font-weight:700;text-transform:uppercase}
+        .tv-buy{background:rgba(74,222,128,.15);color:var(--green)}
+        .tv-sell{background:rgba(255,77,77,.15);color:var(--red)}
+        .tv-neutral{background:rgba(163,163,163,.15);color:var(--on-surface-var)}
+        .empty-state{text-align:center;padding:2rem 1rem;color:var(--outline);font-size:.875rem}
+        @media(max-width:900px){.grid-2,.grid-3{grid-template-columns:1fr}.stock-hero{flex-direction:column}.price-block{text-align:left}}
+        @media(max-width:600px){.main{padding:1rem}.header{padding:.5rem .75rem}.logo{font-size:1.125rem}.nav-links a{font-size:.75rem}}
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="header-left">
+        <div class="logo"><div class="logo-icon"></div>TradeSage</div>
+        <nav class="nav-links">
+            <a href="/">Dashboard</a>
+            <a href="/portfolio">Portfolio</a>
+        </nav>
+    </div>
+    <button class="back-btn" onclick="history.back()">← Back</button>
+</header>
+
+<main class="main" id="app">
+    <!-- Hero -->
+    <div class="stock-hero fade-in" id="hero">
+        <div class="stock-id">
+            <h1 id="stock-name"><div class="skeleton lg"></div></h1>
+            <div class="sub" id="stock-symbol"></div>
+            <div id="sector-tag"></div>
+        </div>
+        <div class="price-block">
+            <div class="price" id="current-price"><div class="skeleton lg"></div></div>
+            <div class="change" id="daily-change"></div>
+            <div style="margin-top:.5rem" id="status-badge"></div>
+        </div>
+    </div>
+
+    <!-- Position + Trade Levels -->
+    <div class="grid grid-3" id="position-section" style="display:none">
+        <div class="card fade-in">
+            <div class="card-title">📊 Position</div>
+            <div id="pos-metrics"></div>
+        </div>
+        <div class="card fade-in">
+            <div class="card-title">🎯 Trade Levels</div>
+            <div id="level-metrics"></div>
+        </div>
+        <div class="card fade-in">
+            <div class="card-title">📈 Performance</div>
+            <div id="perf-metrics"></div>
+        </div>
+    </div>
+
+    <!-- TradingView Chart -->
+    <div class="card fade-in">
+        <div class="card-title">📉 Price Chart</div>
+        <div class="tv-chart-wrap" id="tv-chart"></div>
+    </div>
+
+    <!-- Fundamentals + Technicals + AI -->
+    <div class="grid grid-3">
+        <div class="card fade-in">
+            <div class="card-title">🏦 Fundamentals</div>
+            <div id="fund-metrics">
+                <div class="skeleton"></div><br><div class="skeleton"></div><br><div class="skeleton"></div>
+            </div>
+        </div>
+        <div class="card fade-in">
+            <div class="card-title">📐 Technical Analysis</div>
+            <div id="tech-metrics">
+                <div class="skeleton"></div><br><div class="skeleton"></div><br><div class="skeleton"></div>
+            </div>
+        </div>
+        <div class="card fade-in">
+            <div class="card-title">🤖 AI Analysis</div>
+            <div id="ai-metrics">
+                <div class="skeleton"></div><br><div class="skeleton"></div><br><div class="skeleton"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Market Info -->
+    <div class="grid grid-2">
+        <div class="card fade-in">
+            <div class="card-title">📊 Market Info</div>
+            <div id="market-metrics"></div>
+        </div>
+        <div class="card fade-in">
+            <div class="card-title">🏆 Win/Loss Analytics</div>
+            <div id="analytics-metrics"></div>
+        </div>
+    </div>
+
+    <!-- Trade History -->
+    <div class="card fade-in">
+        <div class="card-title">📜 Trade History</div>
+        <div style="overflow-x:auto">
+            <table class="data-table">
+                <thead><tr><th>Entry Date</th><th>Exit Date</th><th>Entry</th><th>Exit</th><th>P&L %</th><th>Reason</th></tr></thead>
+                <tbody id="history-tbody"><tr><td colspan="6" class="empty-state">Loading...</td></tr></tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<script>
+const API_BASE = window.location.protocol === 'file:' ? 'http://localhost:8000' : window.location.origin;
+const params = new URLSearchParams(window.location.search);
+const SYMBOL = params.get('symbol') || '';
+
+if (!SYMBOL) { document.getElementById('app').innerHTML = '<div class="empty-state" style="padding:4rem">No symbol specified. Go back to <a href="/portfolio">Portfolio</a>.</div>'; }
+
+function mr(label, value, cls='') {
+    return `<div class="metric-row"><span class="metric-label">${label}</span><span class="metric-value ${cls}">${value}</span></div>`;
+}
+
+function fmt(v, prefix='₹') {
+    if (v == null || v === 'N/A') return '--';
+    return prefix + Number(v).toLocaleString('en-IN', {maximumFractionDigits:2});
+}
+
+function pnlClass(v) { return v >= 0 ? 'text-green' : 'text-red'; }
+
+async function loadStock() {
+    if (!SYMBOL) return;
+    document.title = `TradeSage | ${SYMBOL}`;
+    try {
+        const res = await fetch(`${API_BASE}/api/stock/${SYMBOL}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const d = await res.json();
+        render(d);
+    } catch(e) {
+        console.error('Load failed:', e);
+        document.getElementById('stock-name').textContent = SYMBOL;
+        document.getElementById('stock-symbol').textContent = 'Failed to load data — API may be offline';
+    }
+}
+
+function render(d) {
+    // Hero
+    document.getElementById('stock-name').textContent = d.name || d.symbol;
+    document.getElementById('stock-symbol').textContent = d.symbol;
+    if (d.sector) document.getElementById('sector-tag').innerHTML = `<span class="sector-tag">${d.sector}${d.industry ? ' · ' + d.industry : ''}</span>`;
+
+    // Price
+    const priceEl = document.getElementById('current-price');
+    priceEl.textContent = d.current_price ? `₹${d.current_price.toLocaleString('en-IN',{maximumFractionDigits:2})}` : '--';
+
+    if (d.daily_change != null) {
+        const ch = d.daily_change;
+        const chp = d.daily_change_pct;
+        const cls = ch >= 0 ? 'text-green' : 'text-red';
+        const arrow = ch >= 0 ? '▲' : '▼';
+        document.getElementById('daily-change').innerHTML = `<span class="${cls}">${arrow} ₹${Math.abs(ch).toFixed(2)} (${chp >= 0 ? '+' : ''}${chp.toFixed(2)}%)</span>`;
+    }
+
+    // Status badge
+    const pos = d.position;
+    const badgeEl = document.getElementById('status-badge');
+    if (pos && pos.status === 'open') badgeEl.innerHTML = '<span class="status-badge status-open">● Open Position</span>';
+    else if (pos && pos.status !== 'open') badgeEl.innerHTML = '<span class="status-badge status-closed">● Closed</span>';
+    else badgeEl.innerHTML = '<span class="status-badge status-none">No Position</span>';
+
+    // Position section
+    if (pos) {
+        document.getElementById('position-section').style.display = '';
+        let posHTML = mr('Status', pos.status === 'open' ? '🟢 Open' : '🔴 Closed');
+        posHTML += mr('Shares', pos.shares || '--');
+        posHTML += mr('Entry Price', fmt(pos.entry_price));
+        posHTML += mr('Entry Date', pos.entry_date ? pos.entry_date.split('T')[0] : '--');
+        if (pos.confidence) posHTML += mr('Confidence', pos.confidence);
+        document.getElementById('pos-metrics').innerHTML = posHTML;
+
+        let lvlHTML = mr('Stop Loss', fmt(pos.stop_loss), 'text-red');
+        lvlHTML += mr('Take Profit', fmt(pos.take_profit), 'text-green');
+        if (pos.current_rr != null) lvlHTML += mr('Current R:R', pos.current_rr.toFixed(2));
+        if (pos.invested_value) lvlHTML += mr('Invested', fmt(pos.invested_value));
+        document.getElementById('level-metrics').innerHTML = lvlHTML;
+
+        let perfHTML = '';
+        if (pos.status === 'open' && pos.live_pnl != null) {
+            perfHTML += mr('Live P&L', `₹${pos.live_pnl.toFixed(2)}`, pnlClass(pos.live_pnl));
+            perfHTML += mr('P&L %', `${pos.live_pnl_pct.toFixed(2)}%`, pnlClass(pos.live_pnl_pct));
+            if (pos.current_value) perfHTML += mr('Current Value', fmt(pos.current_value));
+        } else if (pos.realized_pnl != null) {
+            perfHTML += mr('Realized P&L', `₹${pos.realized_pnl.toFixed(2)}`, pnlClass(pos.realized_pnl));
+            perfHTML += mr('P&L %', `${pos.realized_pnl_pct.toFixed(2)}%`, pnlClass(pos.realized_pnl_pct));
+            if (pos.exit_price) perfHTML += mr('Exit Price', fmt(pos.exit_price));
+            if (pos.exit_reason) perfHTML += mr('Exit Reason', pos.exit_reason);
+            if (pos.duration) perfHTML += mr('Duration', pos.duration);
+        } else {
+            perfHTML = '<div class="empty-state">No P&L data</div>';
+        }
+        document.getElementById('perf-metrics').innerHTML = perfHTML;
+    }
+
+    // TradingView chart
+    const tvEl = document.getElementById('tv-chart');
+    tvEl.innerHTML = '';
+    const script = document.createElement('script');
+    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+    script.type = 'text/javascript';
+    script.async = true;
+    script.textContent = JSON.stringify({
+        autosize: true, symbol: `NSE:${d.symbol}`, interval: 'D', timezone: 'Asia/Kolkata',
+        theme: 'dark', style: '1', locale: 'en', backgroundColor: 'rgba(10,10,10,1)',
+        gridColor: 'rgba(30,30,30,1)', hide_side_toolbar: false, allow_symbol_change: true,
+        calendar: false, support_host: 'https://www.tradingview.com',
+        height: 450, width: '100%'
+    });
+    const wrap = document.createElement('div');
+    wrap.className = 'tradingview-widget-container';
+    wrap.style.height = '450px';
+    const inner = document.createElement('div');
+    inner.className = 'tradingview-widget-container__widget';
+    inner.style.height = '100%';inner.style.width = '100%';
+    wrap.appendChild(inner);wrap.appendChild(script);tvEl.appendChild(wrap);
+
+    // Fundamentals
+    const f = d.fundamentals || {};
+    let fundHTML = '';
+    fundHTML += mr('P/E Ratio', f.pe_ratio != null ? Number(f.pe_ratio).toFixed(1) : '--');
+    fundHTML += mr('ROE', f.roe != null ? Number(f.roe).toFixed(1) + '%' : '--');
+    fundHTML += mr('ROCE', f.roce != null ? Number(f.roce).toFixed(1) + '%' : '--');
+    fundHTML += mr('Debt/Equity', f.debt_to_equity != null ? Number(f.debt_to_equity).toFixed(2) : '--');
+    fundHTML += mr('Promoter Hold', f.promoter_holding != null ? Number(f.promoter_holding).toFixed(1) + '%' : '--');
+    fundHTML += mr('FII Holding', f.fii_holding != null ? Number(f.fii_holding).toFixed(1) + '%' : '--');
+    fundHTML += mr('DII Holding', f.dii_holding != null ? Number(f.dii_holding).toFixed(1) + '%' : '--');
+    fundHTML += mr('Div Yield', f.dividend_yield != null ? Number(f.dividend_yield).toFixed(2) + '%' : '--');
+    document.getElementById('fund-metrics').innerHTML = fundHTML;
+
+    // Technicals
+    const t = d.technicals || {};
+    let techHTML = '';
+    const tvR = t.tv_rating || 'N/A';
+    const tvCls = tvR.includes('BUY') ? 'tv-buy' : tvR.includes('SELL') ? 'tv-sell' : 'tv-neutral';
+    techHTML += `<div style="text-align:center;margin-bottom:.75rem"><span class="tv-badge ${tvCls}">${tvR}</span></div>`;
+    techHTML += mr('TV Score', t.tv_score != null ? (t.tv_score > 0 ? '+' : '') + t.tv_score.toFixed(3) : '--');
+    techHTML += mr('Buy Signals', t.tv_buy || 0, 'text-green');
+    techHTML += mr('Sell Signals', t.tv_sell || 0, 'text-red');
+    techHTML += mr('Neutral', t.tv_neutral || 0);
+    document.getElementById('tech-metrics').innerHTML = techHTML;
+
+    // AI Analysis
+    const ai = d.ai_analysis || {};
+    let aiHTML = '';
+    if (ai.conviction_score != null) {
+        const cs = ai.conviction_score;
+        const csColor = cs >= 70 ? 'var(--green)' : cs >= 45 ? 'var(--yellow)' : 'var(--red)';
+        aiHTML += `<div style="text-align:center;margin-bottom:.5rem"><span style="font-family:var(--font-h);font-size:1.75rem;font-weight:700;color:${csColor}">${cs}</span><span style="font-size:.75rem;color:var(--outline)">/100</span></div>`;
+        aiHTML += `<div class="conviction-bar"><div class="conviction-fill" style="width:${cs}%;background:${csColor}"></div></div>`;
+        aiHTML += '<div style="height:.5rem"></div>';
+    }
+    const sentLabel = ai.sentiment || 'N/A';
+    const sentCls = sentLabel === 'POSITIVE' ? 'text-green' : sentLabel === 'NEGATIVE' ? 'text-red' : '';
+    aiHTML += mr('Sentiment', sentLabel, sentCls);
+    aiHTML += mr('Sent. Score', ai.sentiment_score != null ? ai.sentiment_score.toFixed(3) : '--');
+    aiHTML += mr('Headlines', ai.headlines_analyzed || 0);
+    if (ai.model_auc) aiHTML += mr('Model AUC', ai.model_auc.toFixed(4), 'text-cyan');
+    document.getElementById('ai-metrics').innerHTML = aiHTML;
+
+    // Market Info
+    let mktHTML = '';
+    if (d.market_cap) mktHTML += mr('Market Cap', d.market_cap > 1e7 ? '₹' + (d.market_cap / 1e7).toFixed(0) + ' Cr' : fmt(d.market_cap));
+    if (d.volume) mktHTML += mr('Volume', Number(d.volume).toLocaleString('en-IN'));
+    if (d.avg_volume) mktHTML += mr('Avg Volume', Number(d.avg_volume).toLocaleString('en-IN'));
+    if (d.fifty_two_week_high) mktHTML += mr('52W High', fmt(d.fifty_two_week_high));
+    if (d.fifty_two_week_low) mktHTML += mr('52W Low', fmt(d.fifty_two_week_low));
+    document.getElementById('market-metrics').innerHTML = mktHTML || '<div class="empty-state">No market data</div>';
+
+    // Analytics
+    const a = d.analytics || {};
+    let anaHTML = mr('Total Trades', a.total_trades || 0);
+    anaHTML += mr('Wins', a.wins || 0, 'text-green');
+    anaHTML += mr('Losses', a.losses || 0, 'text-red');
+    anaHTML += mr('Win Rate', a.win_rate != null ? a.win_rate.toFixed(1) + '%' : '--');
+    anaHTML += mr('Avg P&L %', a.avg_pnl_pct != null ? a.avg_pnl_pct.toFixed(2) + '%' : '--');
+    document.getElementById('analytics-metrics').innerHTML = anaHTML;
+
+    // Trade History
+    const hist = d.trade_history || [];
+    const tbody = document.getElementById('history-tbody');
+    if (hist.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No trade history for this stock</td></tr>';
+    } else {
+        tbody.innerHTML = hist.map(h => {
+            const pnl = h.pnl_pct;
+            const cls = pnl != null ? (pnl >= 0 ? 'text-green' : 'text-red') : '';
+            return `<tr>
+                <td>${h.entry_date || '--'}</td>
+                <td>${h.exit_date || '--'}</td>
+                <td>${h.entry_price != null ? '₹'+Number(h.entry_price).toFixed(2) : '--'}</td>
+                <td>${h.exit_price != null ? '₹'+Number(h.exit_price).toFixed(2) : '--'}</td>
+                <td class="${cls}">${pnl != null ? pnl.toFixed(2)+'%' : '--'}</td>
+                <td>${h.exit_reason || '--'}</td>
+            </tr>`;
+        }).join('');
+    }
+}
+
+loadStock();
+</script>
+</body>
+</html>

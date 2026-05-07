@@ -97,6 +97,24 @@ async def serve_index():
     return FileResponse(index_path, media_type="text/html")
 
 
+@app.get("/portfolio", response_class=HTMLResponse)
+async def serve_portfolio():
+    """Serve portfolio page at a cleaner URL."""
+    portfolio_path = FRONTEND_DIR / "portfolio.html"
+    if not portfolio_path.exists():
+        return HTMLResponse("<h1>Portfolio page not found</h1>", status_code=404)
+    return FileResponse(portfolio_path, media_type="text/html")
+
+
+@app.get("/stock", response_class=HTMLResponse)
+async def serve_stock_detail():
+    """Serve the stock detail page."""
+    stock_path = FRONTEND_DIR / "stock.html"
+    if not stock_path.exists():
+        return HTMLResponse("<h1>Stock detail page not found</h1>", status_code=404)
+    return FileResponse(stock_path, media_type="text/html")
+
+
 # Serve any other static assets in frontend/
 if FRONTEND_DIR.exists():
     app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="static")
@@ -706,6 +724,210 @@ async def trigger_retrain():
         return {"status": "ok", "pid": proc.pid}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ══════════════════════════════════════════════════════════════
+#  GET /api/stock/{symbol} — full stock detail aggregation
+# ══════════════════════════════════════════════════════════════
+
+@app.get("/api/stock/{symbol}")
+async def get_stock_detail(symbol: str):
+    """Return comprehensive stock detail data for the stock details page."""
+    symbol = symbol.upper().strip()
+    if not symbol:
+        raise HTTPException(status_code=400, detail="Symbol is required")
+
+    result = {
+        "symbol": symbol,
+        "name": symbol,
+        "current_price": None,
+        "daily_change": None,
+        "daily_change_pct": None,
+        "position": None,
+        "trade_history": [],
+        "fundamentals": {},
+        "technicals": {},
+        "ai_analysis": {},
+        "sector": None,
+        "industry": None,
+    }
+
+    # ── 1. Position data from positions.json ──
+    positions_path = PROJECT_ROOT / "data" / "positions.json"
+    if positions_path.exists():
+        try:
+            with open(positions_path) as f:
+                positions = json.load(f)
+            if symbol in positions:
+                pos = positions[symbol]
+                pos_data = {
+                    "status": pos.get("status", "unknown"),
+                    "entry_price": pos.get("entry_price"),
+                    "shares": pos.get("shares"),
+                    "stop_loss": pos.get("stop_loss"),
+                    "take_profit": pos.get("take_profit"),
+                    "entry_date": pos.get("entry_date"),
+                    "exit_date": pos.get("exit_date"),
+                    "exit_price": pos.get("exit_price"),
+                    "exit_reason": pos.get("exit_reason"),
+                    "confidence": pos.get("confidence"),
+                    "fundamentals": pos.get("fundamentals", {}),
+                }
+                # Compute P&L if position has entry_price
+                ep = pos.get("entry_price")
+                sh = pos.get("shares", 0)
+                if pos.get("status") == "open" and ep:
+                    pos_data["invested_value"] = round(ep * sh, 2)
+                elif pos.get("status") != "open" and ep and pos.get("exit_price"):
+                    xp = pos["exit_price"]
+                    pos_data["realized_pnl"] = round((xp - ep) * sh, 2)
+                    pos_data["realized_pnl_pct"] = round(((xp - ep) / ep) * 100, 2) if ep > 0 else 0
+                    duration_str = None
+                    if pos.get("entry_date") and pos.get("exit_date"):
+                        try:
+                            d0 = datetime.fromisoformat(pos["entry_date"].replace("Z", "+00:00"))
+                            d1 = datetime.fromisoformat(pos["exit_date"].replace("Z", "+00:00"))
+                            duration_str = f"{(d1 - d0).days}d"
+                        except Exception:
+                            pass
+                    pos_data["duration"] = duration_str
+                result["position"] = pos_data
+        except Exception as e:
+            logger.warning(f"stock detail: positions.json read failed: {e}")
+
+    # ── 2. Live price from Angel One (or yfinance fallback) ──
+    try:
+        from src.angel.angel_one_api import AngelOneAPI
+        config_path = PROJECT_ROOT / "config" / "angel_config.json"
+        alt_config = PROJECT_ROOT / "config" / "angel_one_config.json"
+        cfg = str(alt_config if alt_config.exists() else config_path)
+        angel_api = AngelOneAPI(cfg)
+        live_prices = angel_api.get_ltp_batch([symbol])
+        if symbol in live_prices and live_prices[symbol] > 0:
+            result["current_price"] = round(live_prices[symbol], 2)
+        angel_api.logout()
+    except Exception as e:
+        logger.debug(f"Angel One LTP failed for {symbol}: {e}")
+
+    # yfinance fallback for price + info
+    try:
+        import yfinance as yf
+        ticker = yf.Ticker(f"{symbol}.NS")
+        info = ticker.info or {}
+        if result["current_price"] is None:
+            cp = info.get("currentPrice") or info.get("regularMarketPrice")
+            if cp and cp > 0:
+                result["current_price"] = round(float(cp), 2)
+        prev_close = info.get("previousClose") or info.get("regularMarketPreviousClose")
+        if result["current_price"] and prev_close and prev_close > 0:
+            change = result["current_price"] - float(prev_close)
+            result["daily_change"] = round(change, 2)
+            result["daily_change_pct"] = round((change / float(prev_close)) * 100, 2)
+        result["name"] = info.get("shortName") or info.get("longName") or symbol
+        result["sector"] = info.get("sector")
+        result["industry"] = info.get("industry")
+        result["market_cap"] = info.get("marketCap")
+        result["fifty_two_week_high"] = info.get("fiftyTwoWeekHigh")
+        result["fifty_two_week_low"] = info.get("fiftyTwoWeekLow")
+        result["volume"] = info.get("volume") or info.get("regularMarketVolume")
+        result["avg_volume"] = info.get("averageVolume")
+    except Exception as e:
+        logger.debug(f"yfinance info failed for {symbol}: {e}")
+
+    # Compute live P&L for open positions
+    if result["position"] and result["position"].get("status") == "open" and result["current_price"]:
+        ep = result["position"]["entry_price"]
+        sh = result["position"]["shares"]
+        cp = result["current_price"]
+        if ep and sh and cp:
+            result["position"]["current_value"] = round(cp * sh, 2)
+            result["position"]["live_pnl"] = round((cp - ep) * sh, 2)
+            result["position"]["live_pnl_pct"] = round(((cp - ep) / ep) * 100, 2) if ep > 0 else 0
+            # Risk/Reward from current
+            sl = result["position"].get("stop_loss", 0)
+            tp = result["position"].get("take_profit", 0)
+            if sl and tp and cp > sl:
+                risk = cp - sl
+                reward = tp - cp
+                result["position"]["current_rr"] = round(reward / risk, 2) if risk > 0 else 0
+
+    # ── 3. Fundamentals via FundamentalAnalyzer ──
+    try:
+        from src.core.fundamental_analyzer import FundamentalAnalyzer
+        analyzer = FundamentalAnalyzer()
+
+        # Screener data
+        fund_data = analyzer.fetch_fundamentals(symbol)
+        if fund_data:
+            result["fundamentals"].update(fund_data)
+
+        # TradingView rating
+        tv_data = analyzer.fetch_tradingview_rating(symbol)
+        if tv_data:
+            result["technicals"]["tv_rating"] = tv_data.get("recommendation", "N/A")
+            result["technicals"]["tv_score"] = tv_data.get("score", 0)
+            result["technicals"]["tv_buy"] = tv_data.get("buy", 0)
+            result["technicals"]["tv_sell"] = tv_data.get("sell", 0)
+            result["technicals"]["tv_neutral"] = tv_data.get("neutral", 0)
+
+        # News sentiment
+        sentiment = analyzer.analyze_news_sentiment(symbol)
+        if sentiment:
+            result["ai_analysis"]["sentiment"] = sentiment.get("label", "N/A")
+            result["ai_analysis"]["sentiment_score"] = sentiment.get("score", 0)
+            result["ai_analysis"]["sentiment_confidence"] = sentiment.get("confidence", 0)
+            result["ai_analysis"]["headlines_analyzed"] = sentiment.get("headlines_found", 0)
+
+        # Composite conviction
+        if fund_data and tv_data and sentiment:
+            composite = analyzer.compute_composite_score(tv_data, sentiment, fund_data)
+            result["ai_analysis"]["conviction_score"] = composite.get("composite_score", 0)
+            result["ai_analysis"]["tv_component"] = composite.get("tv_component", 0)
+            result["ai_analysis"]["sentiment_component"] = composite.get("sentiment_component", 0)
+            result["ai_analysis"]["fundamental_component"] = composite.get("fundamental_component", 0)
+    except Exception as e:
+        logger.debug(f"Fundamental analysis failed for {symbol}: {e}")
+
+    # ── 4. Trade history from backtest_ledger.csv ──
+    ledger_path = PROJECT_ROOT / "data" / "backtest_ledger.csv"
+    if ledger_path.exists():
+        try:
+            with open(ledger_path, newline="") as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    if row.get("symbol", "").upper() == symbol:
+                        result["trade_history"].append({
+                            "entry_date": row.get("entry_date"),
+                            "exit_date": row.get("exit_date"),
+                            "entry_price": _fin_scalar("entry", row.get("entry_price")),
+                            "exit_price": _fin_scalar("exit", row.get("exit_price")),
+                            "pnl_pct": _fin_scalar("pnl", row.get("pnl_pct")),
+                            "exit_reason": row.get("exit_reason", ""),
+                        })
+        except Exception as e:
+            logger.debug(f"Ledger read failed for {symbol}: {e}")
+
+    # ── 5. Win/loss analytics ──
+    wins = sum(1 for t in result["trade_history"] if (t.get("pnl_pct") or 0) > 0)
+    losses = sum(1 for t in result["trade_history"] if (t.get("pnl_pct") or 0) < 0)
+    total = wins + losses
+    result["analytics"] = {
+        "total_trades": total,
+        "wins": wins,
+        "losses": losses,
+        "win_rate": round(wins / total * 100, 1) if total > 0 else None,
+        "avg_pnl_pct": round(
+            sum(t.get("pnl_pct", 0) or 0 for t in result["trade_history"]) / total, 2
+        ) if total > 0 else None,
+    }
+
+    # ── 6. Model confidence from latest report ──
+    report = _find_latest_report()
+    if report:
+        result["ai_analysis"]["model_auc"] = report.get("test_metrics", {}).get("auc_score")
+        result["ai_analysis"]["model_version"] = report.get("version")
+
+    return result
 
 
 # ══════════════════════════════════════════════════════════════
