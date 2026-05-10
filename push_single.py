@@ -9,7 +9,10 @@ VPS_DIR = "/root/TradeSage"
 
 FILES_TO_UPLOAD = [
     "Dockerfile",
+    "requirements.txt",
+    "README.md",
     "api/main.py",
+    "services/scanner.py",
     "src/core/screener_scraper.py",
     "frontend/index.html",
     "frontend/portfolio.html",

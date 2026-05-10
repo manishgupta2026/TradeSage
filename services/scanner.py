@@ -1007,7 +1007,7 @@ def run_scanner():
                                 # Try to get live price for unrealized P&L
                                 try:
                                     if angel_mgr.is_connected:
-                                        ltp = angel_mgr.fetcher.get_ltp(sym)
+                                        ltp = angel_mgr.api.get_ltp(sym)
                                         if ltp and ltp > 0:
                                             unrealized_pnl += (ltp - entry_price) * shares
                                 except Exception:
@@ -1027,7 +1027,7 @@ def run_scanner():
                         nifty_value = None
                         try:
                             if angel_mgr.is_connected:
-                                nifty_ltp = angel_mgr.fetcher.get_ltp("NIFTY")
+                                nifty_ltp = angel_mgr.api.get_ltp("NIFTY")
                                 if nifty_ltp and nifty_ltp > 0:
                                     nifty_value = round(nifty_ltp, 2)
                         except Exception as e:
