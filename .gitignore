@@ -76,3 +76,10 @@ data/strategies/*_strategies.json
 *.tmp
 *.bak
 *.backup
+
+# Sensitive Deployment Scripts
+train_local_push_vps.py
+push_single.py
+scripts/deploy_to_vps.py
+test_scp.py
+test_obscura_exit.py
