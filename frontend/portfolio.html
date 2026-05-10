@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Manrope:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --bg: #000000;
@@ -332,6 +333,7 @@
             .nav-links.open { display: flex; }
             .section { overflow-x: auto; -webkit-overflow-scrolling: touch; }
             .data-table { min-width: 700px; }
+            .analytics-grid { grid-template-columns: 1fr !important; }
         }
         @media (max-width: 600px) {
             .capital-grid { grid-template-columns: 1fr 1fr; gap: 0.625rem; }
@@ -396,6 +398,37 @@
                 <div class="sub" id="win-rate">Win Rate: --%</div>
             </div>
         </div>
+        
+        <!-- ── Equity Curve ── -->
+        <div class="section" style="margin-bottom: 1.5rem;">
+            <div class="section-header">
+                <span class="section-title">📈 Equity Curve vs Nifty 50</span>
+                <span style="font-size: 0.7rem; color: var(--outline); font-style: italic;">Updated daily at market close</span>
+            </div>
+            <div style="position: relative; height: 300px; width: 100%;">
+                <canvas id="equityCurveChart"></canvas>
+            </div>
+        </div>
+
+        <!-- ── Portfolio Analytics ── -->
+        <div class="analytics-grid" style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem; margin-bottom: 2rem;">
+            <div class="section" style="margin-bottom: 0;">
+                <div class="section-header">
+                    <span class="section-title">🍩 Capital Allocation</span>
+                </div>
+                <div style="position: relative; height: 250px; width: 100%; display: flex; justify-content: center; align-items: center;">
+                    <canvas id="allocationChart"></canvas>
+                </div>
+            </div>
+            <div class="section" style="margin-bottom: 0;">
+                <div class="section-header">
+                    <span class="section-title">📈 Realized P&L History</span>
+                </div>
+                <div style="position: relative; height: 250px; width: 100%;">
+                    <canvas id="pnlHistoryChart"></canvas>
+                </div>
+            </div>
+        </div>
 
         <!-- ── Active Holdings ── -->
         <div class="section">
@@ -420,6 +453,7 @@
                         <th>Sentiment</th>
                         <th>Confidence</th>
                         <th>Entry Date</th>
+                        <th style="width: 140px; text-align: center;">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="active-tbody">
@@ -472,6 +506,225 @@
     })();
 
     const INITIAL_CAPITAL = 50000;
+    
+    let allocationChartInst = null;
+    let pnlChartInst = null;
+    let equityCurveInst = null;
+
+    async function loadEquityCurve() {
+        try {
+            const res = await fetch(`${API_BASE}/api/equity-history`);
+            if (!res.ok) return;
+            const data = await res.json();
+            const history = data.history || [];
+            
+            if (history.length === 0) {
+                document.getElementById('equityCurveChart').parentElement.innerHTML = 
+                    '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--outline);font-size:0.875rem;flex-direction:column;gap:0.5rem;">' +
+                    '<div style="font-size:2rem;">📊</div>' +
+                    '<div>Equity curve data will appear after the first market close</div>' +
+                    '</div>';
+                return;
+            }
+            
+            const labels = history.map(h => h.date);
+            const portfolioData = history.map(h => h.portfolio_value);
+            
+            // Normalize Nifty 50 to same scale as portfolio for visual comparison
+            const niftyRaw = history.map(h => h.nifty_50);
+            const hasNifty = niftyRaw.some(v => v !== null && v !== undefined);
+            
+            let niftyNormalized = [];
+            if (hasNifty) {
+                // Find the first valid nifty value as base
+                const firstNifty = niftyRaw.find(v => v !== null && v !== undefined);
+                const firstPortfolio = portfolioData[0] || INITIAL_CAPITAL;
+                niftyNormalized = niftyRaw.map(v => {
+                    if (v === null || v === undefined) return null;
+                    return Math.round((v / firstNifty) * firstPortfolio * 100) / 100;
+                });
+            }
+            
+            const datasets = [
+                {
+                    label: 'Portfolio Value (₹)',
+                    data: portfolioData,
+                    borderColor: '#22c55e',
+                    backgroundColor: 'rgba(34, 197, 94, 0.08)',
+                    fill: true,
+                    tension: 0.3,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    pointBackgroundColor: '#22c55e',
+                    borderWidth: 2,
+                }
+            ];
+            
+            if (hasNifty) {
+                datasets.push({
+                    label: 'Nifty 50 (Normalized)',
+                    data: niftyNormalized,
+                    borderColor: '#f59e0b',
+                    backgroundColor: 'transparent',
+                    borderDash: [5, 5],
+                    tension: 0.3,
+                    pointRadius: 3,
+                    pointHoverRadius: 5,
+                    pointBackgroundColor: '#f59e0b',
+                    borderWidth: 1.5,
+                });
+            }
+            
+            // Add initial capital baseline
+            datasets.push({
+                label: 'Initial Capital (₹50,000)',
+                data: Array(labels.length).fill(INITIAL_CAPITAL),
+                borderColor: 'rgba(161, 161, 170, 0.4)',
+                borderDash: [3, 3],
+                borderWidth: 1,
+                pointRadius: 0,
+                fill: false,
+            });
+            
+            const ctx = document.getElementById('equityCurveChart').getContext('2d');
+            if (equityCurveInst) equityCurveInst.destroy();
+            equityCurveInst = new Chart(ctx, {
+                type: 'line',
+                data: { labels, datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    scales: {
+                        x: {
+                            ticks: { color: '#a1a1aa', font: { size: 10 }, maxRotation: 45 },
+                            grid: { display: false },
+                        },
+                        y: {
+                            ticks: {
+                                color: '#a1a1aa',
+                                font: { size: 10 },
+                                callback: v => '₹' + Number(v).toLocaleString('en-IN'),
+                            },
+                            grid: { color: 'rgba(255,255,255,0.05)' },
+                        },
+                    },
+                    plugins: {
+                        legend: { labels: { color: '#a1a1aa', font: { family: 'Inter', size: 11 }, usePointStyle: true, pointStyle: 'line' } },
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => {
+                                    const label = ctx.dataset.label || '';
+                                    const val = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(ctx.parsed.y);
+                                    return `${label}: ${val}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        } catch (e) {
+            console.error('Equity curve load error:', e);
+        }
+    }
+
+    function renderCharts(active, closed, availCash) {
+        // 1. Capital Allocation Donut Chart
+        const allocCtx = document.getElementById('allocationChart').getContext('2d');
+        const labels = ['Available Cash'];
+        const dataVals = [availCash];
+        const colors = ['#22c55e']; // Green for cash
+        
+        const palette = ['#8b5cf6', '#3b82f6', '#f59e0b', '#ec4899', '#06b6d4', '#f43f5e', '#84cc16'];
+        let colorIdx = 0;
+        
+        active.forEach(p => {
+            labels.push(p.symbol);
+            dataVals.push((p.entry_price || 0) * (p.shares || 0));
+            colors.push(palette[colorIdx % palette.length]);
+            colorIdx++;
+        });
+
+        if (allocationChartInst) allocationChartInst.destroy();
+        allocationChartInst = new Chart(allocCtx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: dataVals,
+                    backgroundColor: colors,
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'right', labels: { color: '#a1a1aa', font: { family: 'Inter', size: 11 } } },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) label += ': ';
+                                if (context.parsed !== null) {
+                                    label += new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(context.parsed);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 2. Closed Trades P&L History Chart
+        const pnlCtx = document.getElementById('pnlHistoryChart').getContext('2d');
+        const closedTrades = closed.slice().reverse(); // Show oldest to newest
+        
+        const tradeLabels = [];
+        const pnlData = [];
+        const bgColors = [];
+        
+        closedTrades.forEach(c => {
+            tradeLabels.push(c.symbol);
+            const pnl = c.realized_pnl_rupees || 0;
+            pnlData.push(pnl);
+            bgColors.push(pnl >= 0 ? 'rgba(34, 197, 94, 0.6)' : 'rgba(239, 68, 68, 0.6)');
+        });
+
+        if (pnlChartInst) pnlChartInst.destroy();
+        pnlChartInst = new Chart(pnlCtx, {
+            type: 'bar',
+            data: {
+                labels: tradeLabels,
+                datasets: [{
+                    label: 'Realized P&L (₹)',
+                    data: pnlData,
+                    backgroundColor: bgColors,
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { ticks: { color: '#a1a1aa', font: { size: 10 } }, grid: { display: false } },
+                    y: { ticks: { color: '#a1a1aa', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.05)' } }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(context.parsed.y);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
 
     async function loadPortfolio() {
         try {
@@ -542,13 +795,15 @@
                     const livePnlRs = p.live_pnl_rs || 0;
                     const livePnlPct = p.live_pnl_pct || 0;
                     const pnlClass = livePnlRs >= 0 ? 'text-green' : 'text-red';
+                    
+                    const sidewaysBadge = p.sideways_suggestion ? `<div style="margin-top:4px;"><span class="badge badge-active" style="font-size:0.6rem;background:rgba(255,165,0,0.2);color:orange;border-color:orange;">Sideways 💤</span></div>` : '';
 
                     rows += `<tr>
                         <td><a href="/stock?symbol=${p.symbol}" class="symbol-link">${p.symbol}</a></td>
                         <td>${p.shares}</td>
                         <td>₹${(p.entry_price || 0).toFixed(2)}</td>
                         <td>₹${cp.toFixed(2)}</td>
-                        <td class="${pnlClass}">₹${livePnlRs.toFixed(2)} (${livePnlPct.toFixed(2)}%)</td>
+                        <td class="${pnlClass}">₹${livePnlRs.toFixed(2)} (${livePnlPct.toFixed(2)}%) ${sidewaysBadge}</td>
                         <td class="text-red">₹${(p.stop_loss || 0).toFixed(2)}</td>
                         <td class="text-green">₹${(p.take_profit || 0).toFixed(2)}</td>
                         <td><span class="fund-badge ${tvClass}">${tv}</span></td>
@@ -558,6 +813,12 @@
                             ${conf}
                         </td>
                         <td>${entryDate}</td>
+                        <td style="text-align: center;">
+                            <div style="display: flex; gap: 0.25rem; justify-content: center;">
+                                <button onclick="openTradeModal('BUY', '${p.symbol}', ${cp})" style="background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid var(--green); border-radius: 4px; padding: 2px 8px; cursor: pointer; font-size: 0.75rem; font-weight: 600;">Buy</button>
+                                <button onclick="openTradeModal('SELL', '${p.symbol}', ${cp}, ${p.shares})" style="background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid var(--red); border-radius: 4px; padding: 2px 8px; cursor: pointer; font-size: 0.75rem; font-weight: 600;">Sell</button>
+                            </div>
+                        </td>
                     </tr>`;
                 });
                 tbody.innerHTML = rows;
@@ -623,15 +884,102 @@
             // ── Timestamp ──
             const now = new Date();
             document.getElementById('last-update').textContent = now.toLocaleTimeString('en-IN', {hour12: false});
+            
+            // ── Render Charts ──
+            renderCharts(positions, closed, available);
 
         } catch(e) {
             console.error('Portfolio load error:', e);
         }
     }
 
-    // Initial load + auto-refresh every 30s
+    // Initial load + auto-refresh every 60s
     loadPortfolio();
+    loadEquityCurve();
     setInterval(loadPortfolio, 60000);
+    setInterval(loadEquityCurve, 300000); // Refresh equity curve every 5 min
+
+    // ── Manual Trade Logic ──
+    let currentTradeAction = '';
+    function openTradeModal(action, symbol, price, maxShares = null) {
+        currentTradeAction = action;
+        document.getElementById('trade-action-text').textContent = action;
+        document.getElementById('trade-action-text').className = action === 'BUY' ? 'text-green' : 'text-red';
+        document.getElementById('trade-symbol').textContent = symbol;
+        document.getElementById('trade-price').value = price;
+        
+        const qtyInput = document.getElementById('trade-qty');
+        qtyInput.value = '';
+        if (action === 'SELL' && maxShares) {
+            qtyInput.max = maxShares;
+            qtyInput.placeholder = `Max ${maxShares}`;
+        } else {
+            qtyInput.removeAttribute('max');
+            qtyInput.placeholder = 'e.g. 10';
+        }
+        
+        document.getElementById('trade-modal').showModal();
+    }
+
+    function closeTradeModal() {
+        document.getElementById('trade-modal').close();
+    }
+
+    async function submitTrade() {
+        const symbol = document.getElementById('trade-symbol').textContent;
+        const price = parseFloat(document.getElementById('trade-price').value);
+        const qty = parseInt(document.getElementById('trade-qty').value);
+
+        if (!qty || qty <= 0) return alert('Enter a valid quantity');
+        if (!price || price <= 0) return alert('Enter a valid price');
+
+        const btn = document.getElementById('trade-submit-btn');
+        btn.disabled = true;
+        btn.textContent = 'Executing...';
+
+        try {
+            const res = await fetch('/api/portfolio/trade', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: currentTradeAction,
+                    symbol: symbol,
+                    shares: qty,
+                    price: price
+                })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.detail || 'Trade failed');
+            
+            closeTradeModal();
+            loadPortfolio();
+        } catch (e) {
+            alert('Error: ' + e.message);
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Confirm Trade';
+        }
+    }
 </script>
+
+<!-- Trade Modal -->
+<dialog id="trade-modal" style="background: var(--surface); border: 1px solid var(--outline); border-radius: 8px; padding: 20px; color: var(--on-surface); min-width: 300px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+    <h3 style="margin-top: 0; margin-bottom: 1rem;"><span id="trade-action-text"></span> <span id="trade-symbol"></span></h3>
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <div>
+            <label style="display: block; font-size: 0.8rem; margin-bottom: 0.25rem;">Price (₹)</label>
+            <input type="number" id="trade-price" step="0.05" style="width: 100%; padding: 8px; background: rgba(0,0,0,0.2); border: 1px solid var(--outline); color: white; border-radius: 4px;">
+        </div>
+        <div>
+            <label style="display: block; font-size: 0.8rem; margin-bottom: 0.25rem;">Quantity</label>
+            <input type="number" id="trade-qty" min="1" style="width: 100%; padding: 8px; background: rgba(0,0,0,0.2); border: 1px solid var(--outline); color: white; border-radius: 4px;">
+        </div>
+        <div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 0.5rem;">
+            <button onclick="closeTradeModal()" style="padding: 6px 12px; background: transparent; border: 1px solid var(--outline); color: var(--on-surface); border-radius: 4px; cursor: pointer;">Cancel</button>
+            <button id="trade-submit-btn" onclick="submitTrade()" style="padding: 6px 12px; background: var(--green); border: none; color: black; border-radius: 4px; cursor: pointer; font-weight: bold;">Confirm Trade</button>
+        </div>
+    </div>
+</dialog>
+
 </body>
 </html>

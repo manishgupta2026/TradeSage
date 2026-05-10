@@ -111,6 +111,10 @@
             0%, 100% { transform: scale(1); opacity: 1; box-shadow: 0 0 10px var(--primary); }
             50% { transform: scale(1.4); opacity: 0.8; box-shadow: 0 0 20px var(--primary); }
         }
+        .main-nav { display: flex; gap: 1.5rem; margin-left: 2rem; }
+        .nav-link { text-decoration: none; font-weight: 600; font-size: 0.875rem; color: var(--on-surface-variant); transition: color 0.2s; }
+        .nav-link:hover { color: var(--on-surface); }
+        .nav-link.active { color: var(--green); }
         .header-right { display: flex; align-items: center; gap: 1rem; }
         .badge {
             padding: 0.25rem 0.75rem;
@@ -230,9 +234,11 @@
         .table-wrap {
             background: var(--surface-container);
             border-radius: var(--radius);
-            overflow: hidden;
             overflow-x: auto;
+            overflow-y: auto;
+            max-height: 60vh;
             -webkit-overflow-scrolling: touch;
+            border: 1px solid var(--outline-variant);
         }
         table {
             width: 100%;
@@ -251,6 +257,7 @@
             background: var(--surface-container-low);
             position: sticky;
             top: 0;
+            z-index: 10;
         }
         tbody tr {
             transition: background var(--transition);
@@ -666,12 +673,13 @@
             .sidebar { width: 100%; max-height: 280px; order: 2; }
             .content { order: 1; }
             .stat-cards { grid-template-columns: repeat(2, 1fr); }
-            .header { flex-wrap: wrap; gap: 0.5rem; padding: 0.625rem 1rem; }
-            .header-left { width: 100%; justify-content: space-between; }
+            .header { flex-wrap: wrap; gap: 0.75rem; padding: 0.75rem 1rem; }
+            .header-left { width: 100%; justify-content: space-between; position: relative; }
             .hamburger { display: block; }
-            .header-left nav { display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--surface-container-low); padding: 0.75rem 1rem; flex-direction: column; gap: 0.75rem; z-index: 99; border-bottom: 1px solid var(--outline-variant); }
-            .header-left nav.open { display: flex; }
-            .header-right { flex-wrap: wrap; gap: 0.5rem; font-size: 0.6875rem; }
+            .main-nav { display: none; position: absolute; top: calc(100% + 0.75rem); left: -1rem; right: -1rem; background: var(--surface-container-high); padding: 1rem; flex-direction: column; gap: 1rem; z-index: 99; border-bottom: 1px solid var(--outline-variant); margin-left: 0; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+            .main-nav.open { display: flex; }
+            .header-right { width: 100%; flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; gap: 0.5rem; padding-bottom: 0.25rem; font-size: 0.6875rem; }
+            .header-right::-webkit-scrollbar { height: 0px; }
             .content { padding: 0.75rem; }
             .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
             .signal-table { min-width: 800px; }
@@ -680,7 +688,7 @@
         @media (max-width: 600px) {
             .header { padding: 0.5rem 0.75rem; position: sticky; top: 0; z-index: 100; }
             .logo { font-size: 1.125rem; }
-            .header-right { width: 100%; justify-content: flex-start; overflow-x: auto; }
+            .main-nav { left: -0.75rem; right: -0.75rem; top: calc(100% + 0.5rem); }
             .stat-cards { grid-template-columns: 1fr 1fr; gap: 0.625rem; }
             .stat-card { padding: 1rem; }
             .stat-card-value { font-size: 1.5rem; }
@@ -733,9 +741,9 @@
                     TradeSage
                 </div>
                 <button class="hamburger" id="menu-toggle" onclick="document.getElementById('main-nav').classList.toggle('open')" aria-label="Toggle menu">☰</button>
-                <nav id="main-nav" style="display:flex; gap:1.5rem; margin-left: 2rem;">
-                    <a href="/" style="color:var(--green);text-decoration:none;font-weight:600;font-size:0.875rem;">Dashboard</a>
-                    <a href="/portfolio" style="color:var(--on-surface-variant);text-decoration:none;font-size:0.875rem;">Paper Portfolio</a>
+                <nav id="main-nav" class="main-nav">
+                    <a href="/" class="nav-link active">Dashboard</a>
+                    <a href="/portfolio" class="nav-link">Paper Portfolio</a>
                 </nav>
                 <div id="market-badge" class="badge badge-closed">● CLOSED</div>
                 <div class="meta-pill">

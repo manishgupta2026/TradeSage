@@ -201,30 +201,36 @@ class ScreenerScraper:
         
     def _run_obscura(self, url: str) -> str:
         """Execute Obscura CLI and return HTML."""
+        import tempfile
         try:
-            cmd = [
-                self.obscura_bin,
-                "fetch",
-                url,
-                "--stealth",
-                "--dump", "html",
-                "--quiet"
-            ]
+            # We use a temporary file and shell=True because capturing stdout directly
+            # causes the headless browser to lose its stealth fingerprint against Cloudflare.
+            fd, tmp_path = tempfile.mkstemp(suffix=".html")
+            os.close(fd)
             
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+            cmd = f"{self.obscura_bin} fetch '{url}' --stealth --dump html --quiet > {tmp_path}"
+            
+            result = subprocess.run(cmd, shell=True, timeout=45, stderr=subprocess.DEVNULL)
             
             if result.returncode != 0:
-                logger.debug(f"Obscura execution failed (code {result.returncode}): {result.stderr[:200]}")
+                logger.warning(f"Obscura execution failed (code {result.returncode}) for {url}")
+                if os.path.exists(tmp_path):
+                    os.remove(tmp_path)
                 return ""
+            
+            with open(tmp_path, 'r', encoding='utf-8', errors='ignore') as f:
+                html = f.read()
                 
-            return result.stdout
+            os.remove(tmp_path)
+            return html
+            
         except FileNotFoundError:
             # Binary not found — disable for future calls
             logger.warning("Obscura binary not found on PATH — disabling Obscura, using requests fallback")
             self.obscura_available = False
             return ""
         except subprocess.TimeoutExpired:
-            logger.warning(f"Obscura timed out after 30s for {url}")
+            logger.warning(f"Obscura timed out after 45s for {url}")
             return ""
         except Exception as e:
             logger.error(f"Obscura error: {e}")
@@ -241,16 +247,16 @@ class ScreenerScraper:
             if response.status_code == 200:
                 return response.text
             elif response.status_code == 403:
-                logger.debug(f"Screener returned 403 for {url} (anti-bot). Cached data will be used if available.")
+                logger.warning(f"Screener returned 403 for {url} (anti-bot). Cached data will be used if available.")
                 return ""
             elif response.status_code == 429:
-                logger.debug(f"Screener rate-limited (429) for {url}")
+                logger.warning(f"Screener rate-limited (429) for {url}")
                 return ""
             else:
-                logger.debug(f"Screener returned HTTP {response.status_code} for {url}")
+                logger.warning(f"Screener returned HTTP {response.status_code} for {url}")
                 return ""
         except Exception as e:
-            logger.debug(f"Requests fallback failed for {url}: {e}")
+            logger.warning(f"Requests fallback failed for {url}: {e}")
             return ""
 
     def _parse_html(self, html: str) -> dict:

@@ -20,6 +20,7 @@ import os
 import sys
 import time
 import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -403,6 +404,59 @@ def fetch_stock_data(
     return None
 
 
+def fetch_stock_data_cached(
+    angel_mgr: AngelSessionManager,
+    symbol: str,
+    rate_limiter: TokenBucketRateLimiter,
+    redis_client=None,
+    period_days: int = 365,
+) -> pd.DataFrame:
+    """Fetch OHLCV with Redis cache (15-min TTL). Daily candles don't change intraday."""
+    cache_key = f"tradesage:ohlc:{symbol}"
+
+    # Try Redis cache first
+    if redis_client:
+        try:
+            cached = redis_client.get(cache_key)
+            if cached:
+                df = pd.read_json(cached)
+                if df is not None and len(df) >= 200:
+                    return df
+        except Exception:
+            pass  # Cache miss or corrupt — fetch fresh
+
+    # Cache miss — fetch from API
+    df = fetch_stock_data(angel_mgr, symbol, rate_limiter, period_days)
+
+    # Store in cache with 15-min TTL
+    if df is not None and redis_client:
+        try:
+            redis_client.setex(cache_key, 900, df.to_json())
+        except Exception:
+            pass  # Non-critical
+
+    return df
+
+
+def _scan_single_stock(symbol, angel_mgr, rate_limiter, model_mgr, ltp_cache, redis_client=None):
+    """Fetch data + generate signal for one stock. Thread-safe worker."""
+    try:
+        df = fetch_stock_data_cached(angel_mgr, symbol, rate_limiter, redis_client)
+        if df is None:
+            return symbol, None, True  # error
+
+        # Inject live LTP from pre-fetched cache
+        ltp = ltp_cache.get(symbol)
+        if ltp and ltp > 0:
+            df.iloc[-1, df.columns.get_loc('close')] = ltp
+
+        signal = generate_signal(symbol, df, model_mgr)
+        return symbol, signal, False
+    except Exception as e:
+        logger.debug(f"Worker error for {symbol}: {e}")
+        return symbol, None, True
+
+
 # ══════════════════════════════════════════════════════════════
 #  PUBLISH SIGNAL TO REDIS
 # ══════════════════════════════════════════════════════════════
@@ -461,31 +515,63 @@ def run_scanner():
         logger.error("⚠️ Initial Angel One connection failed — will retry on next scan cycle")
         send_telegram("⚠️ Scanner: Initial Angel One connection failed — will retry")
 
-    # ── Load watchlist ──
-    watchlist_paths = [
+    # ── Load watchlists (tiered scanning) ──
+    # Priority tier: Top 500 stocks — scanned every cycle (15 min)
+    # Extended tier: Full 3000 stocks — scanned every 4th cycle (60 min)
+    priority_watchlist = []
+    full_watchlist = []
+
+    # Load full watchlist
+    full_paths = [
         PROJECT_ROOT / "data" / "nse_top_3000_angel.json",
+        PROJECT_ROOT / "data" / "nse_top_2000_angel.json",
+        PROJECT_ROOT / "data" / "nse_1200.json",
+    ]
+    for wp in full_paths:
+        if wp.exists():
+            with open(wp) as f:
+                full_watchlist = json.load(f)
+            logger.info(f"Loaded FULL watchlist: {len(full_watchlist)} symbols from {wp.name}")
+            break
+
+    # Load priority watchlist
+    priority_paths = [
         PROJECT_ROOT / "data" / "nse_top_500_angel.json",
         PROJECT_ROOT / "data" / "nifty500.json",
         PROJECT_ROOT / "data" / "nifty200.json",
     ]
-    watchlist = []
-    for wp in watchlist_paths:
+    for wp in priority_paths:
         if wp.exists():
             with open(wp) as f:
-                watchlist = json.load(f)
-            logger.info(f"Loaded {len(watchlist)} symbols from {wp.name}")
+                priority_watchlist = json.load(f)
+            logger.info(f"Loaded PRIORITY watchlist: {len(priority_watchlist)} symbols from {wp.name}")
             break
 
-    if not watchlist:
+    # Fallback: if no priority list, use full list
+    if not priority_watchlist:
+        priority_watchlist = full_watchlist
+    if not full_watchlist:
+        full_watchlist = priority_watchlist
+
+    if not full_watchlist and not priority_watchlist:
         logger.error("No watchlist found")
         sys.exit(1)
 
     # ── Rate limiter: 3 req/sec ──
     rate_limiter = TokenBucketRateLimiter(rate=3.0, capacity=3.0)
 
-    # ── Scan interval ──
+    # ── Scan config ──
     SCAN_INTERVAL_MINUTES = 15
-    send_telegram(f"🟢 TradeSage Scanner v2 started | {len(watchlist)} stocks | {SCAN_INTERVAL_MINUTES}min interval")
+    PARALLEL_WORKERS = 6  # Threads for parallel fetch (rate limiter gates actual API calls)
+    scan_cycle_count = 0
+
+    send_telegram(
+        f"🟢 TradeSage Scanner v3 started\\n"
+        f"⚡ Priority: {len(priority_watchlist)} stocks (every 15 min)\\n"
+        f"📊 Full: {len(full_watchlist)} stocks (every 60 min)\\n"
+        f"🔀 Parallel workers: {PARALLEL_WORKERS}\\n"
+        f"💾 Redis OHLC caching: ON"
+    )
 
     # ── Main loop ──
     while True:
@@ -518,11 +604,17 @@ def run_scanner():
                 # Proactive reconnect if session is old
                 angel_mgr.reconnect_if_needed()
 
-                msg = f"SCAN STARTING — {datetime.now(IST).strftime('%Y-%m-%d %H:%M:%S IST')}"
+                # ── Tiered watchlist selection ──
+                scan_cycle_count += 1
+                is_full_scan = (scan_cycle_count % 4 == 0)  # Every 4th cycle = full scan
+                current_watchlist = full_watchlist if is_full_scan else priority_watchlist
+                scan_tier = "FULL" if is_full_scan else "PRIORITY"
+
+                msg = f"SCAN STARTING [{scan_tier}] — {datetime.now(IST).strftime('%Y-%m-%d %H:%M:%S IST')} — {len(current_watchlist)} stocks"
                 logger.info(f"\n{'═' * 60}")
                 logger.info(msg)
                 logger.info(f"{'═' * 60}")
-                if redis_client: redis_client.publish("tradesage:signals", f"Started scan of {len(watchlist)} stocks...")
+                if redis_client: redis_client.publish("tradesage:signals", f"Started {scan_tier} scan of {len(current_watchlist)} stocks...")
 
                 scan_start = time.time()
                 signal_count = 0
@@ -533,42 +625,70 @@ def run_scanner():
                 # Save local signals for fallback
                 local_signals = []
 
-                for i, symbol in enumerate(watchlist, 1):
-                    if i % 100 == 0:
-                        msg = f"[{i}/{len(watchlist)}] scanning... (signals: {len(local_signals)}, errors: {errors})"
-                        logger.info(msg)
-                        if redis_client: redis_client.publish("tradesage:signals", msg)
+                # ── Phase 1: Parallel historical data fetch + signal generation ──
+                # Pre-fetch LTPs in batches for injection (done in parallel with historical fetch)
+                ltp_cache = {}
 
-                    df = fetch_stock_data(angel_mgr, symbol, rate_limiter)
-                    if df is None:
-                        errors += 1
-                        continue
+                completed = 0
+                with ThreadPoolExecutor(max_workers=PARALLEL_WORKERS) as executor:
+                    futures = {
+                        executor.submit(
+                            _scan_single_stock, sym, angel_mgr, rate_limiter,
+                            model_mgr, ltp_cache, redis_client
+                        ): sym
+                        for sym in current_watchlist
+                    }
 
-                    successful_fetches += 1
-                    
-                    # INJECT LIVE LTP: Replace the stale 'close' of the latest daily candle with TRUE real-time price
-                    try:
-                        live_ltp = angel_mgr.api.get_ltp(symbol)
-                        if live_ltp and live_ltp > 0:
-                            df.iloc[-1, df.columns.get_loc('close')] = live_ltp
-                            logger.debug(f"Updated {symbol} with live LTP: {live_ltp}")
-                    except Exception as e:
-                        logger.warning(f"Could not fetch live LTP for {symbol}: {e}")
+                    for future in as_completed(futures):
+                        try:
+                            symbol, signal, is_error = future.result(timeout=60)
+                        except Exception as e:
+                            logger.debug(f"Future error: {e}")
+                            errors += 1
+                            completed += 1
+                            continue
 
-                    signal = generate_signal(symbol, df, model_mgr)
-                    if signal:
-                        local_signals.append(signal)
+                        completed += 1
 
-                    # Check if market closed during scan
-                    if not force_scan and not is_market_open():
-                        logger.info("Market closed during scan — stopping early")
-                        if redis_client: redis_client.publish("tradesage:signals", "Market closed during scan — stopping early")
-                        break
+                        if is_error:
+                            errors += 1
+                        else:
+                            successful_fetches += 1
+                            if signal:
+                                local_signals.append(signal)
 
-                    # Mid-scan session recovery: if too many consecutive failures, reconnect
-                    if angel_mgr._consecutive_failures >= angel_mgr._MAX_FAILURES_BEFORE_RECONNECT:
-                        logger.warning("🔄 Too many failures mid-scan — reconnecting session...")
-                        angel_mgr.connect()
+                        # Progress logging
+                        if completed % 100 == 0:
+                            progress_msg = f"[{completed}/{len(current_watchlist)}] scanning... (signals: {len(local_signals)}, errors: {errors})"
+                            logger.info(progress_msg)
+                            if redis_client: redis_client.publish("tradesage:signals", progress_msg)
+
+                        # Mid-scan session recovery
+                        if angel_mgr._consecutive_failures >= angel_mgr._MAX_FAILURES_BEFORE_RECONNECT:
+                            logger.warning("🔄 Too many failures mid-scan — reconnecting session...")
+                            angel_mgr.connect()
+
+                # ── Phase 2: Batch LTP injection for signal accuracy ──
+                # Re-fetch LTPs for stocks that generated signals (most accurate pricing)
+                if local_signals and angel_mgr.is_connected:
+                    signal_symbols = [s['symbol'] for s in local_signals]
+                    logger.info(f"📡 Batch-fetching LTPs for {len(signal_symbols)} signal stocks...")
+                    for sym in signal_symbols:
+                        try:
+                            rate_limiter.acquire()
+                            ltp = angel_mgr.api.get_ltp(sym)
+                            if ltp and ltp > 0:
+                                # Update the signal's entry price with live LTP
+                                for sig in local_signals:
+                                    if sig['symbol'] == sym:
+                                        sig['entry_price'] = round(ltp, 2)
+                                        # Recalculate SL/TP based on new price
+                                        atr = sig.get('atr', ltp * 0.02)
+                                        sig['stop_loss'] = round(ltp - (3.0 * atr), 2)
+                                        sig['take_profit'] = round(ltp + (3.5 * atr), 2)
+                                        break
+                        except Exception as e:
+                            logger.debug(f"LTP batch fetch failed for {sym}: {e}")
 
                 elapsed = time.time() - scan_start
 
@@ -639,6 +759,9 @@ def run_scanner():
                             "errors": errors,
                             "fetched": successful_fetches,
                             "elapsed": round(elapsed, 1),
+                            "tier": scan_tier,
+                            "cycle": scan_cycle_count,
+                            "watchlist_size": len(current_watchlist),
                         }))
                     except Exception:
                         pass
@@ -651,7 +774,7 @@ def run_scanner():
                 except Exception:
                     pass
 
-                # --- AUTONOMOUS PAPER TRADING ---
+                # --- AUTONOMOUS PAPER TRADING & SIDEWAYS DETECTION ---
                 positions_path = PROJECT_ROOT / "data" / "positions.json"
                 if not positions_path.exists():
                     try:
@@ -665,6 +788,62 @@ def run_scanner():
                         positions = json.load(f)
                 except Exception:
                     positions = {}
+                    
+                # 1. Active Position Monitoring (Sideways & TSL)
+                positions_modified = False
+                for sym, p in positions.items():
+                    if p.get('status') == 'open':
+                        try:
+                            # Handle datetime parsing carefully
+                            dt_str = p.get('entry_date', datetime.now(IST).isoformat())
+                            dt_clean = dt_str.split('.')[0].split('+')[0]
+                            entry_date = datetime.strptime(dt_clean, "%Y-%m-%dT%H:%M:%S").replace(tzinfo=IST)
+                            days_held = (datetime.now(IST) - entry_date).days
+                            
+                            df = angel_mgr.fetcher.fetch_historical_data(sym, period_days=20)
+                            if df is not None and not df.empty and len(df) >= 14:
+                                # Calculate ATR(14)
+                                df['prev_close'] = df['close'].shift(1)
+                                df['tr'] = df[['high', 'low', 'prev_close']].apply(
+                                    lambda x: max(x['high'] - x['low'], abs(x['high'] - x['prev_close']) if not pd.isna(x['prev_close']) else 0, abs(x['low'] - x['prev_close']) if not pd.isna(x['prev_close']) else 0), axis=1
+                                )
+                                atr_14 = df['tr'].rolling(window=14).mean().iloc[-1]
+                                current_close = df.iloc[-1]['close']
+                                entry_price = p.get('entry_price', current_close)
+                                
+                                # Trailing Stop-Loss Logic (3x ATR)
+                                if atr_14 and atr_14 > 0 and not pd.isna(atr_14):
+                                    current_sl = p.get('stop_loss', 0)
+                                    tsl_price = current_close - (3 * atr_14)
+                                    
+                                    # Activate TSL if it's higher than current SL and we are in profit
+                                    if current_close > entry_price and tsl_price > current_sl:
+                                        p['stop_loss'] = round(tsl_price, 2)
+                                        positions_modified = True
+                                        msg = f"🛡️ *TSL Updated*: {sym} SL raised to ₹{tsl_price:,.2f} (3x ATR)"
+                                        logger.info(msg.replace('*', ''))
+                                        send_telegram(msg)
+                                        
+                                # Sideways Market Logic
+                                if days_held >= 10:
+                                    last_14 = df.tail(14)
+                                    max_close = last_14['close'].max()
+                                    min_close = last_14['close'].min()
+                                    
+                                    if entry_price > 0 and min_close > 0:
+                                        pnl_pct = ((current_close - entry_price) / entry_price) * 100
+                                        price_range_pct = (max_close - min_close) / min_close
+                                        
+                                        is_sideways = (pnl_pct > 0 and price_range_pct < 0.05)
+                                        if is_sideways != p.get('sideways_suggestion', False):
+                                            p['sideways_suggestion'] = is_sideways
+                                            positions_modified = True
+                                            if is_sideways:
+                                                msg = f"💤 *Sideways Market*: {sym} is in profit ({pnl_pct:.1f}%) but flat. Consider taking profit."
+                                                logger.info(msg.replace('*', ''))
+                                                send_telegram(msg)
+                        except Exception as e:
+                            logger.warning(f"Error checking position monitors for {sym}: {e}")
                 # Calculate deployed capital
                 deployed_capital = 0
                 for p in positions.values():
@@ -716,7 +895,7 @@ def run_scanner():
                                 new_trades_count += 1
                                 logger.info(f"🤖 [AUTO-TRADE] Executed {shares} shares of {sym} at ₹{entry:.2f}")
 
-                if new_trades_count > 0:
+                if new_trades_count > 0 or positions_modified:
                     try:
                         with open(positions_path, "w") as f:
                             json.dump(positions, f, indent=2)
@@ -724,14 +903,15 @@ def run_scanner():
                         logger.error(f"Failed to save paper trades: {e}")
 
                 logger.info(f"\n{'─' * 60}")
-                comp_msg = f"SCAN COMPLETE — {signal_count} signals ({high_conf_count} HIGH) | {errors} errors | {elapsed:.1f}s"
+                comp_msg = f"SCAN COMPLETE [{scan_tier}] — {signal_count} signals ({high_conf_count} HIGH) | {errors} errors | {elapsed:.1f}s"
                 logger.info(comp_msg)
                 logger.info(f"{'─' * 60}")
                 if redis_client: redis_client.publish("tradesage:signals", comp_msg)
 
                 if signal_count > 0:
-                    summary_msg = f"📊 *TradeSage Scan Complete*\n"
+                    summary_msg = f"📊 *TradeSage Scan Complete* [{scan_tier}]\n"
                     summary_msg += f"🕐 {datetime.now(IST).strftime('%d %b %Y, %I:%M %p IST')}\n"
+                    summary_msg += f"⚡ Scanned {successful_fetches} stocks in {elapsed:.0f}s\n"
                     summary_msg += f"✅ Found *{signal_count} signals* ({high_conf_count} HIGH)\n"
                     summary_msg += f"━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
                     
@@ -793,6 +973,107 @@ def run_scanner():
                     time.sleep(5)
 
             else:
+                # ── Daily Equity Snapshot (runs once per day after market close) ──
+                try:
+                    equity_path = PROJECT_ROOT / "data" / "equity_history.json"
+                    today_str = datetime.now(IST).strftime("%Y-%m-%d")
+                    
+                    # Load existing history
+                    history = []
+                    if equity_path.exists():
+                        with open(equity_path) as f:
+                            history = json.load(f)
+                    
+                    # Check if we already have a snapshot for today
+                    already_snapped = any(h.get("date") == today_str for h in history)
+                    
+                    if not already_snapped:
+                        # Calculate portfolio value
+                        positions_path = PROJECT_ROOT / "data" / "positions.json"
+                        positions = {}
+                        if positions_path.exists():
+                            with open(positions_path) as f:
+                                positions = json.load(f)
+                        
+                        deployed = 0
+                        unrealized_pnl = 0
+                        realized_pnl = 0
+                        
+                        for sym, p in positions.items():
+                            if p.get("status") == "open":
+                                entry_price = p.get("entry_price", 0)
+                                shares = p.get("shares", 0)
+                                deployed += entry_price * shares
+                                # Try to get live price for unrealized P&L
+                                try:
+                                    if angel_mgr.is_connected:
+                                        ltp = angel_mgr.fetcher.get_ltp(sym)
+                                        if ltp and ltp > 0:
+                                            unrealized_pnl += (ltp - entry_price) * shares
+                                except Exception:
+                                    pass
+                            elif p.get("status") == "closed":
+                                ep = p.get("entry_price", 0)
+                                xp = p.get("exit_price", 0)
+                                sh = p.get("shares", 0)
+                                if ep > 0 and xp > 0 and sh > 0:
+                                    realized_pnl += (xp - ep) * sh
+                        
+                        initial_capital = 50000
+                        available_cash = initial_capital + realized_pnl - deployed
+                        total_value = available_cash + deployed + unrealized_pnl
+                        
+                        # Fetch Nifty 50 value
+                        nifty_value = None
+                        try:
+                            if angel_mgr.is_connected:
+                                nifty_ltp = angel_mgr.fetcher.get_ltp("NIFTY")
+                                if nifty_ltp and nifty_ltp > 0:
+                                    nifty_value = round(nifty_ltp, 2)
+                        except Exception as e:
+                            logger.warning(f"Could not fetch Nifty 50 for snapshot: {e}")
+                        
+                        # If we couldn't get Nifty from API, try yfinance as fallback
+                        if nifty_value is None:
+                            try:
+                                import yfinance as yf
+                                nifty = yf.Ticker("^NSEI")
+                                hist = nifty.history(period="1d")
+                                if not hist.empty:
+                                    nifty_value = round(hist['Close'].iloc[-1], 2)
+                            except Exception as e:
+                                logger.warning(f"yfinance Nifty fallback failed: {e}")
+                        
+                        snapshot = {
+                            "date": today_str,
+                            "portfolio_value": round(total_value, 2),
+                            "deployed_capital": round(deployed, 2),
+                            "available_cash": round(available_cash, 2),
+                            "realized_pnl": round(realized_pnl, 2),
+                            "unrealized_pnl": round(unrealized_pnl, 2),
+                            "nifty_50": nifty_value,
+                            "active_positions": sum(1 for p in positions.values() if p.get("status") == "open"),
+                        }
+                        
+                        history.append(snapshot)
+                        
+                        with open(equity_path, "w") as f:
+                            json.dump(history, f, indent=2)
+                        
+                        logger.info(f"📸 Daily equity snapshot saved: ₹{total_value:,.2f} | Nifty: {nifty_value}")
+                        send_telegram(
+                            f"📸 *Daily Portfolio Snapshot*\n"
+                            f"📅 {today_str}\n"
+                            f"💰 Portfolio Value: ₹{total_value:,.2f}\n"
+                            f"📈 Nifty 50: {nifty_value or 'N/A'}\n"
+                            f"💵 Cash: ₹{available_cash:,.2f}\n"
+                            f"🔓 Deployed: ₹{deployed:,.2f}\n"
+                            f"📊 Realized P&L: ₹{realized_pnl:,.2f}\n"
+                            f"📊 Unrealized P&L: ₹{unrealized_pnl:,.2f}"
+                        )
+                except Exception as e:
+                    logger.warning(f"Equity snapshot error: {e}")
+
                 next_open = next_market_open()
                 wait_seconds = (next_open - datetime.now(IST)).total_seconds()
                 wait_hours = wait_seconds / 3600

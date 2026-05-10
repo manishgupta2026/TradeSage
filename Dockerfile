@@ -16,7 +16,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Attempt to install Obscura binary (non-fatal — fallback exists in code)
-RUN python scripts/install_obscura.py || echo "⚠️ Obscura install failed — screener will use requests fallback"
+RUN python scripts/install_obscura.py
 
 # Default command (overridden by docker-compose)
 CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]

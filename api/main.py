@@ -575,8 +575,178 @@ async def get_portfolio():
 
 
 # ══════════════════════════════════════════════════════════════
+#  GET /api/equity-history — Daily portfolio snapshots + Nifty 50
+# ══════════════════════════════════════════════════════════════
+
+@app.get("/api/equity-history")
+async def get_equity_history():
+    """Return daily equity curve data for charting."""
+    equity_path = PROJECT_ROOT / "data" / "equity_history.json"
+    history = []
+    if equity_path.exists():
+        try:
+            with open(equity_path) as f:
+                history = json.load(f)
+        except Exception as e:
+            logger.warning(f"Failed to read equity history: {e}")
+
+    # Also compute today's live snapshot so the chart is always current
+    try:
+        positions_path = PROJECT_ROOT / "data" / "positions.json"
+        positions = {}
+        if positions_path.exists():
+            with open(positions_path) as f:
+                positions = json.load(f)
+
+        deployed = 0
+        realized_pnl = 0
+        for sym, p in positions.items():
+            if p.get("status") == "open":
+                deployed += p.get("entry_price", 0) * p.get("shares", 0)
+            elif p.get("status") == "closed":
+                ep = p.get("entry_price", 0)
+                xp = p.get("exit_price", 0)
+                sh = p.get("shares", 0)
+                if ep > 0 and xp > 0 and sh > 0:
+                    realized_pnl += (xp - ep) * sh
+
+        initial_capital = 50000
+        available_cash = initial_capital + realized_pnl - deployed
+        total_value = available_cash + deployed  # Without unrealized since LTP not available here
+
+        from datetime import timezone as tz, timedelta
+        IST = tz(timedelta(hours=5, minutes=30))
+        today_str = datetime.now(IST).strftime("%Y-%m-%d")
+
+        # Check if today's snapshot already exists
+        today_exists = any(h.get("date") == today_str for h in history)
+        if not today_exists:
+            history.append({
+                "date": today_str,
+                "portfolio_value": round(total_value, 2),
+                "deployed_capital": round(deployed, 2),
+                "available_cash": round(available_cash, 2),
+                "realized_pnl": round(realized_pnl, 2),
+                "nifty_50": None,
+                "active_positions": sum(1 for p in positions.values() if p.get("status") == "open"),
+                "is_live": True,
+            })
+    except Exception as e:
+        logger.warning(f"equity-history: live snapshot failed: {e}")
+
+    return {"history": history}
+
+
+# ══════════════════════════════════════════════════════════════
+#  POST /api/portfolio/trade — Manual Paper Trade
+# ══════════════════════════════════════════════════════════════
+
+class TradeRequest(BaseModel):
+    action: str
+    symbol: str
+    shares: int
+    price: float
+
+@app.post("/api/portfolio/trade")
+async def manual_portfolio_trade(trade: TradeRequest):
+    """Execute a manual Buy or Sell paper trade."""
+    if trade.action not in ["BUY", "SELL"]:
+        raise HTTPException(status_code=400, detail="Invalid action, must be BUY or SELL")
+    if trade.shares <= 0:
+        raise HTTPException(status_code=400, detail="Shares must be greater than 0")
+    if trade.price <= 0:
+        raise HTTPException(status_code=400, detail="Price must be greater than 0")
+
+    positions_path = PROJECT_ROOT / "data" / "positions.json"
+    try:
+        with open(positions_path, "r") as f:
+            positions = json.load(f)
+    except Exception:
+        positions = {}
+
+    sym = trade.symbol.upper()
+    pos = positions.get(sym)
+
+    if trade.action == "BUY":
+        if pos and pos.get("status") == "open":
+            # Average up/down
+            old_shares = pos.get("shares", 0)
+            old_price = pos.get("entry_price", 0)
+            new_shares = old_shares + trade.shares
+            new_price = ((old_shares * old_price) + (trade.shares * trade.price)) / new_shares
+            
+            pos["shares"] = new_shares
+            pos["entry_price"] = new_price
+        else:
+            # New position
+            positions[sym] = {
+                "status": "open",
+                "entry_price": trade.price,
+                "shares": trade.shares,
+                "stop_loss": trade.price * 0.95,
+                "take_profit": trade.price * 1.10,
+                "entry_date": datetime.now(timezone.utc).isoformat(),
+                "confidence": "MANUAL",
+                "fundamentals": {}
+            }
+    elif trade.action == "SELL":
+        if not pos or pos.get("status") != "open":
+            raise HTTPException(status_code=400, detail=f"No open position for {sym}")
+        
+        current_shares = pos.get("shares", 0)
+        if trade.shares > current_shares:
+            raise HTTPException(status_code=400, detail=f"Cannot sell {trade.shares} shares, you only own {current_shares}")
+            
+        if trade.shares == current_shares:
+            # Full close
+            pos["status"] = "closed"
+            pos["exit_price"] = trade.price
+            pos["exit_date"] = datetime.now(timezone.utc).isoformat()
+            pos["exit_reason"] = "Manual Sell"
+        else:
+            # Partial sell
+            pos["shares"] -= trade.shares
+
+    try:
+        with open(positions_path, "w") as f:
+            json.dump(positions, f, indent=2)
+    except Exception as e:
+        logger.error(f"Failed to save manual trade: {e}")
+        raise HTTPException(status_code=500, detail="Failed to save trade")
+
+    # Send Telegram Notification
+    try:
+        from src.utils.telegram_bot import TelegramBot
+        telegram = TelegramBot(
+            token=os.getenv("TELEGRAM_BOT_TOKEN"),
+            chat_id=os.getenv("TELEGRAM_CHAT_ID")
+        )
+        if trade.action == "BUY":
+            telegram.send_trade_alert(
+                symbol=sym,
+                action="ENTRY",
+                price=trade.price,
+                confidence=1.0,  # Manual
+                sl=trade.price * 0.95,
+                tp=trade.price * 1.10
+            )
+        else:
+            telegram.send_trade_alert(
+                symbol=sym,
+                action="EXIT",
+                price=trade.price,
+                confidence="Manual Sell via Dashboard"
+            )
+    except Exception as e:
+        logger.warning(f"Could not send manual trade telegram alert: {e}")
+
+    return {"status": "success", "message": f"{trade.action} {trade.shares} shares of {sym} at ₹{trade.price}"}
+
+
+# ══════════════════════════════════════════════════════════════
 #  POST /api/config/angelone — save & restart scanner
 # ══════════════════════════════════════════════════════════════
+
 
 class AngelOneConfig(BaseModel):
     client_id: str

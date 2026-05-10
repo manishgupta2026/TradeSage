@@ -14,11 +14,11 @@ import zipfile
 import shutil
 from pathlib import Path
 
-VERSION = "v0.1.1"
+VERSION = "latest"
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
-LINUX_URL = f"https://github.com/h4ckf0r0day/obscura/releases/download/{VERSION}/obscura-x86_64-linux.tar.gz"
-WINDOWS_URL = f"https://github.com/h4ckf0r0day/obscura/releases/download/{VERSION}/obscura-x86_64-windows.zip"
+LINUX_URL = "https://github.com/h4ckf0r0day/obscura/releases/latest/download/obscura-x86_64-linux.tar.gz"
+WINDOWS_URL = "https://github.com/h4ckf0r0day/obscura/releases/latest/download/obscura-x86_64-windows.zip"
 
 def download_file(url, dest):
     print(f"Downloading {url}...")
